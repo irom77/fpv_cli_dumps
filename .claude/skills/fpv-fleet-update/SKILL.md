@@ -28,7 +28,7 @@ files are derived from them and must stay in sync whenever the set of dumps chan
   (`cells, weight, esc_stack, motors, props, camera, vtx, notes`), plus three curated columns the
   dumps can't provide: `class` (whoop / cinewhoop / micro / 5-inch, overrides the auto-guess),
   `status` (lifecycle — active / building / rebuilding / retired / lost; blank = active), and
-  `discipline` (what it's flown for — race / freestyle / cinematic; blank = unset). Largely seeded
+  `discipline` (what it's flown for — race / freestyle / cinematic / long-range; blank = unset). Largely seeded
   from the pilot's own fleet spreadsheet, so some rows may be stale — the `notes` column flags known
   conflicts. Optional; joined into the summary by quad name. Edit it directly.
 

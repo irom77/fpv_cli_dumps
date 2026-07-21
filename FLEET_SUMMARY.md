@@ -12,10 +12,10 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 | BETAFPVF4SX1280 *(unnamed)* | whoop | — | active | BETAFPVF4SX1280 | F411 | 4.4.0 | DSHOT300 | - | ELRS **[A]** | 2024-07-12 |
 | cinelog-flyfish | cinewhoop | cinematic | active | GEPRCF411_AIO | F411 | 4.5.2 | - | - | - | 2025-06-19 |
 | CineLog30 | cinewhoop | cinematic | **retired** | GEPRC_F411_AIO | F411 | 4.2.3 | DSHOT600 | - | RX_SERIAL / CRSF | 2025-06-19 |
-| Crocodile5 baby | micro | — | **retired** | GEPRC_F722_AIO | F7X2 | 4.2.4 | DSHOT300 | - | RX_SERIAL / CRSF | 2024-08-27 |
+| Crocodile5 baby | micro | long-range | **retired** | GEPRC_F722_AIO | F7X2 | 4.2.4 | DSHOT300 | - | RX_SERIAL / CRSF | 2024-08-27 |
 | Diamond | whoop | — | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | Analog | RX_SPI **[A]** | 2025-01-24 |
 | Ecofree | whoop | — | active | CRAZYBEEF4DX | F411 | 4.4.2 | DSHOT300 | HD | - | 2025-11-14 |
-| FLYWOOF7NANO | micro | — | active | FLYWOOF745NANO | F745 | 4.2.11 | DSHOT300 | - | CRSF | 2024-08-14 |
+| FLYWOOF7NANO | micro | long-range | active | FLYWOOF745NANO | F745 | 4.2.11 | DSHOT300 | - | CRSF | 2024-08-14 |
 | GEPRC_F722_AIO *(unnamed)* | 5-inch | — | active | GEPRC_F722_AIO | F7X2 | 4.5.1 | DSHOT300 | - | - | 2024-08-27 |
 | Happish | whoop | — | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2024-12-06 |
 | HDZERO CRUX35 | micro | — | active | BETAFLIGHTF4 | F405 | 4.4.3 | DSHOT300 | HD | - | 2025-03-12 |
@@ -39,7 +39,7 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 
 - **Class:** 14× whoop, 2× cinewhoop, 3× micro, 7× 5-inch. Size class inferred from craft name / board where `hardware.csv` doesn't set it.
 - **Status:** 24× active, 2× retired. Lifecycle from `hardware.csv`; a blank there counts as active.
-- **Discipline:** 4× race, 2× freestyle, 2× cinematic, 18 unset. Hand-entered in `hardware.csv` (no heuristic — the dump gives no signal).
+- **Discipline:** 4× race, 2× freestyle, 2× cinematic, 2× long-range, 16 unset. Hand-entered in `hardware.csv` (no heuristic — the dump gives no signal).
 - **Flight controllers:** 14× F411, 6× F7X2, 2× G47X, 2× F405, 1× F745, 1× F411SX1280.
 - **Firmware:** 12 on BF 4.4.x, 8 on BF 4.5.x, 4 on BF 4.2.x, 2 on BF 4.3.x.
 - **ESC protocol:** 17× DSHOT300, 4× DSHOT600.

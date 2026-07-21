@@ -52,7 +52,7 @@ STATUS_ORDER = ['active', 'building', 'rebuilding', 'retired', 'lost']
 FLYABLE = {'active', 'building', 'rebuilding', ''}   # states we still nag about (firmware/staleness)
 # What the quad is built to do (how is it flown?). Orthogonal to status — a quad keeps its discipline
 # after it's retired. Hand-entered only; the dump carries no signal for it, so there's no guesser.
-DISCIPLINE_ORDER = ['race', 'freestyle', 'cinematic']
+DISCIPLINE_ORDER = ['race', 'freestyle', 'cinematic', 'long-range']
 
 
 def guess_class(craft, board):
