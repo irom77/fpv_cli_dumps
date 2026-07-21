@@ -25,7 +25,8 @@ files are derived from them and must stay in sync whenever the set of dumps chan
   saturation, and a `flags` column for detected issues like `MOTOR_DESYNC`/`LOW_CELL`). Optional —
   only present once blackbox logs have been processed.
 - `hardware.csv` — hand-maintained per-quad build details (ESC stack, motors, props, cells) that
-  aren't in the dumps. Optional; joined into the summary by quad name. Edit it directly.
+  aren't in the dumps, plus an optional `class` column (whoop / cinewhoop / micro / 5-inch) that
+  overrides the auto-guess. Optional; joined into the summary by quad name. Edit it directly.
 
 ## What to do
 
@@ -86,6 +87,13 @@ same radio together.
 The script reads values straight from `diff all` output, so anything left at a firmware default is
 blank by design — that is not a bug. Truncated/aborted dumps (essentially empty files) are kept but
 flagged so a real backup can replace them.
+
+Size **class** (whoop / cinewhoop / micro / 5-inch) can't be read from a dump — Betaflight records no
+frame/prop/motor/cell field. `guess_class()` infers it from craft name + board family (F411 AIO boards
+and 65–85 mm product names → whoop; XRotor/TMotor/Flywoo F7 stacks → 5-inch; Cinelog → cinewhoop; Crux/
+Crocodile → micro). A digit in a name is a *board* type, not a size — `AIO5` means a 5-in-1 board, so an
+AIO whoop stays a whoop. The guess is a fallback: an explicit `class` in `hardware.csv` always wins, and
+anything the heuristic can't place is listed under "needs attention" to curate there.
 
 Rate columns (`rateprofile`, `rates_type`, `rc_rate_rpy`, `super_rate_rpy`, `expo_rpy`) come from the
 **active** rateprofile only (the last bare `rateprofile N` line) via `extract_active_rates()`. The

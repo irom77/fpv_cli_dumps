@@ -45,6 +45,46 @@ def norm(s):
     return re.sub(r'[^A-Za-z0-9]', '', s).upper()
 
 
+CLASS_ORDER = ['whoop', 'cinewhoop', 'micro', '5-inch']
+
+
+def guess_class(craft, board):
+    """Best-effort size class from craft name + board. Betaflight dumps carry no frame/prop/motor/
+    cell field, so class can't be read directly — this leans on product-name conventions and board
+    families. It is only a fallback: an explicit `class` in hardware.csv overrides it, so fix wrong
+    guesses there rather than special-casing here. Returns '' when nothing matches (left to curate).
+    Note: an 'AIO' / trailing digit in a name is a board type (e.g. AIO5 = 5-in-1 board), not a
+    frame size — so a whoop AIO board stays a whoop regardless of the number after it."""
+    s = (craft + ' ' + board).lower()
+    if 'cinelog' in s or 'cinewhoop' in s or 'cine' in s:
+        return 'cinewhoop'
+    if 'crux' in s or 'crocodile' in s:            # 3-4" micro / long-range product lines
+        return 'micro'
+    whoop_boards = ('crazybeef4', 'betafpvf4sx1280', 'betafpvf4')
+    whoop_names = ('air65', 'meteor', 'mobula', 'mob6', 'beta65', 'beta75', 'beta85',
+                   'us65', 'us75', 'whoop', 'happish', 'ecofree', 'diamond')
+    if any(b in s for b in whoop_boards) or any(n in s for n in whoop_names):
+        return 'whoop'
+    stack_boards = ('xrotor', 'tmotorf7', 'flywoof7', 'f722', 'f745', 'f405', 'xilo')
+    if any(b in s for b in stack_boards):
+        return '5-inch'
+    return ''
+
+
+def load_hw_class(path):
+    """Map normalized quad name -> explicit size class from hardware.csv, when set. This is the
+    authoritative override for guess_class() — the user curates class here alongside build details."""
+    if not os.path.exists(path):
+        return {}
+    out = {}
+    with open(path, newline='') as f:
+        for r in csv.DictReader(f):
+            c = (r.get('class') or '').strip()
+            if c:
+                out[norm(r.get('quad', ''))] = c
+    return out
+
+
 def extract_active_rates(text):
     """Pull the ACTIVE rateprofile's rates. The rate keys (rc_rate/srate/expo/rates_type) live
     inside a rateprofile block, and the same key name appears in every profile — so we must read
@@ -185,6 +225,12 @@ def parse_dumps():
         if r['elrs_uid']:
             r['bind_group'] = uid_label[r['elrs_uid']]
 
+    # Size class (whoop / cinewhoop / micro / 5-inch). Not in the dumps, so it comes from an
+    # explicit hardware.csv `class` when set, else a name/board heuristic left for the user to fix.
+    hw_class = load_hw_class(os.path.join(SRC, "hardware.csv"))
+    for r in rows:
+        r['class'] = hw_class.get(r['_ident'], '') or guess_class(r.get('craft_name', ''), r.get('board', ''))
+
     # Collapse duplicate dumps: when several dumps of one quad share identical extracted
     # inventory values (differing only in date/file), keep just the most recent. The older
     # ones carry no information at this level of detail — even if the raw dump differed in
@@ -214,7 +260,7 @@ def parse_dumps():
     return rows, scanned
 
 
-COLS = ['quad', 'dump_date', 'craft_name', 'board', 'manufacturer', 'bf_version', 'mcu',
+COLS = ['quad', 'class', 'dump_date', 'craft_name', 'board', 'manufacturer', 'bf_version', 'mcu',
         'motor_protocol', 'motor_poles', 'dshot_bidir', 'rx_protocol', 'rx_spi_protocol',
         'elrs_uid', 'bind_group', 'video_system', 'vtx_band', 'vtx_channel', 'vtx_power',
         'vtx_freq', 'cell_min_v', 'cell_max_v', 'cell_warn_v', 'gyro_align',
@@ -274,8 +320,8 @@ def build_summary(latest_rows):
     # ---- Fleet table ----
     A("## Fleet (latest dump per quad)")
     A("")
-    A("| Quad | Board | MCU | BF | ESC | Video | RX / bind | Last dump |")
-    A("|---|---|---|---|---|---|---|---|")
+    A("| Quad | Class | Board | MCU | BF | ESC | Video | RX / bind | Last dump |")
+    A("|---|---|---|---|---|---|---|---|---|")
     for r in latest_rows:
         name = r['quad']
         if not r['craft_name'] and norm(r['quad']) == norm(r['board']):
@@ -284,13 +330,20 @@ def build_summary(latest_rows):
         if r['bind_group']:
             rx = (rx + ' ' if rx else 'ELRS ') + f"**[{r['bind_group'].split('-')[-1]}]**"
         rx = rx or '-'
-        A(f"| {name} | {r['board']} | {short_mcu(r['mcu'])} | {r['bf_version'] or '-'} | "
-          f"{r['motor_protocol'] or '-'} | {short_video(r['video_system'])} | {rx} | {r['dump_date']} |")
+        A(f"| {name} | {r.get('class') or '—'} | {r['board']} | {short_mcu(r['mcu'])} | "
+          f"{r['bf_version'] or '-'} | {r['motor_protocol'] or '-'} | {short_video(r['video_system'])} | "
+          f"{rx} | {r['dump_date']} |")
     A("")
 
     # ---- Rollups ----
     A("## Fleet rollups")
     A("")
+    classes = Counter(r['class'] for r in latest_rows if r.get('class'))
+    if classes:
+        order = {c: i for i, c in enumerate(CLASS_ORDER)}
+        items = sorted(classes.items(), key=lambda kv: (order.get(kv[0], 99), kv[0]))
+        A("- **Class:** " + ", ".join(f"{n}× {c}" for c, n in items) +
+          ". Size class inferred from craft name / board where `hardware.csv` doesn't set it.")
     mcus = Counter(short_mcu(r['mcu']) for r in latest_rows if r['mcu'])
     A("- **Flight controllers:** " + ", ".join(f"{n}× {m}" for m, n in mcus.most_common()) + ".")
     bfs = Counter(f"{a}.{b}" for a, b in (ver_tuple(r['bf_version']) for r in latest_rows) if a)
@@ -344,6 +397,12 @@ def build_summary(latest_rows):
         A("**Truncated dumps (re-export a full backup):**")
         for r in empties:
             A(f"- {r['quad']} — `{r['file']}`")
+        A("")
+
+    unclassed = [r for r in latest_rows if not r.get('class')]
+    if unclassed:
+        A("**Unclassified (heuristic couldn't tell — set `class` in `hardware.csv`):** "
+          + ", ".join(r['quad'] for r in unclassed) + ".")
         A("")
 
     unnamed = [r for r in latest_rows if not r['craft_name'] and norm(r['quad']) == norm(r['board'])]

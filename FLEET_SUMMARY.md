@@ -6,37 +6,38 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 
 ## Fleet (latest dump per quad)
 
-| Quad | Board | MCU | BF | ESC | Video | RX / bind | Last dump |
-|---|---|---|---|---|---|---|---|
-| AIR65 R | BETAFPVG473 | G47X | 4.5.2 | DSHOT300 | - | - | 2025-10-25 |
-| BETAFPVF4SX1280 *(unnamed)* | BETAFPVF4SX1280 | F411 | 4.4.0 | DSHOT300 | - | ELRS **[A]** | 2024-07-12 |
-| cinelog-flyfish | GEPRCF411_AIO | F411 | 4.5.2 | - | - | - | 2025-06-19 |
-| CineLog30 | GEPRC_F411_AIO | F411 | 4.2.3 | DSHOT600 | - | RX_SERIAL / CRSF | 2025-06-19 |
-| Crocodile5 baby | GEPRC_F722_AIO | F7X2 | 4.2.4 | DSHOT300 | - | RX_SERIAL / CRSF | 2024-08-27 |
-| Diamond | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | Analog | RX_SPI **[A]** | 2025-01-24 |
-| Ecofree | CRAZYBEEF4DX | F411 | 4.4.2 | DSHOT300 | HD | - | 2025-11-14 |
-| FLYWOOF7NANO | FLYWOOF745NANO | F745 | 4.2.11 | DSHOT300 | - | CRSF | 2024-08-14 |
-| GEPRC_F722_AIO *(unnamed)* | GEPRC_F722_AIO | F7X2 | 4.5.1 | DSHOT300 | - | - | 2024-08-27 |
-| Happish | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2024-12-06 |
-| HDZERO CRUX35 | BETAFLIGHTF4 | F405 | 4.4.3 | DSHOT300 | HD | - | 2025-03-12 |
-| HOBBYWING_XROTORF7CON *(unnamed)* | HOBBYWING_XROTORF7CON | F7X2 | 4.3.0 | DSHOT600 | - | RX_SERIAL / CRSF | 2024-07-27 |
-| HOBBYWING_XROTORF7CONV *(unnamed)* | HOBBYWING_XROTORF7CONV | F7X2 | 4.5.1 | - | - | - | 2024-07-27 |
-| Kronos | HOBBYWING_XROTORF7CONV | F7X2 | 4.5.1 | - | - | - | 2025-08-10 |
-| LS-Ultra | TMOTORF7 | F7X2 | 4.5.2.KAACK_V15 | DSHOT600 | HD | CRSF | 2025-08-06 |
-| M6 ECO | CRAZYBEEF4DX | F411 | 4.4.2 | DSHOT300 | HD | - | 2025-10-25 |
-| M85 HDZero | BETAFPVF4SX1280 | F411SX1280 | 4.3.1 | DSHOT300 | - | RX_SERIAL / CRSF **[B]** | 2024-07-04 |
-| Meteor85 | BETAFPVF4SX1280 | F411 | 4.4.3 | DSHOT300 | HD | ELRS **[A]** | 2025-01-10 |
-| Mob6 AIO5 1st | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2025-10-25 |
-| Mob6 AIO5 2nd | CRAZYBEEF4SX1280 | F411 | 4.5.2 | - | - | ELRS **[A]** | 2025-10-25 |
-| Mob6 AIO5 RACE | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2024-10-07 |
-| Mob6 HDZERO RACE | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2025-07-28 |
-| Mobula1 | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2025-11-12 |
-| QAS JB | LUXHDAIO-G4 | G47X | 4.5.0 | - | - | CRSF | 2025-06-27 |
-| Race5 | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2025-01-24 |
-| XILOF4 *(unnamed)* | XILOF4 | F405 | 4.2.9 | DSHOT600 | - | CRSF | 2024-10-08 |
+| Quad | Class | Board | MCU | BF | ESC | Video | RX / bind | Last dump |
+|---|---|---|---|---|---|---|---|---|
+| AIR65 R | whoop | BETAFPVG473 | G47X | 4.5.2 | DSHOT300 | - | - | 2025-10-25 |
+| BETAFPVF4SX1280 *(unnamed)* | whoop | BETAFPVF4SX1280 | F411 | 4.4.0 | DSHOT300 | - | ELRS **[A]** | 2024-07-12 |
+| cinelog-flyfish | cinewhoop | GEPRCF411_AIO | F411 | 4.5.2 | - | - | - | 2025-06-19 |
+| CineLog30 | cinewhoop | GEPRC_F411_AIO | F411 | 4.2.3 | DSHOT600 | - | RX_SERIAL / CRSF | 2025-06-19 |
+| Crocodile5 baby | micro | GEPRC_F722_AIO | F7X2 | 4.2.4 | DSHOT300 | - | RX_SERIAL / CRSF | 2024-08-27 |
+| Diamond | whoop | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | Analog | RX_SPI **[A]** | 2025-01-24 |
+| Ecofree | whoop | CRAZYBEEF4DX | F411 | 4.4.2 | DSHOT300 | HD | - | 2025-11-14 |
+| FLYWOOF7NANO | 5-inch | FLYWOOF745NANO | F745 | 4.2.11 | DSHOT300 | - | CRSF | 2024-08-14 |
+| GEPRC_F722_AIO *(unnamed)* | 5-inch | GEPRC_F722_AIO | F7X2 | 4.5.1 | DSHOT300 | - | - | 2024-08-27 |
+| Happish | whoop | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2024-12-06 |
+| HDZERO CRUX35 | micro | BETAFLIGHTF4 | F405 | 4.4.3 | DSHOT300 | HD | - | 2025-03-12 |
+| HOBBYWING_XROTORF7CON *(unnamed)* | 5-inch | HOBBYWING_XROTORF7CON | F7X2 | 4.3.0 | DSHOT600 | - | RX_SERIAL / CRSF | 2024-07-27 |
+| HOBBYWING_XROTORF7CONV *(unnamed)* | 5-inch | HOBBYWING_XROTORF7CONV | F7X2 | 4.5.1 | - | - | - | 2024-07-27 |
+| Kronos | 5-inch | HOBBYWING_XROTORF7CONV | F7X2 | 4.5.1 | - | - | - | 2025-08-10 |
+| LS-Ultra | 5-inch | TMOTORF7 | F7X2 | 4.5.2.KAACK_V15 | DSHOT600 | HD | CRSF | 2025-08-06 |
+| M6 ECO | whoop | CRAZYBEEF4DX | F411 | 4.4.2 | DSHOT300 | HD | - | 2025-10-25 |
+| M85 HDZero | whoop | BETAFPVF4SX1280 | F411SX1280 | 4.3.1 | DSHOT300 | - | RX_SERIAL / CRSF **[B]** | 2024-07-04 |
+| Meteor85 | whoop | BETAFPVF4SX1280 | F411 | 4.4.3 | DSHOT300 | HD | ELRS **[A]** | 2025-01-10 |
+| Mob6 AIO5 1st | whoop | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2025-10-25 |
+| Mob6 AIO5 2nd | whoop | CRAZYBEEF4SX1280 | F411 | 4.5.2 | - | - | ELRS **[A]** | 2025-10-25 |
+| Mob6 AIO5 RACE | whoop | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2024-10-07 |
+| Mob6 HDZERO RACE | whoop | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2025-07-28 |
+| Mobula1 | whoop | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2025-11-12 |
+| QAS JB | 5-inch | LUXHDAIO-G4 | G47X | 4.5.0 | - | - | CRSF | 2025-06-27 |
+| Race5 | whoop | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2025-01-24 |
+| XILOF4 *(unnamed)* | 5-inch | XILOF4 | F405 | 4.2.9 | DSHOT600 | - | CRSF | 2024-10-08 |
 
 ## Fleet rollups
 
+- **Class:** 14× whoop, 2× cinewhoop, 2× micro, 8× 5-inch. Size class inferred from craft name / board where `hardware.csv` doesn't set it.
 - **Flight controllers:** 14× F411, 6× F7X2, 2× G47X, 2× F405, 1× F745, 1× F411SX1280.
 - **Firmware:** 12 on BF 4.4.x, 8 on BF 4.5.x, 4 on BF 4.2.x, 2 on BF 4.3.x.
 - **ESC protocol:** 17× DSHOT300, 4× DSHOT600.
@@ -103,6 +104,7 @@ _Curated per-quad build details (not captured in Betaflight dumps). Edit `hardwa
 | Quad | Cells | ESC / stack | Motors | Props | Notes |
 |---|---|---|---|---|---|
 | Kronos | 6S | Hobbywing XRotor F722 (45A 4-in-1 ESC) | VCI Spark 2207 Pro 2050Kv | Hurricane MCK 51466 V2 | OpenRacer. Motor replaced 2026-07-20 after a rear-corner desync/crash under load (see flights). Bench-fine at 0% DShot error; fault only appeared under aerodynamic load. |
+| QAS JB |  |  |  |  | Lumenier QAV-S 2 5" freestyle frame, Joshua Bardwell Special Edition. |
 
 ## Flights
 
