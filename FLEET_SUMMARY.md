@@ -18,7 +18,7 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 | FLYWOOF7NANO | micro | long-range | active | FLYWOOF745NANO | F745 | 4.2.11 | DSHOT300 | - | CRSF | 2024-08-14 |
 | GEPRC_F722_AIO *(unnamed)* | 5-inch | — | active | GEPRC_F722_AIO | F7X2 | 4.5.1 | DSHOT300 | - | - | 2024-08-27 |
 | Happish | whoop | — | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2024-12-06 |
-| HDZERO CRUX35 | micro | — | active | BETAFLIGHTF4 | F405 | 4.4.3 | DSHOT300 | HD | - | 2025-03-12 |
+| HDZERO CRUX35 | micro | — | **incomplete** | BETAFLIGHTF4 | F405 | 4.4.3 | DSHOT300 | HD | - | 2025-03-12 |
 | HOBBYWING_XROTORF7CON *(unnamed)* | 5-inch | — | active | HOBBYWING_XROTORF7CON | F7X2 | 4.3.0 | DSHOT600 | - | RX_SERIAL / CRSF | 2024-07-27 |
 | HOBBYWING_XROTORF7CONV *(unnamed)* | 5-inch | — | active | HOBBYWING_XROTORF7CONV | F7X2 | 4.5.1 | - | - | - | 2024-07-27 |
 | Kronos | 5-inch | race | active | HOBBYWING_XROTORF7CONV | F7X2 | 4.5.1 | - | - | - | 2025-08-10 |
@@ -32,7 +32,7 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 | Mob6 AIO5 RACE | whoop | — | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2024-10-07 |
 | Mob6 HDZERO RACE | whoop | — | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2025-07-28 |
 | Mobula1 | whoop | — | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2025-11-12 |
-| QAS JB | 5-inch | freestyle | active | LUXHDAIO-G4 | G47X | 4.5.0 | - | - | CRSF | 2025-06-27 |
+| QAS JB | micro | freestyle | **broken** | LUXHDAIO-G4 | G47X | 4.5.0 | DSHOT300 | - | CRSF | 2026-07-21 |
 | Race5 | whoop | — | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2025-01-24 |
 | SPEEDYBEEF405MINI *(unnamed)* | micro | — | **broken** | SPEEDYBEEF405MINI | SPEEDYBEEF405MINI | 4.3.2 | - | - | CRSF | 2026-07-21 |
 | XILOF4 *(unnamed)* | 5-inch | freestyle | **retired** | XILOF4 | F405 | 4.3.2 | - | - | CRSF | 2026-07-21 |
@@ -40,18 +40,18 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 
 ## Fleet rollups
 
-- **Class:** 14× whoop, 2× cinewhoop, 4× micro, 9× 5-inch. Size class inferred from craft name / board where `hardware.csv` doesn't set it.
-- **Status:** 23× active, 3× broken, 3× retired. Lifecycle from `hardware.csv`; a blank there counts as active.
+- **Class:** 14× whoop, 2× cinewhoop, 5× micro, 8× 5-inch. Size class inferred from craft name / board where `hardware.csv` doesn't set it.
+- **Status:** 21× active, 4× broken, 3× retired, 1× incomplete. Lifecycle from `hardware.csv`; a blank there counts as active.
 - **Discipline:** 5× race, 3× freestyle, 2× cinematic, 2× long-range, 17 unset. Hand-entered in `hardware.csv` (no heuristic — the dump gives no signal).
 - **Flight controllers:** 14× F411, 6× F7X2, 3× F405, 2× G47X, 1× F745, 1× H743, 1× F411SX1280, 1× SPEEDYBEEF405MINI.
 - **Firmware:** 12 on BF 4.4.x, 10 on BF 4.5.x, 4 on BF 4.3.x, 3 on BF 4.2.x.
-- **ESC protocol:** 18× DSHOT300, 2× DSHOT600.
+- **ESC protocol:** 19× DSHOT300, 2× DSHOT600.
 - **ExpressLRS bind groups:** **ELRS-A** (10 quads, UID `7,48,91,69,202,173`); **ELRS-B** (1 quad, UID `65,245,33,230,58,226`). Quads in the same group share a binding phrase and bind to the same radio together.
 - **Video:** 10× HD, 1× Analog. Quads showing `-` have `vcd_video_system` at firmware default in the diff — not necessarily video-less.
 
 ## Needs attention
 
-**Broken (needs repair — grounded until fixed):** Diamond, Meteor85, SPEEDYBEEF405MINI.
+**Broken (needs repair — grounded until fixed):** Diamond, Meteor85, QAS JB, SPEEDYBEEF405MINI.
 
 **Aging firmware (older than BF 4.4):**
 - FLYWOOF7NANO (4.2.11)
@@ -68,9 +68,7 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 - Mob6 AIO5 RACE (last dump 2024-10-07)
 - Happish (last dump 2024-12-06)
 - Race5 (last dump 2025-01-24)
-- HDZERO CRUX35 (last dump 2025-03-12)
 - cinelog-flyfish (last dump 2025-06-19)
-- QAS JB (last dump 2025-06-27)
 
 _Note: BETAFPVF4SX1280, GEPRC_F722_AIO, HOBBYWING_XROTORF7CON, HOBBYWING_XROTORF7CONV, SPEEDYBEEF405MINI, XILOF4 are keyed by board name because their dumps had no craft name set (`set craft_name` / `# name:`). Setting a craft name makes future tracking more reliable._
 
@@ -94,6 +92,7 @@ _Active rateprofile only, raw stored r/p/y values (see `fpv_quads_latest.csv`). 
 | Mob6 AIO5 RACE | BETAFLIGHT | 100/100/100 | 70/70/70 | — | 0 |
 | Mob6 HDZERO RACE | BETAFLIGHT | 100/100/100 | 70/70/70 | — | 0 |
 | Mobula1 | default | 20/20/20 | 50/50/50 | 50/50/25 | 0:R_Angle |
+| QAS JB | BETAFLIGHT | 95/80/80 | 70/70/70 | — | 0 |
 | Race5 | BETAFLIGHT | 100/100/100 | 70/70/70 | — | 0:R_Angle |
 | XILOF4 | default | 2/2/2 | 80/80/60 | 40/40/40 | 0 |
 | XILOF4-2 | default | 70/70/70 | 84/84/81 | 30/30/30 | 0 |
@@ -121,8 +120,8 @@ _Curated per-quad build details (not captured in Betaflight dumps), largely seed
 | Mob6 AIO5 1st | 1S | 19g | CrazybeeF4SX1280 (built-in) | SE 0702 28000KV | HQ ultralight 1.2x1.1x3 | HDZero Eco | AIO5 | crash recovery off, airmode on |
 | Mob6 AIO5 2nd | 1S | 19g | CrazybeeF4SX1280 (built-in) | SE 0702 28000KV | HQ ultralight 1.2x1.1x3 | HDZero Eco | AIO5 | crash recovery on, airmode on |
 | Mobula1 | 1S 650mAh | 29.5g | Built-in 5A BLHeli_S 4-in-1 | EX 1002 20000KV | Gemfan 1610-2 40mm bi-blade | HDZero Nano Lite | HDZero Whoop Lite VTX | HappyModel Moblite7 -> Moblite6 (SuperbeeF4 Lite); 75mm; Mobula7 v4 frame |
-| QAS JB | 4S | sub-250g | 35A AM32 3-6S | XILO Stealth 1404 4500KV | HQProp | Lumenier LUX HD AIO G4 |  | Lumenier QAV-S 2, JB Special Edition. User: 5in freestyle frame; sheet lists a 3in / 1404 build (may be outdated) |
-| SPEEDYBEEF405MINI | 3-4S (850mAh 4S) |  | SpeedyBee F405 Mini (20x20) | e.g. EMAX ECO 1404 3700KV | 3" | Caddx Vista | Caddx Vista (DJI HD) | Massive Droner 3in HD (sheet Racing frames/retire); 3in HD micro; no craft_name in dump; board=SPEEDYBEEF405MINI; BF 4.3.2; motors/props per sheet options - verify |
+| QAS JB | 4S | sub-250g | 35A AM32 3-6S | XILO Stealth 1404 4500KV | Gemfan Hurricane 3020 3-blade | Caddx (analog) | SpeedyBee analog VTX | Lumenier QAV-S 2 Sub-250, JB Special Edition, 3in / 1404 build (matches sheet Fleet2 QAV-S 2). Converted from HDZero to analog: SpeedyBee VTX + Caddx cam. Broken 2026-07-21 - blackbox analysis pending |
+| SPEEDYBEEF405MINI | 3-4S (850mAh 4S) |  | SpeedyBee F405 Mini (20x20) | e.g. EMAX ECO 1404 3700KV | 3in | Caddx Vista | Caddx Vista (DJI HD) | Massive Droner 3in HD (sheet Racing frames/retire); 3in HD micro; no craft_name in dump; board=SPEEDYBEEF405MINI; BF 4.3.2; motors/props per sheet options - verify |
 | XILOF4 | 6S |  | XILO Stax 45A BLHeli_32 4-in-1 | XILO Stealth 2206 1700KV (6S) | Lumenier 5x5.3x3 Gate Breaker | RunCam HDZero Nano 90 | HDZero Freestyle VTX | XILO Phreakstyle Slam; JB Edition. Sheet name: Joshua Bardwell Edition - Bundle |
 | XILOF4-2 |  |  |  |  |  |  |  | Sheet name: Joshua Bardwell Edition Pre-Built (newer of the two). Second XILOF4 freestyle build (BF 4.5.1), very similar to XILOF4 (Bundle); specs assumed same — confirm/fill in. No craft_name set, tracked by filename label |
 
