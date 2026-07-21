@@ -147,6 +147,21 @@ def parse_dumps():
         if r['elrs_uid']:
             r['bind_group'] = uid_label[r['elrs_uid']]
 
+    # Collapse duplicate dumps: when several dumps of one quad share identical extracted
+    # inventory values (differing only in date/file), keep just the most recent. The older
+    # ones carry no information at this level of detail — even if the raw dump differed in
+    # fields we don't track (PIDs, OSD layout), the inventory row would be identical.
+    scanned = len(rows)
+    ignore = {'_ident', 'dump_date', 'note', 'file'}
+    keycols = [c for c in rows[0].keys() if c not in ignore] if rows else []
+    dedup = {}
+    for r in rows:
+        k = (r['_ident'],) + tuple(r[c] for c in keycols)
+        cur = dedup.get(k)
+        if cur is None or (r['dump_date'], r['file']) > (cur['dump_date'], cur['file']):
+            dedup[k] = r
+    rows = list(dedup.values())
+
     rows.sort(key=lambda r: (r['_ident'], r['dump_date'], r['file']))
 
     latest = {}
@@ -158,7 +173,7 @@ def parse_dumps():
         if r['dump_date'] == latest[r['_ident']] and 'EMPTY' not in r['note']:
             r['note'] = 'latest' + (('; ' + r['note']) if r['note'] else '')
 
-    return rows
+    return rows, scanned
 
 
 COLS = ['quad', 'dump_date', 'craft_name', 'board', 'manufacturer', 'bf_version', 'mcu',
@@ -303,7 +318,7 @@ def build_summary(latest_rows):
 
 
 def main():
-    rows = parse_dumps()
+    rows, scanned = parse_dumps()
     if not rows:
         print(f"No BTFL_cli_*.txt dumps found in {SRC}", file=sys.stderr)
         sys.exit(1)
@@ -314,7 +329,9 @@ def main():
     with open(OUT_SUMMARY, 'w') as f:
         f.write(build_summary(latest_rows))
 
-    print(f"Scanned {len(rows)} dumps -> {len(latest_rows)} quads")
+    dropped = scanned - len(rows)
+    print(f"Scanned {scanned} dumps -> {len(rows)} rows "
+          f"({dropped} duplicate{'s' if dropped != 1 else ''} collapsed) -> {len(latest_rows)} quads")
     print(f"  {OUT}")
     print(f"  {OUT_LATEST}")
     print(f"  {OUT_SUMMARY}")

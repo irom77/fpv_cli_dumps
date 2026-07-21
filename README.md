@@ -6,7 +6,7 @@ Betaflight CLI backups for my FPV quads, plus a derived fleet inventory.
 
 ```
 backups/                 Betaflight CLI dumps (BTFL_cli_*.txt), one or more per quad
-fpv_quads.csv            Full history — one row per dump, newest per quad flagged 'latest'
+fpv_quads.csv            History — one row per dump (unchanged re-dumps collapsed), newest per quad flagged 'latest'
 fpv_quads_latest.csv     One row per quad, newest dump only
 FLEET_SUMMARY.md         Human-readable overview: fleet table, rollups, "needs attention"
 .claude/skills/fpv-fleet-update/   Skill that regenerates the three files above

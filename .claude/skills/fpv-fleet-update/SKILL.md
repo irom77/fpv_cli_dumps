@@ -15,7 +15,9 @@ description: >-
 This folder holds Betaflight CLI dumps (`BTFL_cli_*.txt`) exported from FPV quads. Three tracked
 files are derived from them and must stay in sync whenever the set of dumps changes:
 
-- `fpv_quads.csv` — full history, one row per dump, newest dump per quad flagged `latest`
+- `fpv_quads.csv` — history, one row per dump, newest dump per quad flagged `latest`. Dumps whose
+  extracted inventory values are identical (differing only in date/file) are collapsed to the most
+  recent, so unchanged re-dumps don't clutter the history.
 - `fpv_quads_latest.csv` — one row per quad, newest dump only
 - `FLEET_SUMMARY.md` — human-readable overview: fleet table, rollups, and a "needs attention" pass
 
