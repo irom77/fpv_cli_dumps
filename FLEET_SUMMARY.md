@@ -34,13 +34,13 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 | Mobula1 | whoop | — | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2025-11-12 |
 | QAS JB | 5-inch | freestyle | active | LUXHDAIO-G4 | G47X | 4.5.0 | - | - | CRSF | 2025-06-27 |
 | Race5 | whoop | — | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2025-01-24 |
-| XILOF4 *(unnamed)* | 5-inch | freestyle | active | XILOF4 | F405 | 4.3.2 | - | - | CRSF | 2026-07-21 |
+| XILOF4 *(unnamed)* | 5-inch | freestyle | **retired** | XILOF4 | F405 | 4.3.2 | - | - | CRSF | 2026-07-21 |
 | XILOF4-2 | 5-inch | freestyle | active | XILOF4 | F405 | 4.5.1 | DSHOT300 | - | - | 2026-07-21 |
 
 ## Fleet rollups
 
 - **Class:** 14× whoop, 2× cinewhoop, 3× micro, 9× 5-inch. Size class inferred from craft name / board where `hardware.csv` doesn't set it.
-- **Status:** 24× active, 2× broken, 2× retired. Lifecycle from `hardware.csv`; a blank there counts as active.
+- **Status:** 23× active, 2× broken, 3× retired. Lifecycle from `hardware.csv`; a blank there counts as active.
 - **Discipline:** 5× race, 3× freestyle, 2× cinematic, 2× long-range, 16 unset. Hand-entered in `hardware.csv` (no heuristic — the dump gives no signal).
 - **Flight controllers:** 14× F411, 6× F7X2, 3× F405, 2× G47X, 1× F745, 1× H743, 1× F411SX1280.
 - **Firmware:** 12 on BF 4.4.x, 10 on BF 4.5.x, 3 on BF 4.2.x, 3 on BF 4.3.x.
@@ -56,7 +56,6 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 - FLYWOOF7NANO (4.2.11)
 - HOBBYWING_XROTORF7CON (4.3.0)
 - M85 HDZero (4.3.1)
-- XILOF4 (4.3.2)
 
 **Not re-dumped in over a year (take a fresh backup next time on the bench):**
 - M85 HDZero (last dump 2024-07-04)
