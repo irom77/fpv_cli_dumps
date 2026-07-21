@@ -25,10 +25,12 @@ files are derived from them and must stay in sync whenever the set of dumps chan
   saturation, and a `flags` column for detected issues like `MOTOR_DESYNC`/`LOW_CELL`). Optional —
   only present once blackbox logs have been processed.
 - `hardware.csv` — hand-maintained per-quad build details that aren't in the dumps
-  (`cells, weight, esc_stack, motors, props, camera, vtx, notes`), plus a `class` column
-  (whoop / cinewhoop / micro / 5-inch) that overrides the auto-guess. Largely seeded from the pilot's
-  own fleet spreadsheet, so some rows may be stale — the `notes` column flags known conflicts. Optional;
-  joined into the summary by quad name. Edit it directly.
+  (`cells, weight, esc_stack, motors, props, camera, vtx, notes`), plus three curated columns the
+  dumps can't provide: `class` (whoop / cinewhoop / micro / 5-inch, overrides the auto-guess),
+  `status` (lifecycle — active / building / rebuilding / retired / lost; blank = active), and
+  `discipline` (what it's flown for — race / freestyle / cinematic; blank = unset). Largely seeded
+  from the pilot's own fleet spreadsheet, so some rows may be stale — the `notes` column flags known
+  conflicts. Optional; joined into the summary by quad name. Edit it directly.
 
 ## What to do
 
@@ -96,6 +98,14 @@ and 65–85 mm product names → whoop; XRotor/TMotor/Flywoo F7 stacks → 5-inc
 Crocodile → micro). A digit in a name is a *board* type, not a size — `AIO5` means a 5-in-1 board, so an
 AIO whoop stays a whoop. The guess is a fallback: an explicit `class` in `hardware.csv` always wins, and
 anything the heuristic can't place is listed under "needs attention" to curate there.
+
+**Status** (lifecycle) and **discipline** (what a quad is flown for) are two orthogonal hand-curated
+columns — a quad keeps its `discipline` after it's `retired`, so they can't share one column. Neither
+is in a dump, so both come only from `hardware.csv` (no guesser). `status` blank defaults to `active`
+via `status_of()`; `retired`/`lost` quads are dropped from the aging-firmware and stale-backup nags in
+"needs attention" (no point re-flashing a shelved quad) but still appear in the fleet table with their
+status flagged, and `building`/`rebuilding` are surfaced as intentionally-incomplete rather than as
+truncated dumps.
 
 Rate columns (`rateprofile`, `rates_type`, `rc_rate_rpy`, `super_rate_rpy`, `expo_rpy`) come from the
 **active** rateprofile only (the last bare `rateprofile N` line) via `extract_active_rates()`. The
