@@ -39,6 +39,26 @@ The script is the single source of truth: it only reads the dumps and rewrites t
 Values are extracted from Betaflight `diff all` output, which only records settings that differ
 from firmware defaults — a blank cell means the setting is at its firmware default.
 
+## What counts as a quad
+
+The CLI dump is the single source of truth. A quad appears in the inventory only once there is a
+`BTFL_cli_*.txt` dump for it — the Fleet table, rollups, and CSVs are built strictly from the dumps.
+A quad tracked only in a separate build spreadsheet won't show up until its dump is added; adding the
+dump is what registers it.
+
+Each quad is keyed by the `craft_name` set in its dump (normalized — case, spaces, and underscores
+are ignored), falling back to the filename label, then the board name. Setting a real craft name in
+Betaflight makes the key stable across re-flashes and file renames.
+
+## Hardware details
+
+`hardware.csv` holds per-quad build details that Betaflight dumps can't carry (ESC/stack, motors,
+props, camera, VTX, cells, weight) plus three curated columns — `class` (size bucket), `status`
+(lifecycle), and `discipline` (what it's flown for). It is an annotation, never a source: it only
+decorates a quad that a dump already put in the inventory, joined by the same normalized name. A row
+whose name matches no dump is shown in the summary's Hardware section flagged as such, but does not
+create a fleet entry. Edit it by hand; the generator reads it but never writes it.
+
 ## Blackbox flight logs
 
 Drop `.BBL`/`.BFL` logs into `blackbox/` (gitignored), then decode them into `flights.csv`:
