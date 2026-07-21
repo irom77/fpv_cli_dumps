@@ -24,9 +24,11 @@ files are derived from them and must stay in sync whenever the set of dumps chan
 - `flights.csv` — one row per decoded blackbox flight (duration, battery sag, current, mAh, motor
   saturation, and a `flags` column for detected issues like `MOTOR_DESYNC`/`LOW_CELL`). Optional —
   only present once blackbox logs have been processed.
-- `hardware.csv` — hand-maintained per-quad build details (ESC stack, motors, props, cells) that
-  aren't in the dumps, plus an optional `class` column (whoop / cinewhoop / micro / 5-inch) that
-  overrides the auto-guess. Optional; joined into the summary by quad name. Edit it directly.
+- `hardware.csv` — hand-maintained per-quad build details that aren't in the dumps
+  (`cells, weight, esc_stack, motors, props, camera, vtx, notes`), plus a `class` column
+  (whoop / cinewhoop / micro / 5-inch) that overrides the auto-guess. Largely seeded from the pilot's
+  own fleet spreadsheet, so some rows may be stale — the `notes` column flags known conflicts. Optional;
+  joined into the summary by quad name. Edit it directly.
 
 ## What to do
 

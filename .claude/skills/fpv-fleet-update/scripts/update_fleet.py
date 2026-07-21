@@ -449,14 +449,16 @@ def build_hardware_section(path, latest_rows):
         return ""
     known = {norm(r['quad']) for r in latest_rows}
     lines = ["", "## Hardware", "",
-             "_Curated per-quad build details (not captured in Betaflight dumps). Edit `hardware.csv`._",
+             "_Curated per-quad build details (not captured in Betaflight dumps), largely seeded from a "
+             "hand-maintained spreadsheet. Edit `hardware.csv`; some rows may be stale (see notes)._",
              "",
-             "| Quad | Cells | ESC / stack | Motors | Props | Notes |",
-             "|---|---|---|---|---|---|"]
+             "| Quad | Cells | Weight | ESC / stack | Motors | Props | Camera | VTX | Notes |",
+             "|---|---|---|---|---|---|---|---|---|"]
     for r in sorted(hw, key=lambda r: r['quad'].lower()):
         star = "" if norm(r['quad']) in known else " *(no matching dump)*"
-        lines.append(f"| {r.get('quad','')}{star} | {r.get('cells','')} | {r.get('esc_stack','')} | "
-                     f"{r.get('motors','')} | {r.get('props','')} | {r.get('notes','')} |")
+        lines.append(f"| {r.get('quad','')}{star} | {r.get('cells','')} | {r.get('weight','')} | "
+                     f"{r.get('esc_stack','')} | {r.get('motors','')} | {r.get('props','')} | "
+                     f"{r.get('camera','')} | {r.get('vtx','')} | {r.get('notes','')} |")
     lines.append("")
     return "\n".join(lines)
 

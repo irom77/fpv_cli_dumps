@@ -15,7 +15,7 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 | Crocodile5 baby | micro | GEPRC_F722_AIO | F7X2 | 4.2.4 | DSHOT300 | - | RX_SERIAL / CRSF | 2024-08-27 |
 | Diamond | whoop | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | Analog | RX_SPI **[A]** | 2025-01-24 |
 | Ecofree | whoop | CRAZYBEEF4DX | F411 | 4.4.2 | DSHOT300 | HD | - | 2025-11-14 |
-| FLYWOOF7NANO | 5-inch | FLYWOOF745NANO | F745 | 4.2.11 | DSHOT300 | - | CRSF | 2024-08-14 |
+| FLYWOOF7NANO | micro | FLYWOOF745NANO | F745 | 4.2.11 | DSHOT300 | - | CRSF | 2024-08-14 |
 | GEPRC_F722_AIO *(unnamed)* | 5-inch | GEPRC_F722_AIO | F7X2 | 4.5.1 | DSHOT300 | - | - | 2024-08-27 |
 | Happish | whoop | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2024-12-06 |
 | HDZERO CRUX35 | micro | BETAFLIGHTF4 | F405 | 4.4.3 | DSHOT300 | HD | - | 2025-03-12 |
@@ -37,7 +37,7 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 
 ## Fleet rollups
 
-- **Class:** 14× whoop, 2× cinewhoop, 2× micro, 8× 5-inch. Size class inferred from craft name / board where `hardware.csv` doesn't set it.
+- **Class:** 14× whoop, 2× cinewhoop, 3× micro, 7× 5-inch. Size class inferred from craft name / board where `hardware.csv` doesn't set it.
 - **Flight controllers:** 14× F411, 6× F7X2, 2× G47X, 2× F405, 1× F745, 1× F411SX1280.
 - **Firmware:** 12 on BF 4.4.x, 8 on BF 4.5.x, 4 on BF 4.2.x, 2 on BF 4.3.x.
 - **ESC protocol:** 17× DSHOT300, 4× DSHOT600.
@@ -99,12 +99,28 @@ _Active rateprofile only, raw stored r/p/y values (see `fpv_quads_latest.csv`). 
 
 ## Hardware
 
-_Curated per-quad build details (not captured in Betaflight dumps). Edit `hardware.csv`._
+_Curated per-quad build details (not captured in Betaflight dumps), largely seeded from a hand-maintained spreadsheet. Edit `hardware.csv`; some rows may be stale (see notes)._
 
-| Quad | Cells | ESC / stack | Motors | Props | Notes |
-|---|---|---|---|---|---|
-| Kronos | 6S | Hobbywing XRotor F722 (45A 4-in-1 ESC) | VCI Spark 2207 Pro 2050Kv | Hurricane MCK 51466 V2 | OpenRacer. Motor replaced 2026-07-20 after a rear-corner desync/crash under load (see flights). Bench-fine at 0% DShot error; fault only appeared under aerodynamic load. |
-| QAS JB |  |  |  |  | Lumenier QAV-S 2 5" freestyle frame, Joshua Bardwell Special Edition. |
+| Quad | Cells | Weight | ESC / stack | Motors | Props | Camera | VTX | Notes |
+|---|---|---|---|---|---|---|---|---|
+| AIR65 R | 1S | 17.3g | Air 5-in-1 (built-in) | 0702 SE II 27000KV | Gemfan 1219S 3-blade | C03 | Onboard 5.8G 25-400mW | BetaFPV Air65; ELRS 2.4G |
+| cinelog-flyfish |  |  | GEPRC F411 AIO (built-in) |  |  |  |  | Successor of CineLog30 (migrated to Flyfish30 frame); current build details TBD |
+| CineLog30 | 4S | 158.5g | BLHeli_S 35A (GEP-F411-35A AIO) | GR1404 3850KV | T3x3x3 | Polar | Caddx Vista | GEPRC GEP-CL30; RETIRED -> migrated to cinelog-flyfish (Flyfish30) |
+| Crocodile5 baby | 4S | 252.29g | GEP-F722-35A AIO (built-in) | GEP 2004 2550KV | Gemfan 5130 | Caddx Air Unit | HD air unit | GEPRC GEP-CB5; RETIRED; sheet size 5in but 2004 motors = 4in class |
+| Diamond | 1S 300mAh | 17.5g | Built-in 5A BLHeli_S 4-in-1 | SE 0702 23000KV | Gemfan 1210 31mm bi-blade | RunCam Nano 3 | Built-in 25-400mW 5.8G | HappyModel Mobeetle6 (Diamond F4 ELRS AIO); analog |
+| Ecofree | 1S | 23g | 12A 1-2S BLHeli_S (built-in) | SE 0702 28000KV | Gemfan Durable 1210 31mm bi-blade | HDZero ECO | HDZero ECO VTX | HappyModel Mobula6 SuperECOfree; sheet FC=SuperX AIO but dump board=CrazybeeF4DX - verify |
+| FLYWOOF7NANO | 4S 850mAh | <250g | Goku F745 16x16 stack (built-in) | NIN 1404 V2 2750KV | Gemfan 4024 | Caddx Polar / Nebula Pro | Caddx Vista | Flywoo Explorer LR4 V2 HD; 4in; class corrected 5-inch -> micro (4in LR) |
+| Happish | 1S | 28g | Onboard 4-in-1 | EX0802 19000KV | Gemfan 35mm 3-blade | HDZero Nano Lite | HDZero Whoop Lite VTX | HappyModel Mobula6 HDZero (SuperbeeF4 Lite ELRS SPI); Meteor65 Pro frame |
+| HDZERO CRUX35 | 4S | 115g | Built-in 20A BLHeli_S 4-in-1 | HappyModel EX1404 3500KV | HQProp T3.5x2x3 | CruxF405 HD ELRS AIO cam | Onboard HDZero | HDZero Crux35; 113mm |
+| Kronos | 6S | 305g | Hobbywing XRotor F722 (45A 4-in-1 ESC) | VCI Spark 2207 Pro 2050Kv | Hurricane MCK 51466 V2 | Runcam HDZero Nano 90 | HDZero Race V3 HD | OpenRacer / KRONOS racing frame, Tattu 6S 1400mAh. Motor replaced 2026-07-20 after a rear-corner desync/crash under load (see flights); bench-fine at 0% DShot error, fault only under aero load. |
+| LS-Ultra | 6S | 270g | T-Motor Mini F45A 6S 4-in-1 (AM32) | Five33 2207 Champion Ed. 2070KV | Gemfan Fury 5128 | Runcam HDZero Nano 90 | HDZero Race V3 | Five33 Lightswitch V2 Ultra; sheet FC=Foxeer Mini F722 but dump board=TMOTORF7 - verify |
+| M6 ECO | 1S | 23.16g | SuperX HD ELRS AIO (built-in) | SE 0702 28000KV | Gemfan 1208-3 31mm tri-blade | HDZero ECO | HDZero ECO VTX | HappyModel Mobula6 ECO 2024; dump board CrazybeeF4DX differs from sheet - verify |
+| Meteor85 | 2S 450mAh | 48.3g | Built-in 1S/2S 12A ESC | 1103 11000KV | Gemfan 2015 2-blade | Runcam HDZero Nano Lite / Caddx Ant Nano | HDZero Whoop Lite / M03 analog | BetaFPV Meteor85 Brushless Whoop |
+| Mob6 AIO5 1st | 1S | 19g | CrazybeeF4SX1280 (built-in) | SE 0702 28000KV | HQ ultralight 1.2x1.1x3 | HDZero Eco | AIO5 | crash recovery off, airmode on |
+| Mob6 AIO5 2nd | 1S | 19g | CrazybeeF4SX1280 (built-in) | SE 0702 28000KV | HQ ultralight 1.2x1.1x3 | HDZero Eco | AIO5 | crash recovery on, airmode on |
+| Mobula1 | 1S 650mAh | 29.5g | Built-in 5A BLHeli_S 4-in-1 | EX 1002 20000KV | Gemfan 1610-2 40mm bi-blade | HDZero Nano Lite | HDZero Whoop Lite VTX | HappyModel Moblite7 -> Moblite6 (SuperbeeF4 Lite); 75mm; Mobula7 v4 frame |
+| QAS JB | 4S | sub-250g | 35A AM32 3-6S | XILO Stealth 1404 4500KV | HQProp | Lumenier LUX HD AIO G4 |  | Lumenier QAV-S 2, JB Special Edition. User: 5in freestyle frame; sheet lists a 3in / 1404 build (may be outdated) |
+| XILOF4 | 6S |  | XILO Stax 45A BLHeli_32 4-in-1 | XILO Stealth 2206 1700KV (6S) | Lumenier 5x5.3x3 Gate Breaker | RunCam HDZero Nano 90 | HDZero Freestyle VTX | XILO Phreakstyle Slam; JB Edition |
 
 ## Flights
 
