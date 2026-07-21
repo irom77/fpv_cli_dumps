@@ -2,6 +2,13 @@
 
 Betaflight CLI backups for my FPV quads, plus a derived fleet inventory.
 
+## About
+
+I use AI to help build, tune, and troubleshoot my FPV quads — extracting fleet configs from
+Betaflight dumps, decoding blackbox flight logs, and diagnosing failures. I write about it on
+Substack: [Tracking Down a Flight Failure](https://irekromaniuk.substack.com/p/tracking-down-a-flight-failure-an),
+the story behind the Kronos motor-desync analysis in this repo.
+
 ## Layout
 
 ```
