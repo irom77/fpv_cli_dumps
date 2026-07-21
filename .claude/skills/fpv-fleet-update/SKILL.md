@@ -27,7 +27,7 @@ files are derived from them and must stay in sync whenever the set of dumps chan
 - `hardware.csv` — hand-maintained per-quad build details that aren't in the dumps
   (`cells, weight, esc_stack, motors, props, camera, vtx, notes`), plus three curated columns the
   dumps can't provide: `class` (whoop / cinewhoop / micro / 5-inch, overrides the auto-guess),
-  `status` (lifecycle — active / building / rebuilding / retired / lost; blank = active), and
+  `status` (lifecycle — active / building / rebuilding / broken / retired / lost; blank = active), and
   `discipline` (what it's flown for — race / freestyle / cinematic / long-range; blank = unset). Largely seeded
   from the pilot's own fleet spreadsheet, so some rows may be stale — the `notes` column flags known
   conflicts. Optional; joined into the summary by quad name. Edit it directly.
@@ -102,10 +102,10 @@ anything the heuristic can't place is listed under "needs attention" to curate t
 **Status** (lifecycle) and **discipline** (what a quad is flown for) are two orthogonal hand-curated
 columns — a quad keeps its `discipline` after it's `retired`, so they can't share one column. Neither
 is in a dump, so both come only from `hardware.csv` (no guesser). `status` blank defaults to `active`
-via `status_of()`; `retired`/`lost` quads are dropped from the aging-firmware and stale-backup nags in
-"needs attention" (no point re-flashing a shelved quad) but still appear in the fleet table with their
-status flagged, and `building`/`rebuilding` are surfaced as intentionally-incomplete rather than as
-truncated dumps.
+via `status_of()`; any not-flyable status (`broken`/`retired`/`lost`) is dropped from the aging-firmware
+and stale-backup nags in "needs attention" (no point re-flashing a grounded quad) but still appears in
+the fleet table with its status flagged. `broken` also gets its own actionable "needs repair" line, and
+`building`/`rebuilding` are surfaced as intentionally-incomplete rather than as truncated dumps.
 
 Rate columns (`rateprofile`, `rates_type`, `rc_rate_rpy`, `super_rate_rpy`, `expo_rpy`) come from the
 **active** rateprofile only (the last bare `rateprofile N` line) via `extract_active_rates()`. The

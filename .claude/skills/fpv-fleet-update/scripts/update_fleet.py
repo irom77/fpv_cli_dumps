@@ -48,7 +48,7 @@ def norm(s):
 CLASS_ORDER = ['whoop', 'cinewhoop', 'micro', '5-inch']
 # Lifecycle state of the airframe (can I fly it today?). Hand-maintained; blank defaults to 'active'
 # so only exceptions need annotating. Ordered flyable -> gone for stable rollups.
-STATUS_ORDER = ['active', 'building', 'rebuilding', 'retired', 'lost']
+STATUS_ORDER = ['active', 'building', 'rebuilding', 'broken', 'retired', 'lost']
 FLYABLE = {'active', 'building', 'rebuilding', ''}   # states we still nag about (firmware/staleness)
 # What the quad is built to do (how is it flown?). Orthogonal to status — a quad keeps its discipline
 # after it's retired. Hand-entered only; the dump carries no signal for it, so there's no guesser.
@@ -412,6 +412,12 @@ def build_summary(latest_rows):
     # shelved or gone quad doesn't need a fresh backup or a flash. They still appear in the fleet
     # table (flagged by status); this section is only about things worth acting on.
     inservice = [r for r in latest_rows if status_of(r) in FLYABLE]
+
+    broken = [r for r in latest_rows if status_of(r) == 'broken']
+    if broken:
+        A("**Broken (needs repair — grounded until fixed):** "
+          + ", ".join(r['quad'] for r in broken) + ".")
+        A("")
 
     building = [r for r in latest_rows if status_of(r) in ('building', 'rebuilding')]
     if building:

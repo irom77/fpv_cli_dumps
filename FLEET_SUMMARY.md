@@ -13,7 +13,7 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 | cinelog-flyfish | cinewhoop | cinematic | active | GEPRCF411_AIO | F411 | 4.5.2 | - | - | - | 2025-06-19 |
 | CineLog30 | cinewhoop | cinematic | **retired** | GEPRC_F411_AIO | F411 | 4.2.3 | DSHOT600 | - | RX_SERIAL / CRSF | 2025-06-19 |
 | Crocodile5 baby | micro | long-range | **retired** | GEPRC_F722_AIO | F7X2 | 4.2.4 | DSHOT300 | - | RX_SERIAL / CRSF | 2024-08-27 |
-| Diamond | whoop | — | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | Analog | RX_SPI **[A]** | 2025-01-24 |
+| Diamond | whoop | — | **broken** | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | Analog | RX_SPI **[A]** | 2025-01-24 |
 | Ecofree | whoop | — | active | CRAZYBEEF4DX | F411 | 4.4.2 | DSHOT300 | HD | - | 2025-11-14 |
 | FLYWOOF7NANO | micro | long-range | active | FLYWOOF745NANO | F745 | 4.2.11 | DSHOT300 | - | CRSF | 2024-08-14 |
 | GEPRC_F722_AIO *(unnamed)* | 5-inch | — | active | GEPRC_F722_AIO | F7X2 | 4.5.1 | DSHOT300 | - | - | 2024-08-27 |
@@ -25,7 +25,7 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 | LS-Ultra | 5-inch | race | active | TMOTORF7 | F7X2 | 4.5.2.KAACK_V15 | DSHOT600 | HD | CRSF | 2025-08-06 |
 | M6 ECO | whoop | — | active | CRAZYBEEF4DX | F411 | 4.4.2 | DSHOT300 | HD | - | 2025-10-25 |
 | M85 HDZero | whoop | — | active | BETAFPVF4SX1280 | F411SX1280 | 4.3.1 | DSHOT300 | - | RX_SERIAL / CRSF **[B]** | 2024-07-04 |
-| Meteor85 | whoop | — | active | BETAFPVF4SX1280 | F411 | 4.4.3 | DSHOT300 | HD | ELRS **[A]** | 2025-01-10 |
+| Meteor85 | whoop | — | **broken** | BETAFPVF4SX1280 | F411 | 4.4.3 | DSHOT300 | HD | ELRS **[A]** | 2025-01-10 |
 | Mob6 AIO5 1st | whoop | race | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2025-10-25 |
 | Mob6 AIO5 2nd | whoop | race | active | CRAZYBEEF4SX1280 | F411 | 4.5.2 | - | - | ELRS **[A]** | 2025-10-25 |
 | Mob6 AIO5 RACE | whoop | — | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2024-10-07 |
@@ -38,7 +38,7 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 ## Fleet rollups
 
 - **Class:** 14× whoop, 2× cinewhoop, 3× micro, 7× 5-inch. Size class inferred from craft name / board where `hardware.csv` doesn't set it.
-- **Status:** 24× active, 2× retired. Lifecycle from `hardware.csv`; a blank there counts as active.
+- **Status:** 22× active, 2× broken, 2× retired. Lifecycle from `hardware.csv`; a blank there counts as active.
 - **Discipline:** 4× race, 2× freestyle, 2× cinematic, 2× long-range, 16 unset. Hand-entered in `hardware.csv` (no heuristic — the dump gives no signal).
 - **Flight controllers:** 14× F411, 6× F7X2, 2× G47X, 2× F405, 1× F745, 1× F411SX1280.
 - **Firmware:** 12 on BF 4.4.x, 8 on BF 4.5.x, 4 on BF 4.2.x, 2 on BF 4.3.x.
@@ -47,6 +47,8 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 - **Video:** 11× HD, 1× Analog. Quads showing `-` have `vcd_video_system` at firmware default in the diff — not necessarily video-less.
 
 ## Needs attention
+
+**Broken (needs repair — grounded until fixed):** Diamond, Meteor85.
 
 **Aging firmware (older than BF 4.4):**
 - FLYWOOF7NANO (4.2.11)
@@ -64,8 +66,6 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 - Mob6 AIO5 RACE (last dump 2024-10-07)
 - XILOF4 (last dump 2024-10-08)
 - Happish (last dump 2024-12-06)
-- Meteor85 (last dump 2025-01-10)
-- Diamond (last dump 2025-01-24)
 - Race5 (last dump 2025-01-24)
 - HDZERO CRUX35 (last dump 2025-03-12)
 - cinelog-flyfish (last dump 2025-06-19)
