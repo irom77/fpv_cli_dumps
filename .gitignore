@@ -6,3 +6,11 @@ Thumbs.db
 # python
 __pycache__/
 *.pyc
+.venv/
+
+# raw blackbox flight logs — large binaries; only the derived flights.csv is committed
+blackbox/
+*.BBL
+*.bbl
+*.BFL
+*.bfl

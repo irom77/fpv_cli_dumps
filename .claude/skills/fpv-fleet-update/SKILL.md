@@ -19,7 +19,10 @@ files are derived from them and must stay in sync whenever the set of dumps chan
   extracted inventory values are identical (differing only in date/file) are collapsed to the most
   recent, so unchanged re-dumps don't clutter the history.
 - `fpv_quads_latest.csv` — one row per quad, newest dump only
-- `FLEET_SUMMARY.md` — human-readable overview: fleet table, rollups, and a "needs attention" pass
+- `FLEET_SUMMARY.md` — human-readable overview: fleet table, rollups, "needs attention", and (if
+  `flights.csv` exists) a per-quad Flights section
+- `flights.csv` — one row per decoded blackbox flight (duration, battery sag, current, mAh, motor
+  saturation). Optional — only present once blackbox logs have been processed.
 
 ## What to do
 
@@ -33,6 +36,27 @@ python3 .claude/skills/fpv-fleet-update/scripts/update_fleet.py
 The script prints how many dumps it scanned and how many distinct quads it found. That's the whole
 update — do not hand-edit the CSVs or the summary, because the next run overwrites them. If something
 in the output looks wrong, fix the script rather than the generated files (see "How it works" below).
+
+### Blackbox flight logs (optional)
+
+If the user adds Betaflight blackbox logs (`.BBL`/`.BFL`) or asks about flights, decode them with
+the companion script, then re-run `update_fleet.py` so the summary picks up the Flights section:
+
+```bash
+# one-time dependency setup (the orangebox blackbox parser, isolated in a venv):
+python3 -m venv .venv && .venv/bin/pip install orangebox
+
+# put logs in ./blackbox (default) or pass a folder (e.g. the OneDrive backup dir), then:
+python3 .claude/skills/fpv-fleet-update/scripts/update_flights.py [logs_folder]
+python3 .claude/skills/fpv-fleet-update/scripts/update_fleet.py
+```
+
+`update_flights.py` auto-re-execs under `./.venv` if `orangebox` isn't already importable. It writes
+`flights.csv` and **merges** with any existing rows keyed by `(file, log_index)`, so summarized
+flights persist even after the raw log is moved or deleted — important because the large `.BBL` files
+are gitignored and never committed. Units are calibrated from each log's headers (vbat/current in
+0.01 units, cell count inferred from start voltage). A quirk of the parser is that a duplicated header
+marker can look like a phantom extra flight; `valid_logs()` skips those by ignoring near-empty logs.
 
 After it runs, tell the user what actually changed relative to before: which quad the new dump belongs
 to, whether it created a new quad or updated an existing one, and anything newly flagged under "needs

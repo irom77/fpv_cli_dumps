@@ -31,13 +31,21 @@ flag) before publishing.
 
 ## 2. Make use of blackbox logs
 
-Betaflight blackbox flight logs (`.bbl` / `.bfl`) capture per-flight telemetry (gyro, PID error,
-motor output, vbat, RC commands). Explore pulling these into the project alongside the CLI dumps.
+Betaflight blackbox flight logs (`.bbl` / `.bfl`) capture per-flight telemetry. First pass is
+implemented: `update_flights.py` decodes logs (via `orangebox`) into `flights.csv`, and
+`update_fleet.py` folds a per-quad Flights section into FLEET_SUMMARY.md.
 
-Ideas to scope:
-- [ ] Decide where logs live (e.g. `blackbox/<quad>/` subfolders) and a naming convention.
-- [ ] Parse logs to per-flight summaries (flight time, min/avg vbat, max current/mAh, motor
-      saturation, notable warnings) — likely via `blackbox_decode` (Betaflight tools) or a Python parser.
-- [ ] Link each log back to its quad so it joins the existing inventory (craft name / board).
-- [ ] Consider a per-quad "flights" rollup and add it to FLEET_SUMMARY.md.
-- [ ] Extend the `fpv-fleet-update` skill (or add a sibling skill) to regenerate these summaries.
+Done:
+- [x] Logs live in `blackbox/` (gitignored); only derived `flights.csv` is committed.
+- [x] Per-flight summary: duration, battery start/min/sag, cell count, avg/peak current, mAh,
+      avg throttle & motor, motor saturation %. Units calibrated from log headers.
+- [x] Link each flight to its quad (craft name from log header) and per-quad rollup in the summary.
+- [x] Wired into the `fpv-fleet-update` skill.
+
+Next / ideas to extend:
+- [ ] More metrics: max gyro / vibration (noise), PID error / tracking, RC dropout & failsafe events,
+      throttle histogram, per-motor imbalance (worn motor / prop detection).
+- [ ] Detect concerning patterns automatically (excessive sag → aging pack; motor saturation →
+      underpowered/overweight; desync/erpm anomalies) and surface under "needs attention".
+- [ ] Distinguish real flights from bench tests (both current logs are short bench hops).
+- [ ] Handle logs whose filename lacks a craft label; match to a quad another way.

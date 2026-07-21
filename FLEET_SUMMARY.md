@@ -73,3 +73,14 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 - QAS JB (last dump 2025-06-27)
 
 _Note: BETAFPVF4SX1280, GEPRC_F722_AIO, HOBBYWING_XROTORF7CON, HOBBYWING_XROTORF7CONV, XILOF4 are keyed by board name because their dumps had no craft name set (`set craft_name` / `# name:`). Setting a craft name makes future tracking more reliable._
+
+## Flights
+
+_From decoded Betaflight blackbox logs (see `flights.csv`). Raw `.BBL` logs are not committed._
+
+**Kronos** — 2 flights, 22s total, 18 mAh total, worst sag 4.66V (2026-07-15).
+
+| Date | Dur | Batt | Min | Sag | Avg A | Peak A | mAh | Motor sat |
+|---|---|---|---|---|---|---|---|---|
+| 2026-07-15 | 8s | 6S 24.96V | 20.3V | 4.66V | 5.0A | 54.5A | 11 | 7.2% |
+| 2026-07-20 | 14s | 6S 24.72V | 24.03V | 0.69V | 1.9A | 7.1A | 7 | 0.0% |

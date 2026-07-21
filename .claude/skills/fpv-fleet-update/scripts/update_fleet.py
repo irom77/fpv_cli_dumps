@@ -317,6 +317,49 @@ def build_summary(latest_rows):
     return "\n".join(lines).rstrip() + "\n"
 
 
+def build_flights_section(path):
+    """Optional '## Flights' section, built from flights.csv if it exists (produced by
+    update_flights.py). Kept separate so this stdlib-only script never needs the blackbox parser."""
+    if not os.path.exists(path):
+        return ""
+    with open(path, newline='') as f:
+        flights = list(csv.DictReader(f))
+    if not flights:
+        return ""
+
+    def num(v):
+        try:
+            return float(v)
+        except (ValueError, TypeError):
+            return 0.0
+
+    groups = {}
+    for fl in flights:
+        key = fl.get('craft') or fl.get('quad') or '?'
+        groups.setdefault(key, []).append(fl)
+
+    lines = ["", "## Flights", "",
+             "_From decoded Betaflight blackbox logs (see `flights.csv`). Raw `.BBL` logs are not "
+             "committed._", ""]
+    for quad in sorted(groups, key=str.lower):
+        fs = sorted(groups[quad], key=lambda r: (r['date'], r['time']))
+        tot_t = sum(num(f['duration_s']) for f in fs)
+        tot_mah = sum(num(f['mah']) for f in fs)
+        worst = max(fs, key=lambda f: num(f['sag_v']))
+        lines.append(f"**{quad}** — {len(fs)} flight{'s' if len(fs) != 1 else ''}, "
+                     f"{tot_t:.0f}s total, {tot_mah:.0f} mAh total, "
+                     f"worst sag {num(worst['sag_v']):.2f}V ({worst['date']}).")
+        lines.append("")
+        lines.append("| Date | Dur | Batt | Min | Sag | Avg A | Peak A | mAh | Motor sat |")
+        lines.append("|---|---|---|---|---|---|---|---|---|")
+        for f in fs:
+            lines.append(f"| {f['date']} | {num(f['duration_s']):.0f}s | {f['cells']}S "
+                         f"{f['v_start']}V | {f['v_min']}V | {num(f['sag_v']):.2f}V | "
+                         f"{f['a_avg']}A | {f['a_peak']}A | {f['mah']} | {num(f['motor_sat_pct']):.1f}% |")
+        lines.append("")
+    return "\n".join(lines)
+
+
 def main():
     rows, scanned = parse_dumps()
     if not rows:
@@ -327,7 +370,8 @@ def main():
     write_csv(OUT, rows)
     write_csv(OUT_LATEST, latest_rows)
     with open(OUT_SUMMARY, 'w') as f:
-        f.write(build_summary(latest_rows))
+        f.write(build_summary(latest_rows).rstrip() + "\n")
+        f.write(build_flights_section(os.path.join(SRC, "flights.csv")))
 
     dropped = scanned - len(rows)
     print(f"Scanned {scanned} dumps -> {len(rows)} rows "
