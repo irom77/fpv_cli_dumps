@@ -74,6 +74,28 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 
 _Note: BETAFPVF4SX1280, GEPRC_F722_AIO, HOBBYWING_XROTORF7CON, HOBBYWING_XROTORF7CONV, XILOF4 are keyed by board name because their dumps had no craft name set (`set craft_name` / `# name:`). Setting a craft name makes future tracking more reliable._
 
+## Rates
+
+_Active rateprofile only, raw stored r/p/y values (see `fpv_quads_latest.csv`). Meaning depends on type — BETAFLIGHT: RC Rate / Super / Expo; ACTUAL: Center Sens / Max Rate / Expo. Blank type = firmware default (ACTUAL); quads at all-default rates are omitted._
+
+| Quad | Type | RC rate | Super | Expo | Profile |
+|---|---|---|---|---|---|
+| BETAFPVF4SX1280 | default | — | 65/65/65 | — | 0 |
+| Crocodile5 baby | default | 130/130/130 | — | 20/22/20 | 0 |
+| Ecofree | default | //12 | 64/64/72 | 35/35/15 | 0:R_Angle |
+| GEPRC_F722_AIO | default | 130/130/130 | — | 20/22/20 | 0 |
+| Happish | default | 20/20/20 | 50/50/50 | 50/50/25 | 0 |
+| LS-Ultra | ACTUAL | 7/7/7 | 67/67/67 | 0/0/0 | 1:- |
+| M85 HDZero | default | — | 65/65/65 | — | 0 |
+| Meteor85 | default | — | 65/65/65 | — | 0 |
+| Mob6 AIO5 1st | BETAFLIGHT | 100/100/100 | 70/70/70 | — | 0 |
+| Mob6 AIO5 2nd | BETAFLIGHT | 100/100/100 | 70/70/70 | — | 0 |
+| Mob6 AIO5 RACE | BETAFLIGHT | 100/100/100 | 70/70/70 | — | 0 |
+| Mob6 HDZERO RACE | BETAFLIGHT | 100/100/100 | 70/70/70 | — | 0 |
+| Mobula1 | default | 20/20/20 | 50/50/50 | 50/50/25 | 0:R_Angle |
+| Race5 | BETAFLIGHT | 100/100/100 | 70/70/70 | — | 0:R_Angle |
+| XILOF4 | default | 70/70/70 | 84/84/81 | 30/30/30 | 0 |
+
 ## Hardware
 
 _Curated per-quad build details (not captured in Betaflight dumps). Edit `hardware.csv`._

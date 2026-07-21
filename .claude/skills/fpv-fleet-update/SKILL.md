@@ -87,6 +87,12 @@ The script reads values straight from `diff all` output, so anything left at a f
 blank by design — that is not a bug. Truncated/aborted dumps (essentially empty files) are kept but
 flagged so a real backup can replace them.
 
+Rate columns (`rateprofile`, `rates_type`, `rc_rate_rpy`, `super_rate_rpy`, `expo_rpy`) come from the
+**active** rateprofile only (the last bare `rateprofile N` line) via `extract_active_rates()`. The
+r/p/y triples are the RAW stored integers; their meaning depends on `rates_type` (BETAFLIGHT → RC
+Rate / Super Rate / Expo; ACTUAL → Center Sensitivity / Max Rate / Expo). A blank `rates_type` means
+firmware default (ACTUAL), and a triple like `//12` means only yaw was set (roll/pitch at default).
+
 If the extraction is wrong or you want to capture a new field, edit
 `scripts/update_fleet.py` — the field extraction lives in `parse_dumps()`, the CSV columns in `COLS`,
 and the summary layout in `build_summary()`. Re-run the script and confirm the diffs look right.

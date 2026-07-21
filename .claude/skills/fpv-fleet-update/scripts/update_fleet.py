@@ -45,6 +45,43 @@ def norm(s):
     return re.sub(r'[^A-Za-z0-9]', '', s).upper()
 
 
+def extract_active_rates(text):
+    """Pull the ACTIVE rateprofile's rates. The rate keys (rc_rate/srate/expo/rates_type) live
+    inside a rateprofile block, and the same key name appears in every profile — so we must read
+    only the active one. The active profile is the last bare `rateprofile N` line (the restore
+    selection in normal dumps; the sole defined profile in older/partial dumps). Values are the RAW
+    stored integers straight from the dump; their meaning depends on rates_type (BETAFLIGHT: RC Rate /
+    Super Rate / Expo; ACTUAL: Center Sensitivity / Max Rate / Expo). Defaults are omitted by
+    `diff all`, so unset fields come out blank. rates_type blank means firmware default (ACTUAL)."""
+    sels = re.findall(r'^rateprofile (\d+)\s*$', text, re.M)
+    active = sels[-1] if sels else None
+    vals = {}
+    if active is not None:
+        cur = None
+        for line in text.splitlines():
+            m = re.match(r'^rateprofile (\d+)\s*$', line)
+            if m:
+                cur = m.group(1)
+                continue
+            if cur == active:
+                sm = re.match(r'^set (\w+) = (.+?)\s*$', line)
+                if sm:
+                    vals[sm.group(1)] = sm.group(2).strip()
+
+    def triple(a, b, c):
+        parts = [vals.get(a, ''), vals.get(b, ''), vals.get(c, '')]
+        return '/'.join(parts) if any(parts) else ''
+
+    name = vals.get('rateprofile_name', '')
+    return {
+        'rateprofile': (f"{active}:{name}" if active is not None and name else (active or '')),
+        'rates_type': vals.get('rates_type', ''),
+        'rc_rate_rpy': triple('roll_rc_rate', 'pitch_rc_rate', 'yaw_rc_rate'),
+        'super_rate_rpy': triple('roll_srate', 'pitch_srate', 'yaw_srate'),
+        'expo_rpy': triple('roll_expo', 'pitch_expo', 'yaw_expo'),
+    }
+
+
 def parse_dumps():
     rows = []
     # Recursive so dumps organized into subfolders (e.g. backups/) are still found.
@@ -130,6 +167,7 @@ def parse_dumps():
             'elrs_uid': val(text, 'expresslrs_uid'),
             'bind_group': '',
             'gyro_align': val(text, 'gyro_1_sensor_align'),
+            **extract_active_rates(text),
             'pilot': val(text, 'pilot_name'),
             'file': base,
             'note': '',
@@ -153,10 +191,10 @@ def parse_dumps():
     # fields we don't track (PIDs, OSD layout), the inventory row would be identical.
     scanned = len(rows)
     ignore = {'_ident', 'dump_date', 'note', 'file'}
-    keycols = [c for c in rows[0].keys() if c not in ignore] if rows else []
+    keycols = [c for c in COLS if c not in ignore]  # canonical + stable across row shapes
     dedup = {}
     for r in rows:
-        k = (r['_ident'],) + tuple(r[c] for c in keycols)
+        k = (r['_ident'],) + tuple(r.get(c, '') for c in keycols)
         cur = dedup.get(k)
         if cur is None or (r['dump_date'], r['file']) > (cur['dump_date'], cur['file']):
             dedup[k] = r
@@ -179,7 +217,8 @@ def parse_dumps():
 COLS = ['quad', 'dump_date', 'craft_name', 'board', 'manufacturer', 'bf_version', 'mcu',
         'motor_protocol', 'motor_poles', 'dshot_bidir', 'rx_protocol', 'rx_spi_protocol',
         'elrs_uid', 'bind_group', 'video_system', 'vtx_band', 'vtx_channel', 'vtx_power',
-        'vtx_freq', 'cell_min_v', 'cell_max_v', 'cell_warn_v', 'gyro_align', 'pilot',
+        'vtx_freq', 'cell_min_v', 'cell_max_v', 'cell_warn_v', 'gyro_align',
+        'rateprofile', 'rates_type', 'rc_rate_rpy', 'super_rate_rpy', 'expo_rpy', 'pilot',
         'note', 'file']
 
 
@@ -317,6 +356,28 @@ def build_summary(latest_rows):
     return "\n".join(lines).rstrip() + "\n"
 
 
+def build_rates_section(latest_rows):
+    """Compact per-quad rates table. Only lists quads that set any rate (the rest are at firmware
+    default). Values are the raw stored r/p/y integers; meaning depends on rates_type."""
+    have = [r for r in latest_rows
+            if r.get('rates_type') or r.get('rc_rate_rpy') or r.get('super_rate_rpy') or r.get('expo_rpy')]
+    if not have:
+        return ""
+    lines = ["", "## Rates", "",
+             "_Active rateprofile only, raw stored r/p/y values (see `fpv_quads_latest.csv`). Meaning "
+             "depends on type — BETAFLIGHT: RC Rate / Super / Expo; ACTUAL: Center Sens / Max Rate / "
+             "Expo. Blank type = firmware default (ACTUAL); quads at all-default rates are omitted._",
+             "",
+             "| Quad | Type | RC rate | Super | Expo | Profile |",
+             "|---|---|---|---|---|---|"]
+    for r in sorted(have, key=lambda r: r['quad'].lower()):
+        lines.append(f"| {r['quad']} | {r.get('rates_type') or 'default'} | "
+                     f"{r.get('rc_rate_rpy') or '—'} | {r.get('super_rate_rpy') or '—'} | "
+                     f"{r.get('expo_rpy') or '—'} | {r.get('rateprofile') or '—'} |")
+    lines.append("")
+    return "\n".join(lines)
+
+
 def build_hardware_section(path, latest_rows):
     """Optional '## Hardware' section from a hand-maintained hardware.csv. This data (ESC stack,
     motors, props, cell count) isn't in the Betaflight dumps, so it's curated separately and joined
@@ -400,6 +461,7 @@ def main():
     write_csv(OUT_LATEST, latest_rows)
     with open(OUT_SUMMARY, 'w') as f:
         f.write(build_summary(latest_rows).rstrip() + "\n")
+        f.write(build_rates_section(latest_rows))
         f.write(build_hardware_section(os.path.join(SRC, "hardware.csv"), latest_rows))
         f.write(build_flights_section(os.path.join(SRC, "flights.csv")))
 
