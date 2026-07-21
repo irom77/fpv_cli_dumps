@@ -38,7 +38,18 @@ fname_re = re.compile(
 
 COLS = ['quad', 'date', 'time', 'board', 'craft', 'firmware', 'duration_s', 'frames', 'cells',
         'v_start', 'v_min', 'v_end', 'sag_v', 'cell_min_v', 'a_avg', 'a_peak', 'mah',
-        'avg_throttle_pct', 'avg_motor_pct', 'motor_sat_pct', 'log_index', 'file']
+        'avg_throttle_pct', 'avg_motor_pct', 'motor_sat_pct', 'desync_pct', 'desync_motors',
+        'flags', 'log_index', 'file']
+
+# Motor desync / thrust-loss detection. A healthy motor's RPM tracks its command; a desynced or
+# failing motor is commanded hard but doesn't spin up. We flag a frame as a desync event when a
+# motor is commanded near max (>=90% of the output range) yet its bidirectional-DShot eRPM is well
+# below the fastest motor's (<55%) — i.e. told to spin hard, spinning much slower than its peers.
+# Validated against a known crash log (193 such frames, motors 0 & 3) vs a clean log (0 frames).
+DESYNC_CMD_FRAC = 0.90
+DESYNC_ERPM_RATIO = 0.55
+DESYNC_MIN_FRAMES = 20  # absolute frame count above which we raise the MOTOR_DESYNC flag
+LOW_CELL_V = 3.3        # sagged cell voltage under load below this raises LOW_CELL
 
 
 def valid_logs(path):
@@ -60,8 +71,11 @@ def summarize_log(path, log_index):
     tm, vb, am = idx.get('time'), idx.get('vbatLatest'), idx.get('amperageLatest')
     thr = idx.get('rcCommand[3]')
     mot = [idx[f'motor[{i}]'] for i in range(4) if f'motor[{i}]' in idx]
+    erp = [idx[f'eRPM[{i}]'] for i in range(4) if f'eRPM[{i}]' in idx]
     mo = p.headers.get('motorOutput', [0, 1000])
     m_lo, m_hi = mo[0], mo[1]
+    desync_cmd = m_lo + DESYNC_CMD_FRAC * (m_hi - m_lo)
+    desync_per_motor = [0, 0, 0, 0]
 
     n = 0
     t0 = tN = tprev = None
@@ -94,6 +108,13 @@ def summarize_log(path, log_index):
             if max(d[i] for i in mot) >= m_lo + 0.99 * (m_hi - m_lo):
                 sat_frames += 1
             motor_sum += sum(d[i] for i in mot) / len(mot)
+            if len(erp) == 4:
+                erpms = [d[e] for e in erp]
+                emax = max(erpms)
+                if emax > 0:
+                    for i in range(4):
+                        if d[mot[i]] >= desync_cmd and erpms[i] < DESYNC_ERPM_RATIO * emax:
+                            desync_per_motor[i] += 1
         if thr is not None:
             thr_sum += d[thr]
         n += 1
@@ -102,6 +123,17 @@ def summarize_log(path, log_index):
         return None
     dur = (tN - t0) / 1e6
     cells = round(v_start / 4.2) if v_start else 0
+
+    desync_total = sum(desync_per_motor)
+    # motors carrying a meaningful share of the desync frames (>=25% of the worst motor's count)
+    worst = max(desync_per_motor) if desync_per_motor else 0
+    bad_motors = [i for i, c in enumerate(desync_per_motor) if c >= max(worst * 0.25, 5)]
+    cell_min = (v_min / cells) if cells else None
+    flags = []
+    if desync_total >= DESYNC_MIN_FRAMES:
+        flags.append("MOTOR_DESYNC(" + ",".join(f"m{i}" for i in bad_motors) + ")")
+    if cell_min is not None and cell_min < LOW_CELL_V:
+        flags.append("LOW_CELL")
     return {
         'craft': p.headers.get('Craft name', ''),
         'firmware': p.headers.get('Firmware revision', ''),
@@ -119,6 +151,9 @@ def summarize_log(path, log_index):
         'avg_throttle_pct': round((thr_sum / n - 1000) / 10.0) if thr is not None else '',
         'avg_motor_pct': round((motor_sum / n - m_lo) / (m_hi - m_lo) * 100) if mot and m_hi > m_lo else '',
         'motor_sat_pct': round(sat_frames / n * 100, 1),
+        'desync_pct': round(desync_total / n * 100, 2),
+        'desync_motors': ",".join(f"m{i}" for i in bad_motors) if desync_total >= DESYNC_MIN_FRAMES else '',
+        'flags': "; ".join(flags),
     }
 
 

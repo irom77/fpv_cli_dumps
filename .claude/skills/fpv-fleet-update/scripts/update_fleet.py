@@ -317,6 +317,30 @@ def build_summary(latest_rows):
     return "\n".join(lines).rstrip() + "\n"
 
 
+def build_hardware_section(path, latest_rows):
+    """Optional '## Hardware' section from a hand-maintained hardware.csv. This data (ESC stack,
+    motors, props, cell count) isn't in the Betaflight dumps, so it's curated separately and joined
+    to quads by normalized name."""
+    if not os.path.exists(path):
+        return ""
+    with open(path, newline='') as f:
+        hw = list(csv.DictReader(f))
+    if not hw:
+        return ""
+    known = {norm(r['quad']) for r in latest_rows}
+    lines = ["", "## Hardware", "",
+             "_Curated per-quad build details (not captured in Betaflight dumps). Edit `hardware.csv`._",
+             "",
+             "| Quad | Cells | ESC / stack | Motors | Props | Notes |",
+             "|---|---|---|---|---|---|"]
+    for r in sorted(hw, key=lambda r: r['quad'].lower()):
+        star = "" if norm(r['quad']) in known else " *(no matching dump)*"
+        lines.append(f"| {r.get('quad','')}{star} | {r.get('cells','')} | {r.get('esc_stack','')} | "
+                     f"{r.get('motors','')} | {r.get('props','')} | {r.get('notes','')} |")
+    lines.append("")
+    return "\n".join(lines)
+
+
 def build_flights_section(path):
     """Optional '## Flights' section, built from flights.csv if it exists (produced by
     update_flights.py). Kept separate so this stdlib-only script never needs the blackbox parser."""
@@ -346,16 +370,21 @@ def build_flights_section(path):
         tot_t = sum(num(f['duration_s']) for f in fs)
         tot_mah = sum(num(f['mah']) for f in fs)
         worst = max(fs, key=lambda f: num(f['sag_v']))
-        lines.append(f"**{quad}** — {len(fs)} flight{'s' if len(fs) != 1 else ''}, "
-                     f"{tot_t:.0f}s total, {tot_mah:.0f} mAh total, "
-                     f"worst sag {num(worst['sag_v']):.2f}V ({worst['date']}).")
+        flagged = [f for f in fs if f.get('flags')]
+        head = (f"**{quad}** — {len(fs)} flight{'s' if len(fs) != 1 else ''}, "
+                f"{tot_t:.0f}s total, {tot_mah:.0f} mAh total, "
+                f"worst sag {num(worst['sag_v']):.2f}V ({worst['date']}).")
+        if flagged:
+            head += f"  ⚠️ {len(flagged)} flagged flight{'s' if len(flagged) != 1 else ''}."
+        lines.append(head)
         lines.append("")
-        lines.append("| Date | Dur | Batt | Min | Sag | Avg A | Peak A | mAh | Motor sat |")
-        lines.append("|---|---|---|---|---|---|---|---|---|")
+        lines.append("| Date | Dur | Batt | Min | Sag | Avg A | Peak A | mAh | Motor sat | Flags |")
+        lines.append("|---|---|---|---|---|---|---|---|---|---|")
         for f in fs:
             lines.append(f"| {f['date']} | {num(f['duration_s']):.0f}s | {f['cells']}S "
                          f"{f['v_start']}V | {f['v_min']}V | {num(f['sag_v']):.2f}V | "
-                         f"{f['a_avg']}A | {f['a_peak']}A | {f['mah']} | {num(f['motor_sat_pct']):.1f}% |")
+                         f"{f['a_avg']}A | {f['a_peak']}A | {f['mah']} | {num(f['motor_sat_pct']):.1f}% | "
+                         f"{f.get('flags') or '—'} |")
         lines.append("")
     return "\n".join(lines)
 
@@ -371,6 +400,7 @@ def main():
     write_csv(OUT_LATEST, latest_rows)
     with open(OUT_SUMMARY, 'w') as f:
         f.write(build_summary(latest_rows).rstrip() + "\n")
+        f.write(build_hardware_section(os.path.join(SRC, "hardware.csv"), latest_rows))
         f.write(build_flights_section(os.path.join(SRC, "flights.csv")))
 
     dropped = scanned - len(rows)

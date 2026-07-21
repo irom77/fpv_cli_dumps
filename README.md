@@ -8,8 +8,9 @@ Betaflight CLI backups for my FPV quads, plus a derived fleet inventory.
 backups/                 Betaflight CLI dumps (BTFL_cli_*.txt), one or more per quad
 fpv_quads.csv            History — one row per dump (unchanged re-dumps collapsed), newest per quad flagged 'latest'
 fpv_quads_latest.csv     One row per quad, newest dump only
-flights.csv              One row per decoded blackbox flight (duration, sag, current, mAh)
-FLEET_SUMMARY.md         Human-readable overview: fleet table, rollups, "needs attention", flights
+flights.csv              One row per decoded blackbox flight (duration, sag, current, mAh, flags)
+hardware.csv             Hand-maintained per-quad build details (ESC, motors, props) not in dumps
+FLEET_SUMMARY.md         Overview: fleet table, rollups, "needs attention", hardware, flights
 blackbox/                Raw .BBL/.BFL flight logs — gitignored (large binaries; not committed)
 .claude/skills/fpv-fleet-update/   Skill that regenerates the derived files above
 ```

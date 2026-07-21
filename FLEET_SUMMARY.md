@@ -74,13 +74,21 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 
 _Note: BETAFPVF4SX1280, GEPRC_F722_AIO, HOBBYWING_XROTORF7CON, HOBBYWING_XROTORF7CONV, XILOF4 are keyed by board name because their dumps had no craft name set (`set craft_name` / `# name:`). Setting a craft name makes future tracking more reliable._
 
+## Hardware
+
+_Curated per-quad build details (not captured in Betaflight dumps). Edit `hardware.csv`._
+
+| Quad | Cells | ESC / stack | Motors | Props | Notes |
+|---|---|---|---|---|---|
+| Kronos | 6S | Hobbywing XRotor F722 (45A 4-in-1 ESC) | VCI Spark 2207 Pro 2050Kv | Hurricane MCK 51466 V2 | OpenRacer. Motor replaced 2026-07-20 after a rear-corner desync/crash under load (see flights). Bench-fine at 0% DShot error; fault only appeared under aerodynamic load. |
+
 ## Flights
 
 _From decoded Betaflight blackbox logs (see `flights.csv`). Raw `.BBL` logs are not committed._
 
-**Kronos** — 2 flights, 22s total, 18 mAh total, worst sag 4.66V (2026-07-15).
+**Kronos** — 2 flights, 22s total, 18 mAh total, worst sag 4.66V (2026-07-15).  ⚠️ 1 flagged flight.
 
-| Date | Dur | Batt | Min | Sag | Avg A | Peak A | mAh | Motor sat |
-|---|---|---|---|---|---|---|---|---|
-| 2026-07-15 | 8s | 6S 24.96V | 20.3V | 4.66V | 5.0A | 54.5A | 11 | 7.2% |
-| 2026-07-20 | 14s | 6S 24.72V | 24.03V | 0.69V | 1.9A | 7.1A | 7 | 0.0% |
+| Date | Dur | Batt | Min | Sag | Avg A | Peak A | mAh | Motor sat | Flags |
+|---|---|---|---|---|---|---|---|---|---|
+| 2026-07-15 | 8s | 6S 24.96V | 20.3V | 4.66V | 5.0A | 54.5A | 11 | 7.2% | MOTOR_DESYNC(m0,m3) |
+| 2026-07-20 | 14s | 6S 24.72V | 24.03V | 0.69V | 1.9A | 7.1A | 7 | 0.0% | — |

@@ -1,0 +1,2 @@
+quad,cells,esc_stack,motors,props,notes
+Kronos,6S,Hobbywing XRotor F722 (45A 4-in-1 ESC),VCI Spark 2207 Pro 2050Kv,Hurricane MCK 51466 V2,"OpenRacer. Motor replaced 2026-07-20 after a rear-corner desync/crash under load (see flights). Bench-fine at 0% DShot error; fault only appeared under aerodynamic load."

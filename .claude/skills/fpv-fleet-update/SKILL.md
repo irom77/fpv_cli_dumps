@@ -22,7 +22,10 @@ files are derived from them and must stay in sync whenever the set of dumps chan
 - `FLEET_SUMMARY.md` — human-readable overview: fleet table, rollups, "needs attention", and (if
   `flights.csv` exists) a per-quad Flights section
 - `flights.csv` — one row per decoded blackbox flight (duration, battery sag, current, mAh, motor
-  saturation). Optional — only present once blackbox logs have been processed.
+  saturation, and a `flags` column for detected issues like `MOTOR_DESYNC`/`LOW_CELL`). Optional —
+  only present once blackbox logs have been processed.
+- `hardware.csv` — hand-maintained per-quad build details (ESC stack, motors, props, cells) that
+  aren't in the dumps. Optional; joined into the summary by quad name. Edit it directly.
 
 ## What to do
 
@@ -54,9 +57,18 @@ python3 .claude/skills/fpv-fleet-update/scripts/update_fleet.py
 `update_flights.py` auto-re-execs under `./.venv` if `orangebox` isn't already importable. It writes
 `flights.csv` and **merges** with any existing rows keyed by `(file, log_index)`, so summarized
 flights persist even after the raw log is moved or deleted — important because the large `.BBL` files
-are gitignored and never committed. Units are calibrated from each log's headers (vbat/current in
-0.01 units, cell count inferred from start voltage). A quirk of the parser is that a duplicated header
-marker can look like a phantom extra flight; `valid_logs()` skips those by ignoring near-empty logs.
+are gitignored and never committed. Because merging skips rows already present, **delete `flights.csv`
+and re-run** if you change the metrics/columns so old rows get recomputed. Units are calibrated from
+each log's headers (vbat/current in 0.01 units, cell count inferred from start voltage). A quirk of
+the parser is that a duplicated header marker can look like a phantom extra flight; `valid_logs()`
+skips those by ignoring near-empty logs.
+
+**Motor desync detection:** the summary flags a frame as a desync/thrust-loss event when a motor is
+commanded near max (≥90% of the output range) yet its bidirectional-DShot eRPM is well below the
+fastest motor's (<55%) — told to spin hard, spinning much slower than its peers. Above a small frame
+count this raises `MOTOR_DESYNC(m#,…)` in `flags`, naming the offending motor(s). This was validated
+against a real crash log (motors 0 & 3 desynced) vs a clean post-repair log (no flag). Report the
+data's answer for which motor, not an external narrative — motor indices are 0-based blackbox order.
 
 After it runs, tell the user what actually changed relative to before: which quad the new dump belongs
 to, whether it created a new quad or updated an existing one, and anything newly flagged under "needs

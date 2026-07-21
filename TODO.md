@@ -42,10 +42,15 @@ Done:
 - [x] Link each flight to its quad (craft name from log header) and per-quad rollup in the summary.
 - [x] Wired into the `fpv-fleet-update` skill.
 
+- [x] Motor desync / thrust-loss detection (motor commanded high while its eRPM collapses vs peers),
+      surfaced as `MOTOR_DESYNC(m#)` in flights.csv flags + ⚠️ in the summary. Validated against the
+      Kronos crash log (motors 0 & 3) vs the clean post-repair log.
+- [x] `hardware.csv` for per-quad build details (ESC, motors, props) not present in dumps.
+
 Next / ideas to extend:
 - [ ] More metrics: max gyro / vibration (noise), PID error / tracking, RC dropout & failsafe events,
       throttle histogram, per-motor imbalance (worn motor / prop detection).
-- [ ] Detect concerning patterns automatically (excessive sag → aging pack; motor saturation →
-      underpowered/overweight; desync/erpm anomalies) and surface under "needs attention".
+- [ ] More auto-flags: excessive sag → aging pack (partial: LOW_CELL); motor saturation →
+      underpowered/overweight. Roll flagged flights up into the summary's "needs attention".
 - [ ] Distinguish real flights from bench tests (both current logs are short bench hops).
 - [ ] Handle logs whose filename lacks a craft label; match to a quad another way.
