@@ -19,10 +19,11 @@ fpv_quads.csv            History — one row per dump (unchanged re-dumps collap
 fpv_quads_latest.csv     One row per quad, newest dump only
 flights.csv              One row per decoded blackbox flight (duration, sag, current, mAh, flags)
 hardware.csv             Hand-maintained per-quad build details (ESC, motors, props) + size class, status, discipline, not in dumps
-orders.csv               FPV parts ledger, one row per ordered line item, built from Gmail by the fpv-orders-update skill; 'build' (quad/'spare'/blank) and 'notes' hand-maintained, other columns from order emails, re-runs only add new
+orders.csv               FPV parts ledger, one row per ordered line item, built from Gmail by the fpv-orders-update skill; 'build' (quad/'spare'/blank) and 'notes' hand-maintained, other columns from order emails, re-runs only add new — gitignored (personal purchase history; kept local, not committed)
 FLEET_SUMMARY.md         Overview: fleet table, rollups, "needs attention", hardware, flights
 blackbox/                Raw .BBL/.BFL flight logs — gitignored (large binaries; not committed)
 .claude/skills/fpv-fleet-update/   Skill that regenerates the derived files above
+.claude/skills/fpv-orders-update/  Skill that builds orders.csv from Gmail order confirmations
 ```
 
 ## Updating
@@ -71,3 +72,36 @@ python3 .claude/skills/fpv-fleet-update/scripts/update_fleet.py     # folds Flig
 ```
 
 Raw logs are large and stay out of git; `flights.csv` is the committed, durable record.
+
+## Orders ledger
+
+`orders.csv` is a parts-purchase ledger — one row per ordered line item — built from Gmail order
+confirmations by the `fpv-orders-update` skill (`.claude/skills/fpv-orders-update/`). It's a hybrid
+file like `hardware.csv`: most columns come from the order emails, but `build` (the quad a part went
+into, or `spare`, or blank) and `notes` are hand-maintained and never overwritten. Re-running only
+adds new orders — the merge dedups by `(vendor, order_number, item)` and preserves your edits.
+
+It holds personal purchase history (prices, order numbers), so it's **gitignored and kept local** —
+unlike the other CSVs, it is not committed. It lives only on your machine.
+
+To refresh it, invoke the skill (it needs Gmail authorized). It searches each known vendor from the
+newest date already in `orders.csv`, extracts line items, and folds them in via:
+
+```bash
+python3 .claude/skills/fpv-orders-update/scripts/merge_orders.py
+```
+
+Don't hand-edit `orders.csv` except the `build` and `notes` columns.
+
+### Adding a vendor
+
+The vendor registry lives entirely in the skill's `SKILL.md` — the merge script is vendor-agnostic,
+so no code changes. To register a new store, edit `.claude/skills/fpv-orders-update/SKILL.md`:
+
+1. Add the vendor's name to the `description:` list in the YAML frontmatter (this makes the skill
+   trigger when you mention that vendor).
+2. Add a row to the **Vendors and senders** table (`vendor short name | sender domain | note`),
+   marked "verify sender on first run" until a real search confirms the actual sending address.
+
+On the next run the skill's per-vendor search loop picks it up automatically. For mixed-catalog
+sellers (Amazon, DJI) the skill applies a best-effort FPV-only filter and flags uncertain items `?`.

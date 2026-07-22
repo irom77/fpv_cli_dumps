@@ -15,5 +15,7 @@ blackbox/
 *.BFL
 *.bfl
 
-# transient staging file for the fpv-orders-update skill; only orders.csv is committed
+# fpv-orders-update: purchase ledger + its transient staging file.
+# orders.csv holds personal purchase history (prices, order numbers) — kept local, never committed.
+orders.csv
 orders_new.csv

@@ -5,7 +5,7 @@ description: >-
   a hand-maintainable parts ledger (each part links to a build or stays a spare). Use whenever
   the user asks to find, refresh, import, or update their FPV orders / purchases / parts ledger
   from email, mentions a new order from a vendor (flyfive33, GetFPV, Pyrodrone, RaceDayQuads,
-  Webleedfpv, Wrecked, Amazon), or asks "what parts did I buy". Runs interactively where Gmail
+  Webleedfpv, Wrecked, HDZero, DJI, Amazon), or asks "what parts did I buy". Runs interactively where Gmail
   is authorized; it reads order-confirmation emails and merges them into orders.csv.
 ---
 
@@ -39,13 +39,23 @@ go through a staging file and a deterministic merge — re-running is always saf
 | Pyrodrone | support@pyrodrone.com | confirmation subject: "Order #NNN confirmed"; use plaintextBody |
 | RaceDayQuads | support@racedayquads.com | confirmation subject: "Order #NNN Confirmed"; use plaintextBody |
 | Webleedfpv | info@webleedfpv.com | confirmed; "weBLEEDfpv Order #NNN …" |
-| Wrecked | wrekd.com | confirmed domain (NOT wreckedfpv.com) |
-| Amazon | amazon.com | order-confirm / shipment addresses |
+| Wrecked | wrekd.com | confirmed domain (NOT wreckedfpv.com); marketing only, no order confirmations |
+| HDZero | sales@divimath.com | HDZero Shop(US) is run by Divimath; Shopify store, subject "Order #NNNN confirmed", clean plaintextBody. (hdzero.us only sends judge.me review requests + tracking) |
+| DJI | noreply@dji.com / noreply.dji@dji.com | best-effort FPV filter. NOTE: on the 2021→2026 run DJI had **no FPV gear** — only DJI Mini 2 / Mavic Mini camera drones + DJI Care Refresh service plans (2021-2022), all correctly dropped by the filter. Skip unless the user bought DJI FPV gear (O4 air unit, Goggles, Avata). |
+| Amazon | amazon.com | order-confirm / shipment addresses; best-effort FPV filter |
 
 Senders confirmed on a real run (2026-07). Tip: RDQ/Pyrodrone/Webleed are Shopify stores whose
 messages include a clean `plaintextBody` — parse that instead of the giant `htmlBody` to save tokens.
 GetFPV's itemized email is the "Invoice" (html only). flyfive33's "received, we're on it" is the
 order confirmation.
+
+**Registering a new vendor** is two text edits in this file — no code changes (`merge_orders.py` is
+vendor-agnostic): (1) add the vendor's name to the `description:` list in the frontmatter above so the
+skill triggers when the user mentions it; (2) add a row to the table above with `vendor short name |
+sender domain | note`, marked "verify sender on first run" until a real search confirms the actual
+sending address (store domain ≠ sender domain sometimes). On the next run the per-vendor search loop
+picks it up automatically. Mixed-catalog vendors (marketplaces, gimbal/camera brands) also get the
+best-effort FPV filter of step 4.
 
 ## Procedure
 
@@ -66,9 +76,11 @@ order confirmation.
    unit_price, line_total, category, source`. Leave `build` and `notes` blank. Choose `category`
    from the fixed list above.
 
-4. **Amazon** — best-effort FPV-only filter: include only items that read as FPV / drone gear
-   (batteries, connectors, chargers, props, motors, tools, etc.). Set `flag = ?` on anything you
-   are not confident is FPV gear. Drop clearly non-FPV items.
+4. **Mixed-catalog vendors (Amazon, DJI)** — best-effort FPV-only filter: include only items that
+   read as FPV / drone gear (batteries, connectors, chargers, props, motors, tools, goggles, VTX,
+   etc.). Set `flag = ?` on anything you are not confident is FPV gear. Drop clearly non-FPV items.
+   The FPV-native vendors (flyfive33, GetFPV, Pyrodrone, RaceDayQuads, Webleedfpv, HDZero) sell only
+   FPV gear, so take every line item from them.
 
 5. **Write the staging file** `orders_new.csv` (same columns as `orders.csv`) using the `csv`
    module — never hand-format CSV.
@@ -95,6 +107,8 @@ order confirmation.
   the line items sum to Subtotal) before trusting unit_price/line_total.
 - Amazon orders were deferred in the first full run (2021→now); Wrecked = `wrekd.com` had zero order
   confirmations in Gmail (marketing only). Complete BNF/RTF quads land in `category=misc` with `flag=?`.
+- HDZero swept 2026-07-22: 4 orders (#1567/#3336/#4476/#4582, 2025-07→2026-01) from `sales@divimath.com`.
+  DJI swept same day: no FPV gear (camera drones + Care Refresh only), nothing added.
 - `orders_new.csv` is transient and gitignored; only `orders.csv` is committed.
 - Do not hand-edit `orders.csv` except the `build` and `notes` columns.
 - Tests for the merge script: `.venv/bin/pytest .claude/skills/fpv-orders-update/scripts/test_merge_orders.py`.
