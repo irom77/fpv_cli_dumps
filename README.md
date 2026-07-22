@@ -19,6 +19,10 @@ fpv_quads.csv            History — one row per dump (unchanged re-dumps collap
 fpv_quads_latest.csv     One row per quad, newest dump only
 flights.csv              One row per decoded blackbox flight (duration, sag, current, mAh, flags)
 hardware.csv             Hand-maintained per-quad build details (ESC, motors, props) + size class, status, discipline, not in dumps
+orders.csv               FPV parts ledger, one row per ordered line item, built from Gmail by the
+                         `fpv-orders-update` skill. `build` (quad name / `spare` / blank) and `notes` are
+                         hand-maintained; all other columns come from order-confirmation emails.
+                         Re-running only adds new orders.
 FLEET_SUMMARY.md         Overview: fleet table, rollups, "needs attention", hardware, flights
 blackbox/                Raw .BBL/.BFL flight logs — gitignored (large binaries; not committed)
 .claude/skills/fpv-fleet-update/   Skill that regenerates the derived files above
