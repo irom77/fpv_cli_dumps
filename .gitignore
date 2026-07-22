@@ -14,3 +14,6 @@ blackbox/
 *.bbl
 *.BFL
 *.bfl
+
+# transient staging file for the fpv-orders-update skill; only orders.csv is committed
+orders_new.csv

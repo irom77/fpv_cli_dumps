@@ -54,3 +54,9 @@ Next / ideas to extend:
       underpowered/overweight. Roll flagged flights up into the summary's "needs attention".
 - [ ] Distinguish real flights from bench tests (both current logs are short bench hops).
 - [ ] Handle logs whose filename lacks a craft label; match to a quad another way.
+
+## Auto-link ordered parts to builds (fpv-orders-update)
+
+The `fpv-orders-update` skill currently leaves the `build` column blank for the pilot to fill.
+Future: propose a best-guess `build` from order timing vs. quad dump dates (e.g. motors bought
+just before a Kronos dump → `Kronos?`), left as a `?`-flagged suggestion to confirm.
