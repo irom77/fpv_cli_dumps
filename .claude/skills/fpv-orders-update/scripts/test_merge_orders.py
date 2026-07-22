@@ -1,3 +1,6 @@
+import csv
+import os
+
 import merge_orders as m
 
 
@@ -58,3 +61,41 @@ def test_new_question_flag_applies_when_existing_blank():
     new = [make("Amazon", "111", "LiPo", flag="?")]
     rows, _ = m.merge_orders(existing, new)
     assert rows[0]["flag"] == "?"
+
+
+def _write(path, rows):
+    with open(path, "w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=m.COLUMNS)
+        w.writeheader()
+        for r in rows:
+            w.writerow(m.normalize(r))
+
+
+def test_read_csv_missing_file_returns_empty(tmp_path):
+    assert m.read_csv(str(tmp_path / "nope.csv")) == []
+
+
+def test_write_then_read_roundtrip(tmp_path):
+    path = str(tmp_path / "orders.csv")
+    rows = [make("GetFPV", "1001", "Motor, 2306", order_date="2021-02-01",
+                 notes='has "quotes" and, comma')]
+    m.write_csv(path, rows)
+    back = m.read_csv(path)
+    assert back[0]["item"] == "Motor, 2306"
+    assert back[0]["notes"] == 'has "quotes" and, comma'
+
+
+def test_main_first_run_creates_orders_csv(tmp_path):
+    orders = str(tmp_path / "orders.csv")
+    new = str(tmp_path / "orders_new.csv")
+    _write(new, [make("GetFPV", "1001", "Motor", order_date="2021-02-01")])
+    rc = m.main(["--orders", orders, "--new", new])
+    assert rc == 0
+    assert os.path.exists(orders)
+    assert m.read_csv(orders)[0]["vendor"] == "GetFPV"
+
+
+def test_main_missing_new_file_returns_1(tmp_path):
+    rc = m.main(["--orders", str(tmp_path / "orders.csv"),
+                 "--new", str(tmp_path / "absent.csv")])
+    assert rc == 1

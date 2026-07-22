@@ -5,6 +5,11 @@ Deterministic and safe to re-run: dedups by (vendor, order_number, item) and
 preserves the hand-filled `build` / `notes` columns and any `?` in `flag`.
 """
 
+import argparse
+import csv
+import os
+import sys
+
 COLUMNS = [
     "vendor", "order_date", "order_number", "item", "qty",
     "unit_price", "line_total", "category", "build", "flag",
@@ -50,3 +55,44 @@ def merge_orders(existing, new):
         key=lambda r: (r["order_date"], r["vendor"].lower(), r["order_number"]),
     )
     return rows, stats
+
+
+def read_csv(path):
+    if not os.path.exists(path):
+        return []
+    with open(path, newline="") as f:
+        return [normalize(row) for row in csv.DictReader(f)]
+
+
+def write_csv(path, rows):
+    with open(path, "w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=COLUMNS, quoting=csv.QUOTE_MINIMAL)
+        writer.writeheader()
+        for row in rows:
+            writer.writerow(normalize(row))
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description="Merge orders_new.csv into orders.csv")
+    parser.add_argument("--orders", default="orders.csv")
+    parser.add_argument("--new", default="orders_new.csv")
+    args = parser.parse_args(argv)
+
+    if not os.path.exists(args.new):
+        print(f"error: staging file not found: {args.new}", file=sys.stderr)
+        return 1
+
+    existing = read_csv(args.orders)
+    new = read_csv(args.new)
+    rows, stats = merge_orders(existing, new)
+    write_csv(args.orders, rows)
+    print(
+        f"orders.csv: {len(rows)} rows "
+        f"({stats['added']} added, {stats['updated']} updated, "
+        f"{stats['existing']} pre-existing) from {len(new)} staged"
+    )
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
