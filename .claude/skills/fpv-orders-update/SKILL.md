@@ -34,15 +34,18 @@ go through a staging file and a deterministic merge — re-running is always saf
 
 | vendor short name | sender domain | note |
 |-------------------|---------------|------|
-| flyfive33 | flyfive33.com | verify on first run |
-| GetFPV | getfpv.com | |
-| Pyrodrone | pyrodrone.com | |
-| RaceDayQuads | racedayquads.com | |
-| Webleedfpv | webleedfpv.com | verify on first run |
-| Wrecked | wreckedfpv.com | **guess — verify on first run** |
+| flyfive33 | support@flyfive33.com | confirmation subject: "Order #NNNNN received, we're on it!" |
+| GetFPV | support@getfpv.com | itemized email: "Invoice for your GetFPV order" (has prices) |
+| Pyrodrone | support@pyrodrone.com | confirmation subject: "Order #NNN confirmed"; use plaintextBody |
+| RaceDayQuads | support@racedayquads.com | confirmation subject: "Order #NNN Confirmed"; use plaintextBody |
+| Webleedfpv | info@webleedfpv.com | confirmed; "weBLEEDfpv Order #NNN …" |
+| Wrecked | wrekd.com | confirmed domain (NOT wreckedfpv.com) |
 | Amazon | amazon.com | order-confirm / shipment addresses |
 
-When a sender is confirmed on a real run, update this table so later runs skip discovery.
+Senders confirmed on a real run (2026-07). Tip: RDQ/Pyrodrone/Webleed are Shopify stores whose
+messages include a clean `plaintextBody` — parse that instead of the giant `htmlBody` to save tokens.
+GetFPV's itemized email is the "Invoice" (html only). flyfive33's "received, we're on it" is the
+order confirmation.
 
 ## Procedure
 
@@ -84,6 +87,14 @@ When a sender is confirmed on a real run, update this table so later runs skip d
 
 ## Notes
 
+- **Pricing gotcha (verify qty>1 lines):** the per-item price shown in these emails is inconsistent
+  about per-unit vs. extended line total. GetFPV's Invoice price is the extended line total;
+  flyfive33's "Total" is per-unit; RaceDayQuads labels a **per-unit** price as "Total" on many
+  (esp. 2021-2023) orders while newer ones are extended; Pyrodrone/Webleed (Shopify) show extended.
+  For any line with qty>1, reconcile against the order's printed Subtotal (which interpretation makes
+  the line items sum to Subtotal) before trusting unit_price/line_total.
+- Amazon orders were deferred in the first full run (2021→now); Wrecked = `wrekd.com` had zero order
+  confirmations in Gmail (marketing only). Complete BNF/RTF quads land in `category=misc` with `flag=?`.
 - `orders_new.csv` is transient and gitignored; only `orders.csv` is committed.
 - Do not hand-edit `orders.csv` except the `build` and `notes` columns.
 - Tests for the merge script: `.venv/bin/pytest .claude/skills/fpv-orders-update/scripts/test_merge_orders.py`.
