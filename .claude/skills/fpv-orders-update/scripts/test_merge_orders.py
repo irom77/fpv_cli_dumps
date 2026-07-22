@@ -63,6 +63,21 @@ def test_new_question_flag_applies_when_existing_blank():
     assert rows[0]["flag"] == "?"
 
 
+def test_missing_order_number_falls_back_to_source():
+    existing = [make("Amazon", "", "LiPo", source="msg-1")]
+    new = [make("Amazon", "", "LiPo", source="msg-2")]
+    rows, stats = m.merge_orders(existing, new)
+    assert stats["added"] == 1
+    assert len(rows) == 2
+
+
+def test_missing_order_number_same_source_is_duplicate():
+    existing = [make("Amazon", "", "LiPo", source="msg-1")]
+    new = [make("Amazon", "", "LiPo", source="msg-1")]
+    rows, stats = m.merge_orders(existing, new)
+    assert len(rows) == 1
+
+
 def _write(path, rows):
     with open(path, "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=m.COLUMNS)

@@ -74,6 +74,8 @@ When a sender is confirmed on a real run, update this table so later runs skip d
    ```bash
    python3 .claude/skills/fpv-orders-update/scripts/merge_orders.py
    ```
+   Run this from the **repo root** — it reads/writes the relative `orders.csv` and
+   `orders_new.csv` paths by default.
    The script dedups by `(vendor, order_number, item)`, preserves hand-filled `build` / `notes`,
    keeps any existing `?` flag, sorts by date, and prints a summary (added / updated / total).
 

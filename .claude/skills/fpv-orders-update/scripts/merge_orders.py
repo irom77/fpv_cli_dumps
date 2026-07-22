@@ -28,8 +28,15 @@ def normalize(row):
     return out
 
 
+# When order_number is blank (e.g. some Amazon confirmations), fall back to
+# `source` (the Gmail message id) so distinct orders don't collapse to one key.
 def row_key(row):
-    return tuple(row.get(f, "").strip().lower() for f in KEY_FIELDS)
+    vendor = row.get("vendor", "").strip().lower()
+    order_number = row.get("order_number", "").strip().lower()
+    item = row.get("item", "").strip().lower()
+    if not order_number:
+        order_number = row.get("source", "").strip().lower()
+    return (vendor, order_number, item)
 
 
 def merge_orders(existing, new):
@@ -60,16 +67,18 @@ def merge_orders(existing, new):
 def read_csv(path):
     if not os.path.exists(path):
         return []
-    with open(path, newline="") as f:
+    with open(path, newline="", encoding="utf-8") as f:
         return [normalize(row) for row in csv.DictReader(f)]
 
 
 def write_csv(path, rows):
-    with open(path, "w", newline="") as f:
+    tmp = path + ".tmp"
+    with open(tmp, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=COLUMNS, quoting=csv.QUOTE_MINIMAL)
         writer.writeheader()
         for row in rows:
             writer.writerow(normalize(row))
+    os.replace(tmp, path)
 
 
 def main(argv=None):
