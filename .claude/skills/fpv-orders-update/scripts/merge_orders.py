@@ -35,7 +35,12 @@ def merge_orders(existing, new):
     for row in new:
         key = row_key(row)
         if key in merged:
-            merged[key] = normalize(row)
+            prev = merged[key]
+            row = normalize(row)
+            row["build"] = prev["build"]
+            row["notes"] = prev["notes"]
+            row["flag"] = prev["flag"] or row["flag"]
+            merged[key] = row
             stats["updated"] += 1
         else:
             merged[key] = normalize(row)

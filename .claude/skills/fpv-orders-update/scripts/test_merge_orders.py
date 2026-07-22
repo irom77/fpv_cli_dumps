@@ -32,3 +32,29 @@ def test_duplicate_key_is_not_duplicated():
     assert stats["added"] == 0
     assert stats["updated"] == 1
     assert len(rows) == 1
+
+
+def test_existing_build_and_notes_are_preserved():
+    existing = [make("GetFPV", "1001", "Motor", order_date="2021-02-01",
+                     build="Kronos", notes="left front")]
+    new = [make("GetFPV", "1001", "Motor", order_date="2021-02-01",
+                unit_price="12.50", build="", notes="")]
+    rows, _ = m.merge_orders(existing, new)
+    assert rows[0]["build"] == "Kronos"
+    assert rows[0]["notes"] == "left front"
+    # machine column from the new parse is taken
+    assert rows[0]["unit_price"] == "12.50"
+
+
+def test_existing_question_flag_is_not_cleared():
+    existing = [make("Amazon", "111", "LiPo", flag="?")]
+    new = [make("Amazon", "111", "LiPo", flag="")]
+    rows, _ = m.merge_orders(existing, new)
+    assert rows[0]["flag"] == "?"
+
+
+def test_new_question_flag_applies_when_existing_blank():
+    existing = [make("Amazon", "111", "LiPo", flag="")]
+    new = [make("Amazon", "111", "LiPo", flag="?")]
+    rows, _ = m.merge_orders(existing, new)
+    assert rows[0]["flag"] == "?"
