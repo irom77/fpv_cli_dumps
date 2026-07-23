@@ -10,7 +10,7 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 |---|---|---|---|---|---|---|---|---|---|---|
 | AIR65 R | whoop | — | active | BETAFPVG473 | G47X | 4.5.2 | DSHOT300 | - | - | 2025-10-25 |
 | BETAFPVF4SX1280 *(unnamed)* | whoop | — | active | BETAFPVF4SX1280 | F411 | 4.4.0 | DSHOT300 | - | ELRS **[A]** | 2024-07-12 |
-| cinelog-flyfish | cinewhoop | cinematic | active | GEPRCF411_AIO | F411 | 4.5.2 | - | - | - | 2025-06-19 |
+| cinelog-flyfish | cinewhoop | cinematic | **incomplete** | GEPRCF411_AIO | F411 | 4.5.2 | - | - | - | 2025-06-19 |
 | CineLog30 | cinewhoop | cinematic | **retired** | GEPRC_F411_AIO | F411 | 4.2.3 | DSHOT600 | - | RX_SERIAL / CRSF | 2025-06-19 |
 | Crocodile5 baby | micro | long-range | **retired** | GEPRC_F722_AIO | F7X2 | 4.2.4 | DSHOT300 | - | RX_SERIAL / CRSF | 2024-08-27 |
 | Diamond | whoop | — | **broken** | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | Analog | RX_SPI **[A]** | 2025-01-24 |
@@ -42,7 +42,7 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 ## Fleet rollups
 
 - **Class:** 14× whoop, 2× cinewhoop, 6× micro, 8× 5-inch. Size class inferred from craft name / board where `hardware.csv` doesn't set it.
-- **Status:** 21× active, 4× broken, 3× retired, 2× incomplete. Lifecycle from `hardware.csv`; a blank there counts as active.
+- **Status:** 20× active, 4× broken, 3× retired, 3× incomplete. Lifecycle from `hardware.csv`; a blank there counts as active.
 - **Discipline:** 5× race, 3× freestyle, 2× cinematic, 2× long-range, 18 unset. Hand-entered in `hardware.csv` (no heuristic — the dump gives no signal).
 - **Flight controllers:** 14× F411, 6× F7X2, 4× F405, 2× G47X, 1× F745, 1× H743, 1× F411SX1280, 1× SPEEDYBEEF405MINI.
 - **Firmware:** 12 on BF 4.4.x, 10 on BF 4.5.x, 5 on BF 4.3.x, 3 on BF 4.2.x.
@@ -69,7 +69,6 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 - Mob6 AIO5 RACE (last dump 2024-10-07)
 - Happish (last dump 2024-12-06)
 - Race5 (last dump 2025-01-24)
-- cinelog-flyfish (last dump 2025-06-19)
 
 _Note: BETAFPVF4SX1280, FLYWOOF405S_AIO, GEPRC_F722_AIO, HOBBYWING_XROTORF7CON, HOBBYWING_XROTORF7CONV, SPEEDYBEEF405MINI, XILOF4 are keyed by board name because their dumps had no craft name set (`set craft_name` / `# name:`). Setting a craft name makes future tracking more reliable._
 
@@ -105,7 +104,7 @@ _Curated per-quad build details (not captured in Betaflight dumps), largely seed
 | Quad | Cells | Weight | ESC / stack | Motors | Props | Camera | VTX | Notes |
 |---|---|---|---|---|---|---|---|---|
 | AIR65 R | 1S | 17.3g | Air 5-in-1 (built-in) | 0702 SE II 27000KV | Gemfan 1219S 3-blade | C03 | Onboard 5.8G 25-400mW | BetaFPV Air65; ELRS 2.4G |
-| cinelog-flyfish |  |  | GEPRC F411 AIO (built-in) |  |  |  |  | Successor of CineLog30 (migrated to Flyfish30 frame); current build details TBD |
+| cinelog-flyfish | 4S |  | GEPRC F411 AIO (built-in) | GR1404 3850KV | T3x3x3 | Polar | Caddx Vista | Successor of CineLog30 (migrated to Flyfish30 frame); GR1404 3850KV motors moved from CineLog30; missing camera; props/cells/VTX carried from CineLog30 - verify |
 | CineLog30 | 4S | 158.5g | BLHeli_S 35A (GEP-F411-35A AIO) | GR1404 3850KV | T3x3x3 | Polar | Caddx Vista | GEPRC GEP-CL30; RETIRED -> migrated to cinelog-flyfish (Flyfish30) |
 | Crocodile5 baby | 4S | 252.29g | GEP-F722-35A AIO (built-in) | GEP 2004 2550KV | Gemfan 5130 | Caddx Air Unit | HD air unit | GEPRC GEP-CB5; RETIRED; sheet size 5in but 2004 motors = 4in class |
 | Diamond | 1S 300mAh | 17.5g | Built-in 5A BLHeli_S 4-in-1 | SE 0702 23000KV | Gemfan 1210 31mm bi-blade | RunCam Nano 3 | Built-in 25-400mW 5.8G | HappyModel Mobeetle6 (Diamond F4 ELRS AIO); analog |

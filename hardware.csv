@@ -9,7 +9,7 @@ Meteor85,whoop,,broken,,2S 450mAh,48.3g,Built-in 1S/2S 12A ESC,1103 11000KV,Gemf
 Mob6 AIO5 1st,whoop,race,active,,1S,19g,CrazybeeF4SX1280 (built-in),SE 0702 28000KV,HQ ultralight 1.2x1.1x3,HDZero Eco,AIO5,"crash recovery off, airmode on"
 Mob6 AIO5 2nd,whoop,race,active,,1S,19g,CrazybeeF4SX1280 (built-in),SE 0702 28000KV,HQ ultralight 1.2x1.1x3,HDZero Eco,AIO5,"crash recovery on, airmode on"
 CineLog30,cinewhoop,cinematic,retired,,4S,158.5g,BLHeli_S 35A (GEP-F411-35A AIO),GR1404 3850KV,T3x3x3,Polar,Caddx Vista,GEPRC GEP-CL30; RETIRED -> migrated to cinelog-flyfish (Flyfish30)
-cinelog-flyfish,cinewhoop,cinematic,active,,,,GEPRC F411 AIO (built-in),,,,,Successor of CineLog30 (migrated to Flyfish30 frame); current build details TBD
+cinelog-flyfish,cinewhoop,cinematic,incomplete,camera,4S,,GEPRC F411 AIO (built-in),GR1404 3850KV,T3x3x3,Polar,Caddx Vista,Successor of CineLog30 (migrated to Flyfish30 frame); GR1404 3850KV motors moved from CineLog30; missing camera; props/cells/VTX carried from CineLog30 - verify
 Crocodile5 baby,micro,long-range,retired,,4S,252.29g,GEP-F722-35A AIO (built-in),GEP 2004 2550KV,Gemfan 5130,Caddx Air Unit,HD air unit,GEPRC GEP-CB5; RETIRED; sheet size 5in but 2004 motors = 4in class
 HDZERO CRUX35,micro,,incomplete,camera,4S,115g,Built-in 20A BLHeli_S 4-in-1,HappyModel EX1404 3500KV,HQProp T3.5x2x3,CruxF405 HD ELRS AIO cam,Onboard HDZero,HDZero Crux35; 113mm
 Kronos,5-inch,race,active,,6S,305g,Hobbywing XRotor F722 (45A 4-in-1 ESC),VCI Spark 2207 Pro 2050Kv,Hurricane MCK 51466 V2,Runcam HDZero Nano 90,HDZero Race V3 HD,"OpenRacer / KRONOS racing frame, Tattu 6S 1400mAh. Motor replaced 2026-07-20 after a rear-corner desync/crash under load (see flights); bench-fine at 0% DShot error, fault only under aero load."
