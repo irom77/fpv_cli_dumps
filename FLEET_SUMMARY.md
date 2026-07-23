@@ -15,7 +15,7 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 | Crocodile5 baby | micro | long-range | **retired** | GEPRC_F722_AIO | F7X2 | 4.2.4 | DSHOT300 | - | RX_SERIAL / CRSF | 2024-08-27 |
 | Diamond | whoop | — | **broken** | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | Analog | RX_SPI **[A]** | 2025-01-24 |
 | Ecofree | whoop | — | active | CRAZYBEEF4DX | F411 | 4.4.2 | DSHOT300 | HD | - | 2025-11-14 |
-| FLYWOOF405S_AIO *(unnamed)* | 5-inch | — | active | FLYWOOF405S_AIO | F405 | 4.3.1 | DSHOT300 | - | RX_SERIAL / CRSF **[B]** | 2026-07-23 |
+| FLYWOOF405S_AIO *(unnamed)* | micro | — | **incomplete** | FLYWOOF405S_AIO | F405 | 4.3.1 | DSHOT300 | - | RX_SERIAL / CRSF **[B]** | 2026-07-23 |
 | FLYWOOF7NANO | micro | long-range | active | FLYWOOF745NANO | F745 | 4.2.11 | DSHOT300 | - | CRSF | 2024-08-14 |
 | GEPRC_F722_AIO *(unnamed)* | 5-inch | — | active | GEPRC_F722_AIO | F7X2 | 4.5.1 | DSHOT300 | - | - | 2024-08-27 |
 | Happish | whoop | — | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2024-12-06 |
@@ -41,8 +41,8 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 
 ## Fleet rollups
 
-- **Class:** 14× whoop, 2× cinewhoop, 5× micro, 9× 5-inch. Size class inferred from craft name / board where `hardware.csv` doesn't set it.
-- **Status:** 22× active, 4× broken, 3× retired, 1× incomplete. Lifecycle from `hardware.csv`; a blank there counts as active.
+- **Class:** 14× whoop, 2× cinewhoop, 6× micro, 8× 5-inch. Size class inferred from craft name / board where `hardware.csv` doesn't set it.
+- **Status:** 21× active, 4× broken, 3× retired, 2× incomplete. Lifecycle from `hardware.csv`; a blank there counts as active.
 - **Discipline:** 5× race, 3× freestyle, 2× cinematic, 2× long-range, 18 unset. Hand-entered in `hardware.csv` (no heuristic — the dump gives no signal).
 - **Flight controllers:** 14× F411, 6× F7X2, 4× F405, 2× G47X, 1× F745, 1× H743, 1× F411SX1280, 1× SPEEDYBEEF405MINI.
 - **Firmware:** 12 on BF 4.4.x, 10 on BF 4.5.x, 5 on BF 4.3.x, 3 on BF 4.2.x.
@@ -56,7 +56,6 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 
 **Aging firmware (older than BF 4.4):**
 - FLYWOOF7NANO (4.2.11)
-- FLYWOOF405S_AIO (4.3.1)
 - HOBBYWING_XROTORF7CON (4.3.0)
 - M85 HDZero (4.3.1)
 
@@ -111,6 +110,7 @@ _Curated per-quad build details (not captured in Betaflight dumps), largely seed
 | Crocodile5 baby | 4S | 252.29g | GEP-F722-35A AIO (built-in) | GEP 2004 2550KV | Gemfan 5130 | Caddx Air Unit | HD air unit | GEPRC GEP-CB5; RETIRED; sheet size 5in but 2004 motors = 4in class |
 | Diamond | 1S 300mAh | 17.5g | Built-in 5A BLHeli_S 4-in-1 | SE 0702 23000KV | Gemfan 1210 31mm bi-blade | RunCam Nano 3 | Built-in 25-400mW 5.8G | HappyModel Mobeetle6 (Diamond F4 ELRS AIO); analog |
 | Ecofree | 1S | 23g | 12A 1-2S BLHeli_S (built-in) | SE 0702 28000KV | Gemfan Durable 1210 31mm bi-blade | HDZero ECO | HDZero ECO VTX | HappyModel Mobula6 SuperECOfree; sheet FC=SuperX AIO but dump board=CrazybeeF4DX - verify |
+| FLYWOOF405S_AIO | 2S | 33.8g | GOKU Versatile F405 2S 12A AIO (built-in 12A 4-in-1) | Flywoo ROBO 1002 15500KV | Gemfan 2015 2-blade | HDZero Nano Lite | HDZero Whoop Lite | Flywoo Firefly 2S Nano Baby 20 (sheet name); no craft_name in dump; board=FLYWOOF405S_AIO; 2S HDZero nano; Flywoo EL24P ELRS v3 RX; MPU6000 gyro + prop guard; sheet: NO VIDEO - camera+VTX removed |
 | FLYWOOF7NANO | 4S 850mAh | <250g | Goku F745 16x16 stack (built-in) | NIN 1404 V2 2750KV | Gemfan 4024 | Caddx Polar / Nebula Pro | Caddx Vista | Flywoo Explorer LR4 V2 HD; 4in; class corrected 5-inch -> micro (4in LR) |
 | Happish | 1S | 28g | Onboard 4-in-1 | EX0802 19000KV | Gemfan 35mm 3-blade | HDZero Nano Lite | HDZero Whoop Lite VTX | HappyModel Mobula6 HDZero (SuperbeeF4 Lite ELRS SPI); Meteor65 Pro frame |
 | HDZERO CRUX35 | 4S | 115g | Built-in 20A BLHeli_S 4-in-1 | HappyModel EX1404 3500KV | HQProp T3.5x2x3 | CruxF405 HD ELRS AIO cam | Onboard HDZero | HDZero Crux35; 113mm |
