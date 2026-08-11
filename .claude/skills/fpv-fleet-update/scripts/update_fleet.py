@@ -77,7 +77,10 @@ def mode_range_visual(start, end):
     """
     start_step = max(0, min(48, (start - 900) // 25))
     end_step = max(0, min(48, (end - 900) // 25))
-    symbols = {(False, False): '·', (True, True): '█',
+    # Keep every slider cell in the Unicode Block Elements family. GitHub renders CSV previews in
+    # a proportional font, where punctuation such as `·` is narrower than `█` and makes ranges
+    # appear to overlap even when their numeric endpoints only touch.
+    symbols = {(False, False): '░', (True, True): '█',
                (True, False): '▌', (False, True): '▐'}
     cells = []
     for step in range(0, 48, 2):

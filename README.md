@@ -105,7 +105,8 @@ channel, and exact activation range. It includes the permanent numeric mode ID, 
 linked-mode fields, firmware version, and source dump so custom or newer firmware remains
 auditable. Unknown IDs are labeled rather than discarded. `range_visual` renders the same
 900–2100 slider as a compact text bar; each character covers 50 µs, with `▌` and `▐` retaining
-Betaflight's 25 µs half-steps. The numeric endpoints immediately after it remain authoritative.
+Betaflight's 25 µs half-steps. Inactive cells use `░` rather than punctuation so the bar stays
+aligned in GitHub's proportional CSV preview. The numeric endpoints immediately after it remain authoritative.
 Repeated `quad`, `discipline`, and `class` cells are blank for readability; a blank means “same as
 the row above”, not missing data.
 
