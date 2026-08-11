@@ -82,6 +82,34 @@ save
 - [ ] Count the LEDs on each (3+ non-status required) and check the event's prop call — neither is
       derivable from a dump.
 
+## Extend spec coverage past the 5-inch racers
+
+`specs.csv` holds one class today, so the compliance pass only sees four quads. The five whoop
+racers — Mob6 AIO5 1st, Mob6 AIO5 2nd, Mob6 AIO5 RACE, Mob6 HDZERO RACE, Race5 — are all
+`discipline=race` and checked against nothing.
+
+- [ ] Add the MultiGP **Tiny Whoop** class. The class-specifications page gives max 65 mm ducted
+      frame, 31 mm props max, 1S at 4.35 V max charge, motors brushed or brushless (0702/0802
+      recommended), no weight limit — but verify against the current rulebook before encoding it,
+      the way Freedom Spec's bare "533g" turned out to need reading rather than quoting.
+- [ ] Frame size and duct are the problem: no dump carries them and `hardware.csv` has no frame
+      column, so a 65 mm rule can only be `manual` or needs a new column. Decide which before
+      writing the rows — a spec made mostly of `·` isn't worth the file.
+- [ ] Cell count is checkable today (`cells` in `hardware.csv`), props partly (`props` records
+      e.g. "Gemfan 1210 31mm bi-blade", so a `31mm|1210|1219|1208` regex works with an `evidence`
+      guard on `mm|\d{4}`).
+- [ ] Once a second spec exists, confirm the per-spec CSV split behaves: two files, no shared
+      columns, and `spec_scope()` keeping whoops out of the Freedom Spec table.
+
+Ideas, not yet needed:
+
+- Per-event overrides. Freedom Spec's RPM cap is 18000 by default but an event may call
+  16000–22000, and the prop is named per event — both are currently one fixed rule plus a
+  `manual` row. An `event` column or a per-event override file would only earn its place if you
+  actually race under a non-standard call.
+- Deleting a spec from `specs.csv` orphans its `compliance_*.csv` (the generator only writes).
+  Cheap to fix with a cleanup pass if specs ever churn; not worth it for two.
+
 ## Upgrade openracer to KAACK firmware
 
 openracer is still on stock **Betaflight 4.5.1** from a Jul 2024 build — the oldest firmware of any

@@ -11,6 +11,12 @@ spin hard but isn't — the kind of fault that only shows up under flight load. 
 Substack: [Tracking Down a Flight Failure](https://irekromaniuk.substack.com/p/tracking-down-a-flight-failure-an),
 the story behind the Kronos motor-desync analysis in this repo.
 
+The same idea runs the other way for racing: `specs.csv` encodes a class rulebook (MultiGP Freedom
+Spec so far) and every quad in scope is checked against it on each run, so "would this pass tech
+check?" is answered from the dumps rather than from memory on race morning. It catches the
+settings that are invisible precisely because they were never touched — a `diff all` says nothing
+at all about an RPM limiter that was never switched on.
+
 ## Layout
 
 ```
@@ -39,9 +45,9 @@ recursively), then regenerate the inventory:
 python3 .claude/skills/fpv-fleet-update/scripts/update_fleet.py
 ```
 
-The script is the single source of truth: it only reads the dumps and rewrites `fpv_quads.csv`,
-`fpv_quads_latest.csv`, `rates.csv` and `FLEET_SUMMARY.md`, so it is safe to re-run any time.
-Don't hand-edit the generated files.
+The script is the single source of truth: it only reads the dumps and the hand-maintained CSVs, and
+rewrites `fpv_quads.csv`, `fpv_quads_latest.csv`, `rates.csv`, `compliance_<spec>.csv` and
+`FLEET_SUMMARY.md`, so it is safe to re-run any time. Don't hand-edit the generated files.
 
 Values are extracted from Betaflight `diff all` output, which only records settings that differ
 from firmware defaults — a blank cell means the setting is at its firmware default.
