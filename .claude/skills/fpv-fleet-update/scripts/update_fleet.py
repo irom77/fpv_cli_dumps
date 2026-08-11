@@ -542,11 +542,13 @@ def build_summary(latest_rows, rate_rows=()):
     return "\n".join(lines).rstrip() + "\n"
 
 
-# Identity, then the decoded deg/s figures, then everything that only qualifies them.
+# Identity, then the headline figures (centre / max / expo), then what qualifies them, then the
+# supporting detail — curve points and the default-filled raw integers they were derived from.
 RATE_COLS = ['quad', 'discipline', 'class',
-             'center_rpy', 'max_rpy', 'expo_rpy', 'dps25_rpy', 'dps50_rpy', 'dps75_rpy',
-             'rc_rate_rpy', 'super_rate_rpy',
-             'bf_version', 'preset', 'preset_status', 'rates_type', 'rateprofile', 'note', 'source']
+             'center_rpy', 'max_rpy', 'expo_rpy',
+             'bf_version', 'preset', 'preset_status', 'rates_type',
+             'dps25_rpy', 'dps50_rpy', 'dps75_rpy', 'rc_rate_rpy', 'super_rate_rpy',
+             'rateprofile', 'note', 'source']
 
 
 def load_presets(path):
