@@ -17,7 +17,7 @@ the story behind the Kronos motor-desync analysis in this repo.
 backups/                 Betaflight CLI dumps (BTFL_cli_*.txt), one or more per quad
 fpv_quads.csv            History — one row per dump (unchanged re-dumps collapsed), newest per quad flagged 'latest'
 fpv_quads_latest.csv     One row per quad, newest dump only
-rates.csv                One row per quad — active rateprofile decoded to real deg/s (centre sensitivity, max rate, curve at 25/50/75% stick)
+rates.csv                Active rateprofile decoded to real deg/s (centre sensitivity, max rate, curve at 25/50/75% stick) — only quads that are active and have a discipline set
 rate_presets.csv         Hand-maintained named rateprofiles ('house-race', ...) that quads are meant to share; assigned per quad via hardware.csv's rate_preset
 flights.csv              One row per decoded blackbox flight (duration, sag, current, mAh, flags)
 hardware.csv             Hand-maintained per-quad build details (ESC, motors, props) + size class, status, discipline, aliases, rate_preset — none of it in dumps

@@ -19,12 +19,13 @@ files are derived from them and must stay in sync whenever the set of dumps chan
   extracted inventory values are identical (differing only in date/file) are collapsed to the most
   recent, so unchanged re-dumps don't clutter the history.
 - `fpv_quads_latest.csv` — one row per quad, newest dump only
-- `rates.csv` — one row per quad, its active rateprofile decoded into real deg/s (centre
-  sensitivity, max rate, and the curve at 25/50/75% stick) instead of the raw stored integers.
-  Every quad appears, including those on stock rates. Grouped by `discipline` then `class` (race
-  first, unset last) rather than alphabetically, so quads flown the same way can be read against
-  each other — and so a 1S whoop and a 6S five-inch never share a heading just because both race.
-  See "Rates" below.
+- `rates.csv` — active rateprofile decoded into real deg/s (centre sensitivity, max rate, and the
+  curve at 25/50/75% stick) instead of the raw stored integers. Covers the quads you might actually
+  fly: `status` active **and** a `discipline` set (`in_rates_view()`) — quads on stock rates are
+  included, retired/broken/undisciplined ones are not. Grouped by `discipline` then `class` (race
+  first) rather than alphabetically, so quads flown the same way can be read against each other —
+  and so a 1S whoop and a 6S five-inch never share a heading just because both race. The filter is
+  on the VIEW only; "needs attention" checks still run over the whole fleet. See "Rates" below.
 - `FLEET_SUMMARY.md` — human-readable overview: fleet table, rollups, "needs attention", and (if
   `flights.csv` exists) a per-quad Flights section
 - `flights.csv` — one row per decoded blackbox flight (duration, battery sag, current, mAh, motor

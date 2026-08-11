@@ -565,6 +565,19 @@ def load_presets(path):
     return out
 
 
+def in_rates_view(r):
+    """Whether a quad belongs in `rates.csv` and the summary's Rates tables.
+
+    Rates only matter for a quad you might actually fly, and only compare meaningfully against
+    quads flown the same way — so the view is limited to active airframes with a discipline set.
+    A retired, broken or half-built quad is noise in a file whose whole purpose is side-by-side
+    comparison, as is one whose discipline was never recorded (it has no group to be read against).
+
+    Note this filters the VIEW only. The needs-attention checks still run over every quad, so a
+    misconfigured rateprofile is reported even on an airframe that never appears here."""
+    return status_of(r) == 'active' and bool((r.get('discipline') or '').strip())
+
+
 def rate_sort_key(r):
     """Group the rates view by discipline, then by size class, then alphabetically.
 
@@ -588,7 +601,11 @@ def build_rate_rows(latest_rows, presets, hw_preset):
     Every quad appears, including those on stock rates — a blank cell in the old raw table meant
     'firmware default', which reads identically to 'not tracked' and hid that a race quad had never
     had its rates set at all. Defaults are materialized here instead, using the values that the
-    quad's own firmware generation shipped (they changed at 4.3)."""
+    quad's own firmware generation shipped (they changed at 4.3).
+
+    Returns a row for EVERY quad, each carrying `in_view` (see in_rates_view()). `in_view` is not
+    in RATE_COLS so it never reaches the CSV — callers filter on it for the view, while the
+    needs-attention checks read the unfiltered list."""
     out = []
     for r in sorted(latest_rows, key=rate_sort_key):
         d = rates.decode(r.get('rc_rate_rpy', ''), r.get('super_rate_rpy', ''),
@@ -605,6 +622,7 @@ def build_rate_rows(latest_rows, presets, hw_preset):
                                     r.get('bf_version', ''))
                 status = 'match' if rates.raw_signature(want) == rates.raw_signature(d) else 'differs'
         out.append({
+            'in_view': in_rates_view(r),
             'quad': r['quad'],
             'discipline': r.get('discipline', ''),
             'class': r.get('class', ''),
@@ -628,10 +646,11 @@ def build_rate_rows(latest_rows, presets, hw_preset):
     return out
 
 
-def build_rates_section(rate_rows):
+def build_rates_section(rate_rows, total=None):
     """Per-quad rates table in real deg/s, decoded from the raw stored integers via rates.py."""
     if not rate_rows:
         return ""
+    hidden = (total - len(rate_rows)) if total else 0
     lines = ["", "## Rates", "",
              "_Active rateprofile, decoded to deg/s (see `rates.csv`). **Center** is stick "
              "sensitivity around centre, **Max** the rate at full deflection, r/p/y. `source=default` "
@@ -639,6 +658,12 @@ def build_rates_section(rate_rows):
              "rateprofile — which changed at 4.3 (before: BETAFLIGHT 100/70, center 200; after: "
              "ACTUAL 7/67, center 70). Intended rates come from `rate_preset` in `hardware.csv`._",
              ""]
+    if hidden:
+        lines += [f"_Showing the {len(rate_rows)} active quads that have a `discipline` set; "
+                  f"{hidden} other{'s are' if hidden != 1 else ' is'} hidden (retired, broken, "
+                  f"incomplete, or no discipline recorded). \"Needs attention\" above still checks "
+                  f"every quad._",
+                  ""]
     # One sub-table per discipline so quads flown the same way sit together and can be read against
     # each other; rate_rows already arrives in that order from rate_sort_key().
     groups = {}
@@ -749,13 +774,15 @@ def main():
     latest_rows = latest_per_quad(rows)
     rate_rows = build_rate_rows(latest_rows, load_presets(PRESETS_CSV),
                                 load_hw_map(HW_CSV, "rate_preset"))
+    rates_view = [r for r in rate_rows if r['in_view']]
 
     write_csv(OUT, rows)
     write_csv(OUT_LATEST, latest_rows)
-    write_csv(OUT_RATES, rate_rows, RATE_COLS)
+    write_csv(OUT_RATES, rates_view, RATE_COLS)
     with open(OUT_SUMMARY, 'w') as f:
+        # Checks see every quad; the tables show only the ones worth comparing.
         f.write(build_summary(latest_rows, rate_rows).rstrip() + "\n")
-        f.write(build_rates_section(rate_rows))
+        f.write(build_rates_section(rates_view, len(rate_rows)))
         f.write(build_hardware_section(HW_CSV, latest_rows))
         f.write(build_flights_section(os.path.join(SRC, "flights.csv"), load_aliases(HW_CSV)))
 

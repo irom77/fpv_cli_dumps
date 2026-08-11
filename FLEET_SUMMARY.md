@@ -81,6 +81,8 @@ _Note: BETAFPVF4SX1280, FLYWOOF405S_AIO, GEPRC_F722_AIO, HOBBYWING_XROTORF7CON, 
 
 _Active rateprofile, decoded to deg/s (see `rates.csv`). **Center** is stick sensitivity around centre, **Max** the rate at full deflection, r/p/y. `source=default` means the dump set no rates at all, so the values shown are that firmware's stock rateprofile — which changed at 4.3 (before: BETAFLIGHT 100/70, center 200; after: ACTUAL 7/67, center 70). Intended rates come from `rate_preset` in `hardware.csv`._
 
+_Showing the 11 active quads that have a `discipline` set; 20 others are hidden (retired, broken, incomplete, or no discipline recorded). "Needs attention" above still checks every quad._
+
 **race — whoop**
 
 | Quad | Center °/s | Max °/s | Expo | @50% | Preset | Type | Source |
@@ -100,62 +102,17 @@ _Active rateprofile, decoded to deg/s (see `rates.csv`). **Center** is stick sen
 | openracer | 190/160/160 | 633/533/533 | 0/0/0 | 146/123/123 | house-race ✓ | BETAFLIGHT | dump |
 | openracer2 | 190/160/160 | 633/533/533 | 0/0/0 | 146/123/123 | house-race ✓ | BETAFLIGHT | dump |
 
-**freestyle — micro**
-
-| Quad | Center °/s | Max °/s | Expo | @50% | Preset | Type | Source |
-|---|---|---|---|---|---|---|---|
-| QAS JB | 190/160/160 | 633/533/533 | 0/0/0 | 146/123/123 | house-race ✓ | BETAFLIGHT | dump |
-
 **freestyle — 5-inch**
 
 | Quad | Center °/s | Max °/s | Expo | @50% | Preset | Type | Source |
 |---|---|---|---|---|---|---|---|
-| XILOF4 | 20/20/20 | 800/800/600 | 40/40/40 | 132/132/101 | — | ACTUAL (default) | dump |
 | XILOF4-2 | 700/700/700 | 840/840/810 | 30/30/30 | 375/375/370 | — | ACTUAL (default) | dump |
-
-**cinematic — cinewhoop**
-
-| Quad | Center °/s | Max °/s | Expo | @50% | Preset | Type | Source |
-|---|---|---|---|---|---|---|---|
-| cinelog-flyfish | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — | ACTUAL (default) | default |
-| CineLog30 | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — | BETAFLIGHT (default) | default |
 
 **long-range — micro**
 
 | Quad | Center °/s | Max °/s | Expo | @50% | Preset | Type | Source |
 |---|---|---|---|---|---|---|---|
-| Crocodile5 baby | 208/203/208 | 867/867/867 | 20/22/20 | 165/161/165 | — | BETAFLIGHT (default) | dump |
 | FLYWOOF7NANO | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — | BETAFLIGHT (default) | default |
-
-**discipline not set — whoop**
-
-| Quad | Center °/s | Max °/s | Expo | @50% | Preset | Type | Source |
-|---|---|---|---|---|---|---|---|
-| AIR65 R | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — | ACTUAL (default) | default |
-| BETAFPVF4SX1280 | 70/70/70 | 650/650/650 | 0/0/0 | 180/180/180 | — | ACTUAL (default) | dump |
-| Diamond | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — | ACTUAL (default) | default |
-| Ecofree | 70/70/120 | 640/640/720 | 35/35/15 | 131/131/189 | — | ACTUAL (default) | dump |
-| Happish | 200/200/200 | 500/500/500 | 50/50/25 | 140/140/157 | — | ACTUAL (default) | dump |
-| M6 ECO | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — | ACTUAL (default) | default |
-| M85 HDZero | 70/70/70 | 650/650/650 | 0/0/0 | 180/180/180 | — | ACTUAL (default) | dump |
-| Meteor85 | 70/70/70 | 650/650/650 | 0/0/0 | 180/180/180 | — | ACTUAL (default) | dump |
-| Mobula1 | 200/200/200 | 500/500/500 | 50/50/25 | 140/140/157 | — | ACTUAL (default) | dump |
-
-**discipline not set — micro**
-
-| Quad | Center °/s | Max °/s | Expo | @50% | Preset | Type | Source |
-|---|---|---|---|---|---|---|---|
-| FLYWOOF405S_AIO | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — | ACTUAL (default) | default |
-| HDZERO CRUX35 | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — | ACTUAL (default) | default |
-| SPEEDYBEEF405MINI | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — | ACTUAL (default) | default |
-
-**discipline not set — 5-inch**
-
-| Quad | Center °/s | Max °/s | Expo | @50% | Preset | Type | Source |
-|---|---|---|---|---|---|---|---|
-| GEPRC_F722_AIO | 1300/1300/1300 | 1300/1300/1300 | 20/22/20 | 650/650/650 | — | ACTUAL (default) | dump |
-| HOBBYWING_XROTORF7CON | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — | ACTUAL (default) | default |
-| HOBBYWING_XROTORF7CONV | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — | ACTUAL (default) | default |
 
 ## Hardware
 
