@@ -6,7 +6,7 @@ Mob6 HDZERO RACE,race,whoop,200/200/200,667/667/667,0/0/0,4.4.2,whoop-race,match
 Race5,race,whoop,200/200/200,667/667/667,0/0/0,4.4.2,whoop-race,match,BETAFLIGHT,61/61/61,154/154/154,316/316/316,100/100/100,70/70/70,0:R_Angle,,dump
 LS-Ultra,race,5-inch,186/160/160,620/533/533,0/0/0,4.5.2.KAACK_V15,,,BETAFLIGHT,56/48/48,143/123/123,294/253/253,93/80/80,70/70/70,0:Rate1,,dump
 LS-Ultra HD,race,5-inch,190/160/160,633/533/533,0/0/0,4.5.3.KAACK_V18,house-race,match,BETAFLIGHT,58/48/48,146/123/123,300/253/253,95/80/80,70/70/70,0,,dump
-openracer,race,5-inch,70/70/70,670/670/670,0/0/0,4.5.1,house-race,differs,ACTUAL (default),55/55/55,185/185/185,390/390/390,7/7/7,67/67/67,0,,default
+openracer,race,5-inch,190/160/160,630/530/530,0/0/0,4.5.1,house-race,differs,ACTUAL (default),75/63/63,205/172/172,390/328/328,19/16/16,63/53/53,0,,dump
 openracer2,race,5-inch,190/160/160,633/533/533,0/0/0,2025.12.3-alpha.KAACK_V19,house-race,match,BETAFLIGHT,58/48/48,146/123/123,300/253/253,95/80/80,70/70/70,0,,dump
 QAS JB,freestyle,micro,190/160/160,633/533/533,0/0/0,4.5.0,house-race,match,BETAFLIGHT,58/48/48,146/123/123,300/253/253,95/80/80,70/70/70,0,,dump
 XILOF4,freestyle,5-inch,20/20/20,800/800/600,40/40/40,4.3.2,,,ACTUAL (default),34/34/27,132/132/101,334/334/252,2/2/2,80/80/60,0,,dump
