@@ -19,6 +19,12 @@ files are derived from them and must stay in sync whenever the set of dumps chan
   extracted inventory values are identical (differing only in date/file) are collapsed to the most
   recent, so unchanged re-dumps don't clutter the history.
 - `fpv_quads_latest.csv` — one row per quad, newest dump only
+- `rates.csv` — one row per quad, its active rateprofile decoded into real deg/s (centre
+  sensitivity, max rate, and the curve at 25/50/75% stick) instead of the raw stored integers.
+  Every quad appears, including those on stock rates. Grouped by `discipline` then `class` (race
+  first, unset last) rather than alphabetically, so quads flown the same way can be read against
+  each other — and so a 1S whoop and a 6S five-inch never share a heading just because both race.
+  See "Rates" below.
 - `FLEET_SUMMARY.md` — human-readable overview: fleet table, rollups, "needs attention", and (if
   `flights.csv` exists) a per-quad Flights section
 - `flights.csv` — one row per decoded blackbox flight (duration, battery sag, current, mAh, motor
@@ -29,7 +35,8 @@ files are derived from them and must stay in sync whenever the set of dumps chan
   dumps can't provide: `class` (whoop / cinewhoop / micro / 5-inch, overrides the auto-guess),
   `status` (lifecycle — active / building / rebuilding / broken / retired / lost; blank = active), and
   `discipline` (what it's flown for — race / freestyle / cinematic / long-range; blank = unset), and
-  `aliases` (former craft names, `;`-separated — see "Renaming a quad" below). Largely seeded
+  `aliases` (former craft names, `;`-separated — see "Renaming a quad" below), and `rate_preset`
+  (which named rateprofile from `rate_presets.csv` this quad is *meant* to fly — see "Rates"). Largely seeded
   from the pilot's own fleet spreadsheet, so some rows may be stale — the `notes` column flags known
   conflicts. Optional; joined into the summary by quad name. Edit it directly.
 
@@ -115,11 +122,33 @@ and stale-backup nags in "needs attention" (no point re-flashing a grounded quad
 the fleet table with its status flagged. `broken` also gets its own actionable "needs repair" line, and
 `building`/`rebuilding` are surfaced as intentionally-incomplete rather than as truncated dumps.
 
-Rate columns (`rateprofile`, `rates_type`, `rc_rate_rpy`, `super_rate_rpy`, `expo_rpy`) come from the
-**active** rateprofile only (the last bare `rateprofile N` line) via `extract_active_rates()`. The
-r/p/y triples are the RAW stored integers; their meaning depends on `rates_type` (BETAFLIGHT → RC
-Rate / Super Rate / Expo; ACTUAL → Center Sensitivity / Max Rate / Expo). A blank `rates_type` means
-firmware default (ACTUAL), and a triple like `//12` means only yaw was set (roll/pitch at default).
+**Rates.** Raw columns (`rateprofile`, `rates_type`, `rc_rate_rpy`, `super_rate_rpy`, `expo_rpy`) come
+from the **active** rateprofile only (the last bare `rateprofile N` line) via `extract_active_rates()`.
+Those triples are the RAW stored integers, and a triple like `//12` means only yaw was set.
+
+`scripts/rates.py` turns them into real deg/s for `rates.csv` and the summary's Rates table. It is
+pure math with no I/O — run `python3 scripts/rates.py` to execute its self-test. Two things it exists
+to handle:
+
+- **Stock rates are not one thing.** `diff all` omits defaults, so a quad that never had rates set
+  dumps no rate lines at all — and the default changed at 4.3 (before: BETAFLIGHT rc 100 / srate 70,
+  centre 200 °/s; after: ACTUAL rc 7 / rates 67, centre 70 °/s). `defaults_for()` fills the values
+  that quad's own firmware shipped, so `source=default` rows show what it really flies at rather than
+  a blank that reads the same as "not tracked".
+- **The type decides the meaning.** `rate_at()` mirrors `applyActualRates()` / `applyBetaflightRates()`
+  from `src/main/fc/rc.c`. Only those two types are implemented; QUICK/KISS/RACEFLIGHT decode to blank
+  with a note rather than a wrong number. If you add one, add a self-test case with it.
+
+`rate_presets.csv` (hand-maintained, `preset,rates_type,rc_rate_rpy,super_rate_rpy,expo_rpy,notes`)
+names rateprofiles the pilot intends several quads to share; `rate_preset` in `hardware.csv` assigns
+one to a quad. Comparison is on default-filled values, not raw dump text, so setting a value
+explicitly to its default still matches. A mismatch is reported in "needs attention" — this is the
+one rates check that encodes intent, since nothing in a dump says what a quad was *supposed* to be.
+
+`inert_max_rate()` flags a related trap: on an ACTUAL profile whose centre sensitivity meets or
+exceeds its max rate, the max-rate setting does nothing and the stick goes linear to a very high
+ceiling. That usually means BETAFLIGHT-era rc_rate values (100 = 1.0×) were left on a profile the
+firmware now reads as ACTUAL (100 = 1000 °/s centre) across an upgrade.
 
 If the extraction is wrong or you want to capture a new field, edit
 `scripts/update_fleet.py` — the field extraction lives in `parse_dumps()`, the CSV columns in `COLS`,

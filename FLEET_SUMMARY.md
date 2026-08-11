@@ -29,13 +29,13 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 | Meteor85 | whoop | — | **broken** | BETAFPVF4SX1280 | F411 | 4.4.3 | DSHOT300 | HD | ELRS **[A]** | 2025-01-10 |
 | Mob6 AIO5 1st | whoop | race | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2025-10-25 |
 | Mob6 AIO5 2nd | whoop | race | active | CRAZYBEEF4SX1280 | F411 | 4.5.2 | - | - | ELRS **[A]** | 2025-10-25 |
-| Mob6 AIO5 RACE | whoop | — | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2024-10-07 |
-| Mob6 HDZERO RACE | whoop | — | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2025-07-28 |
+| Mob6 AIO5 RACE | whoop | race | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2024-10-07 |
+| Mob6 HDZERO RACE | whoop | race | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2025-07-28 |
 | Mobula1 | whoop | — | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2025-11-12 |
 | openracer | 5-inch | race | active | HOBBYWING_XROTORF7CONV | F7X2 | 4.5.1 | - | - | - | 2026-08-11 |
 | openracer2 | 5-inch | race | active | FOXEERF722V4 | F7X2 | 2025.12.3-alpha.KAACK_V19 | - | Analog | - | 2026-08-11 |
 | QAS JB | micro | freestyle | **broken** | LUXHDAIO-G4 | G47X | 4.5.0 | DSHOT300 | - | CRSF | 2026-07-21 |
-| Race5 | whoop | — | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2025-01-24 |
+| Race5 | whoop | race | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2025-01-24 |
 | SPEEDYBEEF405MINI *(unnamed)* | micro | — | **broken** | SPEEDYBEEF405MINI | SPEEDYBEEF405MINI | 4.3.2 | - | - | CRSF | 2026-07-21 |
 | XILOF4 *(unnamed)* | 5-inch | freestyle | **retired** | XILOF4 | F405 | 4.3.2 | - | - | CRSF | 2026-07-21 |
 | XILOF4-2 | 5-inch | freestyle | active | XILOF4 | F405 | 4.5.1 | DSHOT300 | - | - | 2026-07-21 |
@@ -44,7 +44,7 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 
 - **Class:** 14× whoop, 2× cinewhoop, 6× micro, 9× 5-inch. Size class inferred from craft name / board where `hardware.csv` doesn't set it.
 - **Status:** 21× active, 4× broken, 3× retired, 3× incomplete. Lifecycle from `hardware.csv`; a blank there counts as active.
-- **Discipline:** 6× race, 3× freestyle, 2× cinematic, 2× long-range, 18 unset. Hand-entered in `hardware.csv` (no heuristic — the dump gives no signal).
+- **Discipline:** 9× race, 3× freestyle, 2× cinematic, 2× long-range, 15 unset. Hand-entered in `hardware.csv` (no heuristic — the dump gives no signal).
 - **Flight controllers:** 14× F411, 7× F7X2, 4× F405, 2× G47X, 1× F745, 1× H743, 1× F411SX1280, 1× SPEEDYBEEF405MINI.
 - **Firmware:** 12 on BF 4.4.x, 10 on BF 4.5.x, 5 on BF 4.3.x, 3 on BF 4.2.x, 1 on BF 2025.12.x.
 - **ESC protocol:** 20× DSHOT300, 2× DSHOT600.
@@ -72,33 +72,93 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 - Race5 (last dump 2025-01-24)
 - Mob6 HDZERO RACE (last dump 2025-07-28)
 
+**Rates differ from their assigned preset (`rate_preset` in `hardware.csv`):**
+- openracer — on firmware defaults, expected `house-race`
+
+**Rate profile looks like it survived a firmware upgrade** — centre sensitivity meets or exceeds max rate on an ACTUAL profile, so the max-rate setting does nothing and the stick is linear to a very high ceiling. Usually old BETAFLIGHT-rates numbers left on a profile the firmware now reads as ACTUAL:
+- GEPRC_F722_AIO (4.5.1) — rc_rate 130/130/130 → centre 1300/1300/1300 °/s, which swamps the max-rate setting (670/670/670 °/s)
+
 _Note: BETAFPVF4SX1280, FLYWOOF405S_AIO, GEPRC_F722_AIO, HOBBYWING_XROTORF7CON, HOBBYWING_XROTORF7CONV, SPEEDYBEEF405MINI, XILOF4 are keyed by board name because their dumps had no craft name set (`set craft_name` / `# name:`). Setting a craft name makes future tracking more reliable._
 
 ## Rates
 
-_Active rateprofile only, raw stored r/p/y values (see `fpv_quads_latest.csv`). Meaning depends on type — BETAFLIGHT: RC Rate / Super / Expo; ACTUAL: Center Sens / Max Rate / Expo. Blank type = firmware default (ACTUAL); quads at all-default rates are omitted._
+_Active rateprofile, decoded to deg/s (see `rates.csv`). **Center** is stick sensitivity around centre, **Max** the rate at full deflection, r/p/y. `source=default` means the dump set no rates at all, so the values shown are that firmware's stock rateprofile — which changed at 4.3 (before: BETAFLIGHT 100/70, center 200; after: ACTUAL 7/67, center 70). Intended rates come from `rate_preset` in `hardware.csv`._
 
-| Quad | Type | RC rate | Super | Expo | Profile |
-|---|---|---|---|---|---|
-| BETAFPVF4SX1280 | default | — | 65/65/65 | — | 0 |
-| Crocodile5 baby | default | 130/130/130 | — | 20/22/20 | 0 |
-| Ecofree | default | //12 | 64/64/72 | 35/35/15 | 0:R_Angle |
-| GEPRC_F722_AIO | default | 130/130/130 | — | 20/22/20 | 0 |
-| Happish | default | 20/20/20 | 50/50/50 | 50/50/25 | 0 |
-| LS-Ultra | BETAFLIGHT | 93/80/80 | 70/70/70 | — | 0:Rate1 |
-| LS-Ultra HD | BETAFLIGHT | 95/80/80 | 70/70/70 | — | 0 |
-| M85 HDZero | default | — | 65/65/65 | — | 0 |
-| Meteor85 | default | — | 65/65/65 | — | 0 |
-| Mob6 AIO5 1st | BETAFLIGHT | 100/100/100 | 70/70/70 | — | 0 |
-| Mob6 AIO5 2nd | BETAFLIGHT | 100/100/100 | 70/70/70 | — | 0 |
-| Mob6 AIO5 RACE | BETAFLIGHT | 100/100/100 | 70/70/70 | — | 0 |
-| Mob6 HDZERO RACE | BETAFLIGHT | 100/100/100 | 70/70/70 | — | 0 |
-| Mobula1 | default | 20/20/20 | 50/50/50 | 50/50/25 | 0:R_Angle |
-| openracer2 | BETAFLIGHT | 95/80/80 | 70/70/70 | — | 0 |
-| QAS JB | BETAFLIGHT | 95/80/80 | 70/70/70 | — | 0 |
-| Race5 | BETAFLIGHT | 100/100/100 | 70/70/70 | — | 0:R_Angle |
-| XILOF4 | default | 2/2/2 | 80/80/60 | 40/40/40 | 0 |
-| XILOF4-2 | default | 70/70/70 | 84/84/81 | 30/30/30 | 0 |
+**race — whoop**
+
+| Quad | Type | Source | Center °/s | Max °/s | Expo | @50% | Preset |
+|---|---|---|---|---|---|---|---|
+| Mob6 AIO5 1st | BETAFLIGHT | dump | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — |
+| Mob6 AIO5 2nd | BETAFLIGHT | dump | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — |
+| Mob6 AIO5 RACE | BETAFLIGHT | dump | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — |
+| Mob6 HDZERO RACE | BETAFLIGHT | dump | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — |
+| Race5 | BETAFLIGHT | dump | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — |
+
+**race — 5-inch**
+
+| Quad | Type | Source | Center °/s | Max °/s | Expo | @50% | Preset |
+|---|---|---|---|---|---|---|---|
+| LS-Ultra | BETAFLIGHT | dump | 186/160/160 | 620/533/533 | 0/0/0 | 143/123/123 | — |
+| LS-Ultra HD | BETAFLIGHT | dump | 190/160/160 | 633/533/533 | 0/0/0 | 146/123/123 | house-race ✓ |
+| openracer | ACTUAL (default) | default | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | **house-race ⚠️** |
+| openracer2 | BETAFLIGHT | dump | 190/160/160 | 633/533/533 | 0/0/0 | 146/123/123 | house-race ✓ |
+
+**freestyle — micro**
+
+| Quad | Type | Source | Center °/s | Max °/s | Expo | @50% | Preset |
+|---|---|---|---|---|---|---|---|
+| QAS JB | BETAFLIGHT | dump | 190/160/160 | 633/533/533 | 0/0/0 | 146/123/123 | house-race ✓ |
+
+**freestyle — 5-inch**
+
+| Quad | Type | Source | Center °/s | Max °/s | Expo | @50% | Preset |
+|---|---|---|---|---|---|---|---|
+| XILOF4 | ACTUAL (default) | dump | 20/20/20 | 800/800/600 | 40/40/40 | 132/132/101 | — |
+| XILOF4-2 | ACTUAL (default) | dump | 700/700/700 | 840/840/810 | 30/30/30 | 375/375/370 | — |
+
+**cinematic — cinewhoop**
+
+| Quad | Type | Source | Center °/s | Max °/s | Expo | @50% | Preset |
+|---|---|---|---|---|---|---|---|
+| cinelog-flyfish | ACTUAL (default) | default | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — |
+| CineLog30 | BETAFLIGHT (default) | default | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — |
+
+**long-range — micro**
+
+| Quad | Type | Source | Center °/s | Max °/s | Expo | @50% | Preset |
+|---|---|---|---|---|---|---|---|
+| Crocodile5 baby | BETAFLIGHT (default) | dump | 208/203/208 | 867/867/867 | 20/22/20 | 165/161/165 | — |
+| FLYWOOF7NANO | BETAFLIGHT (default) | default | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — |
+
+**discipline not set — whoop**
+
+| Quad | Type | Source | Center °/s | Max °/s | Expo | @50% | Preset |
+|---|---|---|---|---|---|---|---|
+| AIR65 R | ACTUAL (default) | default | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — |
+| BETAFPVF4SX1280 | ACTUAL (default) | dump | 70/70/70 | 650/650/650 | 0/0/0 | 180/180/180 | — |
+| Diamond | ACTUAL (default) | default | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — |
+| Ecofree | ACTUAL (default) | dump | 70/70/120 | 640/640/720 | 35/35/15 | 131/131/189 | — |
+| Happish | ACTUAL (default) | dump | 200/200/200 | 500/500/500 | 50/50/25 | 140/140/157 | — |
+| M6 ECO | ACTUAL (default) | default | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — |
+| M85 HDZero | ACTUAL (default) | dump | 70/70/70 | 650/650/650 | 0/0/0 | 180/180/180 | — |
+| Meteor85 | ACTUAL (default) | dump | 70/70/70 | 650/650/650 | 0/0/0 | 180/180/180 | — |
+| Mobula1 | ACTUAL (default) | dump | 200/200/200 | 500/500/500 | 50/50/25 | 140/140/157 | — |
+
+**discipline not set — micro**
+
+| Quad | Type | Source | Center °/s | Max °/s | Expo | @50% | Preset |
+|---|---|---|---|---|---|---|---|
+| FLYWOOF405S_AIO | ACTUAL (default) | default | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — |
+| HDZERO CRUX35 | ACTUAL (default) | default | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — |
+| SPEEDYBEEF405MINI | ACTUAL (default) | default | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — |
+
+**discipline not set — 5-inch**
+
+| Quad | Type | Source | Center °/s | Max °/s | Expo | @50% | Preset |
+|---|---|---|---|---|---|---|---|
+| GEPRC_F722_AIO | ACTUAL (default) | dump | 1300/1300/1300 | 1300/1300/1300 | 20/22/20 | 650/650/650 | — |
+| HOBBYWING_XROTORF7CON | ACTUAL (default) | default | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — |
+| HOBBYWING_XROTORF7CONV | ACTUAL (default) | default | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — |
 
 ## Hardware
 
@@ -122,10 +182,13 @@ _Curated per-quad build details (not captured in Betaflight dumps), largely seed
 | Meteor85 | 2S 450mAh | 48.3g | Built-in 1S/2S 12A ESC | 1103 11000KV | Gemfan 2015 2-blade | Runcam HDZero Nano Lite / Caddx Ant Nano | HDZero Whoop Lite / M03 analog | BetaFPV Meteor85 Brushless Whoop |
 | Mob6 AIO5 1st | 1S | 19g | CrazybeeF4SX1280 (built-in) | SE 0702 28000KV | HQ ultralight 1.2x1.1x3 | HDZero Eco | AIO5 | crash recovery off, airmode on |
 | Mob6 AIO5 2nd | 1S | 19g | CrazybeeF4SX1280 (built-in) | SE 0702 28000KV | HQ ultralight 1.2x1.1x3 | HDZero Eco | AIO5 | crash recovery on, airmode on |
+| Mob6 AIO5 RACE |  |  |  |  |  |  |  | Race-tuned sibling of the Mob6 AIO5 pair; build details TBD. Class left to the heuristic (whoop). |
+| Mob6 HDZERO RACE |  |  |  |  |  |  |  | HDZero race whoop; build details TBD. Class left to the heuristic (whoop). |
 | Mobula1 | 1S 650mAh | 29.5g | Built-in 5A BLHeli_S 4-in-1 | EX 1002 20000KV | Gemfan 1610-2 40mm bi-blade | HDZero Nano Lite | HDZero Whoop Lite VTX | HappyModel Moblite7 -> Moblite6 (SuperbeeF4 Lite); 75mm; Mobula7 v4 frame |
 | openracer | 6S | 305g | Hobbywing XRotor F722 (45A 4-in-1 ESC) | VCI Spark 2207 Pro 2050Kv | Hurricane MCK 51466 V2 | Runcam HDZero Nano 90 | HDZero Race V3 HD | OpenRacer racing frame (renamed from Kronos 2026-08-11), Tattu 6S 1400mAh. Motor replaced 2026-07-20 after a rear-corner desync/crash under load (see flights); bench-fine at 0% DShot error, fault only under aero load. |
 | openracer2 | 6S | 280g dry (no props/battery) | Foxeer Reaper 20x20 ESC + Foxeer Mini F722 V4 20x20 FC (MPU6000) | HeadsUp \| Five33 2207 1960KV (MR30 connectors) | Hurricane MCK 51466 V2 | Foxeer Predator Nano |  | Analog Open Racer (RTF); RX HappyModel EP1/EP2 2.4G ELRS fw 3.5.6 ISM2G4 (upgraded 2026-08-11 from 3.0.1), serial on UART1; Core 5.8 RHCP antenna; VTX control via Tramp on UART5. Second OpenRacer build (see openracer); same props as openracer. VTX model not yet confirmed. |
 | QAS JB | 4S | sub-250g | 35A AM32 3-6S | XILO Stealth 1404 4500KV | Gemfan Hurricane 3020 3-blade | Caddx (analog) | SpeedyBee analog VTX | Lumenier QAV-S 2 Sub-250, JB Special Edition, 3in / 1404 build (matches sheet Fleet2 QAV-S 2). Converted from HDZero to analog: SpeedyBee VTX + Caddx cam. Broken 2026-07-21 - blackbox analysis pending |
+| Race5 |  |  |  |  |  |  |  | Race whoop on the shared 100/100/100 + 70/70/70 rate; build details TBD. |
 | SPEEDYBEEF405MINI | 3-4S (850mAh 4S) |  | SpeedyBee F405 Mini (20x20) | e.g. EMAX ECO 1404 3700KV | 3in | Caddx Vista | Caddx Vista (DJI HD) | Massive Droner 3in HD (sheet Racing frames/retire); 3in HD micro; no craft_name in dump; board=SPEEDYBEEF405MINI; BF 4.3.2; motors/props per sheet options - verify |
 | XILOF4 | 6S |  | XILO Stax 45A BLHeli_32 4-in-1 | XILO Stealth 2206 1700KV (6S) | Lumenier 5x5.3x3 Gate Breaker | RunCam HDZero Nano 90 | HDZero Freestyle VTX | XILO Phreakstyle Slam; JB Edition. Sheet name: Joshua Bardwell Edition - Bundle |
 | XILOF4-2 |  |  |  |  |  |  |  | Sheet name: Joshua Bardwell Edition Pre-Built (newer of the two). Second XILOF4 freestyle build (BF 4.5.1), very similar to XILOF4 (Bundle); specs assumed same — confirm/fill in. No craft_name set, tracked by filename label |

@@ -16,10 +16,16 @@ files, so it is safe to re-run any time new dumps are dropped in.
 import os, re, csv, sys, glob
 from datetime import date, datetime
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import rates  # noqa: E402  (sibling module: rate-curve math, no I/O)
+
 SRC = os.path.abspath(sys.argv[1]) if len(sys.argv) > 1 else os.getcwd()
 OUT = os.path.join(SRC, "fpv_quads.csv")
 OUT_LATEST = os.path.join(SRC, "fpv_quads_latest.csv")
+OUT_RATES = os.path.join(SRC, "rates.csv")
 OUT_SUMMARY = os.path.join(SRC, "FLEET_SUMMARY.md")
+HW_CSV = os.path.join(SRC, "hardware.csv")
+PRESETS_CSV = os.path.join(SRC, "rate_presets.csv")
 
 # Filename shapes handled:
 #   BTFL_cli_backup_<LABEL>_<YYYYMMDD>_<HHMMSS>_<BOARD>.txt
@@ -322,9 +328,9 @@ COLS = ['quad', 'class', 'discipline', 'status', 'dump_date', 'craft_name', 'boa
         'note', 'file']
 
 
-def write_csv(path, data):
+def write_csv(path, data, cols=None):
     with open(path, 'w', newline='') as f:
-        w = csv.DictWriter(f, fieldnames=COLS, extrasaction='ignore')
+        w = csv.DictWriter(f, fieldnames=cols or COLS, extrasaction='ignore')
         w.writeheader()
         w.writerows(data)
 
@@ -361,7 +367,7 @@ def ver_tuple(v):
     return (int(nums[0]), int(nums[1])) if len(nums) >= 2 else (0, 0)
 
 
-def build_summary(latest_rows):
+def build_summary(latest_rows, rate_rows=()):
     from collections import Counter
     lines = []
     A = lines.append
@@ -493,6 +499,33 @@ def build_summary(latest_rows):
             A(f"- {r['quad']} — `{r['file']}`")
         A("")
 
+    # Rate drift: the dump disagrees with the preset the pilot says this quad should be flying.
+    # Worth nagging about because rates are invisible on the bench — you only notice in the air.
+    drift = [r for r in rate_rows if r['preset_status'] == 'differs']
+    if drift:
+        A("**Rates differ from their assigned preset (`rate_preset` in `hardware.csv`):**")
+        for r in drift:
+            on = 'firmware defaults' if r['source'] == 'default' else f"{r['rates_type']} {r['max_rpy']} °/s max"
+            A(f"- {r['quad']} — on {on}, expected `{r['preset']}`")
+        A("")
+    inert = [r for r in rate_rows if r['note'].startswith('CENTER>=MAX')]
+    if inert:
+        A("**Rate profile looks like it survived a firmware upgrade** — centre sensitivity meets or "
+          "exceeds max rate on an ACTUAL profile, so the max-rate setting does nothing and the "
+          "stick is linear to a very high ceiling. Usually old BETAFLIGHT-rates numbers left on a "
+          "profile the firmware now reads as ACTUAL:")
+        for r in inert:
+            maxset = '/'.join(str(int(v) * 10) for v in r['super_rate_rpy'].split('/'))
+            A(f"- {r['quad']} ({r['bf_version']}) — rc_rate {r['rc_rate_rpy']} → centre "
+              f"{r['center_rpy']} °/s, which swamps the max-rate setting ({maxset} °/s)")
+        A("")
+
+    unknown = sorted({r['preset'] for r in rate_rows if r['preset_status'] == 'unknown-preset'})
+    if unknown:
+        A("**Undefined rate presets (referenced in `hardware.csv`, missing from `rate_presets.csv`):** "
+          + ", ".join(f"`{p}`" for p in unknown) + ".")
+        A("")
+
     unclassed = [r for r in latest_rows if not r.get('class')]
     if unclassed:
         A("**Unclassified (heuristic couldn't tell — set `class` in `hardware.csv`):** "
@@ -509,25 +542,121 @@ def build_summary(latest_rows):
     return "\n".join(lines).rstrip() + "\n"
 
 
-def build_rates_section(latest_rows):
-    """Compact per-quad rates table. Only lists quads that set any rate (the rest are at firmware
-    default). Values are the raw stored r/p/y integers; meaning depends on rates_type."""
-    have = [r for r in latest_rows
-            if r.get('rates_type') or r.get('rc_rate_rpy') or r.get('super_rate_rpy') or r.get('expo_rpy')]
-    if not have:
+RATE_COLS = ['quad', 'discipline', 'class', 'bf_version', 'rates_type', 'source', 'preset', 'preset_status',
+             'center_rpy', 'max_rpy', 'expo_rpy', 'dps25_rpy', 'dps50_rpy', 'dps75_rpy',
+             'rc_rate_rpy', 'super_rate_rpy', 'rateprofile', 'note']
+
+
+def load_presets(path):
+    """Hand-maintained rate presets: name -> raw signature to compare a quad against. A preset is
+    just a named rateprofile the pilot intends several quads to share, so drift can be flagged."""
+    if not os.path.exists(path):
+        return {}
+    out = {}
+    with open(path, newline='') as f:
+        for r in csv.DictReader(f):
+            name = (r.get('preset') or '').strip()
+            if name:
+                out[name] = r
+    return out
+
+
+def rate_sort_key(r):
+    """Group the rates view by discipline, then by size class, then alphabetically.
+
+    Rates are only meaningful in comparison — the point of the file is to see whether quads flown
+    the same way are set up the same way, which alphabetical order scatters (openracer and QAS JB
+    end up eleven rows apart). Class is the second key because rates don't transfer across sizes:
+    a 1S whoop at 667 °/s and a 6S five-inch at 667 °/s are not the same setup, and grouping them
+    under one 'race' heading would invite comparing numbers that were never meant to match.
+    Unset discipline/class sort last rather than leading the file."""
+    def rank(value, order):
+        v = (value or '').strip()
+        return order.index(v) if v in order else len(order)
+    return (rank(r.get('discipline'), DISCIPLINE_ORDER),
+            rank(r.get('class'), CLASS_ORDER),
+            r['quad'].lower())
+
+
+def build_rate_rows(latest_rows, presets, hw_preset):
+    """Decode every quad's active rateprofile into deg/s, and compare against its intended preset.
+
+    Every quad appears, including those on stock rates — a blank cell in the old raw table meant
+    'firmware default', which reads identically to 'not tracked' and hid that a race quad had never
+    had its rates set at all. Defaults are materialized here instead, using the values that the
+    quad's own firmware generation shipped (they changed at 4.3)."""
+    out = []
+    for r in sorted(latest_rows, key=rate_sort_key):
+        d = rates.decode(r.get('rc_rate_rpy', ''), r.get('super_rate_rpy', ''),
+                         r.get('expo_rpy', ''), r.get('rates_type', ''), r.get('bf_version', ''))
+        preset = hw_preset.get(norm(r['quad']), '')
+        status = ''
+        if preset:
+            p = presets.get(preset)
+            if not p:
+                status = 'unknown-preset'
+            else:
+                want = rates.decode(p.get('rc_rate_rpy', ''), p.get('super_rate_rpy', ''),
+                                    p.get('expo_rpy', ''), p.get('rates_type', ''),
+                                    r.get('bf_version', ''))
+                status = 'match' if rates.raw_signature(want) == rates.raw_signature(d) else 'differs'
+        out.append({
+            'quad': r['quad'],
+            'discipline': r.get('discipline', ''),
+            'class': r.get('class', ''),
+            'bf_version': r.get('bf_version', ''),
+            'rates_type': d['rates_type'] + ('' if d['type_from_dump'] else ' (default)'),
+            'source': d['source'],
+            'preset': preset,
+            'preset_status': status,
+            'center_rpy': rates.triple_of(d, 'center'),
+            'max_rpy': rates.triple_of(d, 'max'),
+            'expo_rpy': '/'.join(str(d['axes'][a]['expo']) for a in rates.AXES),
+            'dps25_rpy': rates.curve_triple(d, 25),
+            'dps50_rpy': rates.curve_triple(d, 50),
+            'dps75_rpy': rates.curve_triple(d, 75),
+            'rc_rate_rpy': '/'.join(str(d['axes'][a]['rc_rate']) for a in rates.AXES),
+            'super_rate_rpy': '/'.join(str(d['axes'][a]['srate']) for a in rates.AXES),
+            'rateprofile': r.get('rateprofile', ''),
+            'note': ('CENTER>=MAX(' + ','.join(inert) + ')') if (inert := rates.inert_max_rate(d)) else
+                    ('' if d['supported'] else f"unsupported rates_type {d['rates_type']}"),
+        })
+    return out
+
+
+def build_rates_section(rate_rows):
+    """Per-quad rates table in real deg/s, decoded from the raw stored integers via rates.py."""
+    if not rate_rows:
         return ""
     lines = ["", "## Rates", "",
-             "_Active rateprofile only, raw stored r/p/y values (see `fpv_quads_latest.csv`). Meaning "
-             "depends on type — BETAFLIGHT: RC Rate / Super / Expo; ACTUAL: Center Sens / Max Rate / "
-             "Expo. Blank type = firmware default (ACTUAL); quads at all-default rates are omitted._",
-             "",
-             "| Quad | Type | RC rate | Super | Expo | Profile |",
-             "|---|---|---|---|---|---|"]
-    for r in sorted(have, key=lambda r: r['quad'].lower()):
-        lines.append(f"| {r['quad']} | {r.get('rates_type') or 'default'} | "
-                     f"{r.get('rc_rate_rpy') or '—'} | {r.get('super_rate_rpy') or '—'} | "
-                     f"{r.get('expo_rpy') or '—'} | {r.get('rateprofile') or '—'} |")
-    lines.append("")
+             "_Active rateprofile, decoded to deg/s (see `rates.csv`). **Center** is stick "
+             "sensitivity around centre, **Max** the rate at full deflection, r/p/y. `source=default` "
+             "means the dump set no rates at all, so the values shown are that firmware's stock "
+             "rateprofile — which changed at 4.3 (before: BETAFLIGHT 100/70, center 200; after: "
+             "ACTUAL 7/67, center 70). Intended rates come from `rate_preset` in `hardware.csv`._",
+             ""]
+    # One sub-table per discipline so quads flown the same way sit together and can be read against
+    # each other; rate_rows already arrives in that order from rate_sort_key().
+    groups = {}
+    for r in rate_rows:
+        groups.setdefault(((r['discipline'] or '').strip(), (r['class'] or '').strip()), []).append(r)
+    for (disc, cls), rows in groups.items():
+        lines.append(f"**{disc or 'discipline not set'} — {cls or 'class unknown'}**")
+        lines.append("")
+        lines.append("| Quad | Type | Source | Center °/s | Max °/s | Expo | @50% | Preset |")
+        lines.append("|---|---|---|---|---|---|---|---|")
+        for r in rows:
+            preset = r['preset'] or '—'
+            if r['preset_status'] == 'differs':
+                preset = f"**{preset} ⚠️**"
+            elif r['preset_status'] == 'match':
+                preset = f"{preset} ✓"
+            elif r['preset_status'] == 'unknown-preset':
+                preset = f"{preset} *(undefined)*"
+            lines.append(f"| {r['quad']} | {r['rates_type']} | {r['source']} | "
+                         f"{r['center_rpy'] or '—'} | {r['max_rpy'] or '—'} | {r['expo_rpy']} | "
+                         f"{r['dps50_rpy'] or '—'} | {preset} |")
+        lines.append("")
     return "\n".join(lines)
 
 
@@ -614,21 +743,27 @@ def main():
         print(f"No BTFL_cli_*.txt dumps found in {SRC}", file=sys.stderr)
         sys.exit(1)
     latest_rows = latest_per_quad(rows)
+    rate_rows = build_rate_rows(latest_rows, load_presets(PRESETS_CSV),
+                                load_hw_map(HW_CSV, "rate_preset"))
 
     write_csv(OUT, rows)
     write_csv(OUT_LATEST, latest_rows)
+    write_csv(OUT_RATES, rate_rows, RATE_COLS)
     with open(OUT_SUMMARY, 'w') as f:
-        f.write(build_summary(latest_rows).rstrip() + "\n")
-        f.write(build_rates_section(latest_rows))
-        f.write(build_hardware_section(os.path.join(SRC, "hardware.csv"), latest_rows))
-        f.write(build_flights_section(os.path.join(SRC, "flights.csv"),
-                                      load_aliases(os.path.join(SRC, "hardware.csv"))))
+        f.write(build_summary(latest_rows, rate_rows).rstrip() + "\n")
+        f.write(build_rates_section(rate_rows))
+        f.write(build_hardware_section(HW_CSV, latest_rows))
+        f.write(build_flights_section(os.path.join(SRC, "flights.csv"), load_aliases(HW_CSV)))
 
     dropped = scanned - len(rows)
+    drift = sum(1 for r in rate_rows if r['preset_status'] == 'differs')
     print(f"Scanned {scanned} dumps -> {len(rows)} rows "
           f"({dropped} duplicate{'s' if dropped != 1 else ''} collapsed) -> {len(latest_rows)} quads")
+    if drift:
+        print(f"  {drift} quad{'s differ' if drift != 1 else ' differs'} from their rate_preset")
     print(f"  {OUT}")
     print(f"  {OUT_LATEST}")
+    print(f"  {OUT_RATES}")
     print(f"  {OUT_SUMMARY}")
 
 
