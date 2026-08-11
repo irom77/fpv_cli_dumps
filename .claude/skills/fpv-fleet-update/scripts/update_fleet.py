@@ -2,16 +2,18 @@
 """
 Regenerate the FPV fleet inventory from Betaflight CLI dump files.
 
-Scans every BTFL_cli_*.txt dump in the target folder and produces three outputs:
+Scans every BTFL_cli_*.txt dump in the target folder and produces derived outputs including:
   - fpv_quads.csv         full history, one row per dump, newest per quad flagged 'latest'
   - fpv_quads_latest.csv  one row per quad, newest dump only
+  - rates.csv             active rate profiles for curated, active quads
+  - modes.csv             AUX mode assignments and activation ranges for curated, active quads
   - FLEET_SUMMARY.md      human-readable overview with rollups and a 'needs attention' pass
 
 Usage:
     python update_fleet.py [folder]     # defaults to the current working directory
 
-The parser is the single source of truth. It only reads dumps and writes those three
-files, so it is safe to re-run any time new dumps are dropped in.
+The parser is the single source of truth for generated outputs, so it is safe to re-run any time
+new dumps are dropped in.
 """
 import os, re, csv, sys, glob
 from datetime import date, datetime
@@ -23,6 +25,7 @@ SRC = os.path.abspath(sys.argv[1]) if len(sys.argv) > 1 else os.getcwd()
 OUT = os.path.join(SRC, "fpv_quads.csv")
 OUT_LATEST = os.path.join(SRC, "fpv_quads_latest.csv")
 OUT_RATES = os.path.join(SRC, "rates.csv")
+OUT_MODES = os.path.join(SRC, "modes.csv")
 OUT_SUMMARY = os.path.join(SRC, "FLEET_SUMMARY.md")
 HW_CSV = os.path.join(SRC, "hardware.csv")
 PRESETS_CSV = os.path.join(SRC, "rate_presets.csv")
@@ -46,6 +49,53 @@ def val(text, key):
 def line_after(text, prefix):
     m = re.search(r'^' + re.escape(prefix) + r'\s+(.+?)\s*$', text, re.M)
     return m.group(1).strip() if m else ""
+
+
+# Permanent IDs written by Betaflight's `aux` CLI command. They are deliberately sparse: IDs that
+# disappeared remain reserved so a saved mode range keeps its meaning across firmware upgrades.
+MODE_NAMES = {
+    0: 'ARM', 1: 'ANGLE', 2: 'HORIZON', 3: 'ALTHOLD', 4: 'ANTI GRAVITY', 5: 'MAG',
+    6: 'HEADFREE', 7: 'HEADADJ', 8: 'CAMSTAB', 11: 'POS HOLD', 12: 'PASSTHRU',
+    13: 'BEEPER ON', 15: 'LEDLOW', 17: 'CALIB', 19: 'OSD', 20: 'TELEMETRY',
+    23: 'SERVO1', 24: 'SERVO2', 25: 'SERVO3', 26: 'BLACKBOX', 27: 'FAILSAFE',
+    28: 'AIRMODE', 29: '3D MODE', 30: 'FPV ANGLE MIX', 31: 'BLACKBOX ERASE',
+    32: 'CAMERA CONTROL 1', 33: 'CAMERA CONTROL 2', 34: 'CAMERA CONTROL 3',
+    35: 'FLIP OVER AFTER CRASH', 36: 'PREARM', 37: 'BEEP GPS SATELLITE COUNT',
+    39: 'VTX PIT MODE', 40: 'USER1', 41: 'USER2', 42: 'USER3', 43: 'USER4',
+    44: 'PID AUDIO', 45: 'PARALYZE', 46: 'GPS RESCUE', 47: 'ACRO TRAINER',
+    48: 'DISABLE VTX CONTROL', 49: 'LAUNCH CONTROL', 50: 'MSP OVERRIDE',
+    51: 'STICK COMMANDS DISABLE', 52: 'BEEPER MUTE', 53: 'READY',
+    54: 'LAP TIMER RESET', 55: 'CHIRP', 56: 'AUTOPILOT',
+}
+
+
+def extract_modes(text):
+    """Decode configured Betaflight mode ranges from `aux` lines.
+
+    CLI shape: aux <slot> <permanent mode id> <zero-based AUX> <start> <end> <logic> <linked id>.
+    Equal range endpoints are Betaflight's disabled-slot representation and are omitted. Unknown
+    IDs stay visible for custom/newer firmware instead of silently losing configuration.
+    """
+    out = []
+    pattern = re.compile(
+        r'^aux\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s*$', re.M)
+    for match in pattern.finditer(text):
+        slot, mode_id, aux_index, start, end, logic, linked_id = map(int, match.groups())
+        if start == end:
+            continue
+        out.append({
+            'slot': slot,
+            'mode_id': mode_id,
+            'mode': MODE_NAMES.get(mode_id, f'UNKNOWN ({mode_id})'),
+            'aux_channel': f'AUX{aux_index + 1}',
+            'range_start': start,
+            'range_end': end,
+            'logic': 'AND' if logic == 1 else 'OR',
+            # linkedTo=0 is Betaflight's sentinel for no linked mode (ARM cannot be a link target).
+            'linked_to_id': linked_id if linked_id else '',
+            'linked_to': MODE_NAMES.get(linked_id, f'UNKNOWN ({linked_id})') if linked_id else '',
+        })
+    return out
 
 
 def md(s):
@@ -193,6 +243,7 @@ def parse_dumps():
                 'vtx_power': '', 'vtx_freq': '', 'cell_min_v': '', 'cell_max_v': '',
                 'cell_warn_v': '', 'rx_spi_protocol': '', 'elrs_uid': '', 'bind_group': '',
                 'gyro_align': '', 'rpm_limit': '', 'rpm_limit_value': '',
+                '_modes': [],
                 'pilot': '', 'file': base, 'note': 'EMPTY/INCOMPLETE DUMP'
             })
             continue
@@ -256,6 +307,7 @@ def parse_dumps():
             # blank reads as "limiter not enabled", not "not tracked". See DUMP_DEFAULTS.
             'rpm_limit': val(text, 'rpm_limit'),
             'rpm_limit_value': val(text, 'rpm_limit_value'),
+            '_modes': extract_modes(text),
             **extract_active_rates(text),
             'pilot': val(text, 'pilot_name'),
             'file': base,
@@ -571,6 +623,10 @@ RATE_COLS = ['quad', 'discipline', 'class',
              'dps25_rpy', 'dps50_rpy', 'dps75_rpy', 'rc_rate_rpy', 'super_rate_rpy',
              'rateprofile', 'note', 'source']
 
+MODE_COLS = ['quad', 'discipline', 'class', 'mode', 'mode_id', 'aux_channel',
+             'range_start', 'range_end', 'logic', 'linked_to', 'linked_to_id',
+             'slot', 'bf_version', 'source']
+
 
 def load_presets(path):
     """Hand-maintained rate presets: name -> raw signature to compare a quad against. A preset is
@@ -599,6 +655,13 @@ def in_rates_view(r):
     return status_of(r) == 'active' and bool((r.get('discipline') or '').strip())
 
 
+def in_modes_view(r):
+    """Mode comparison view: only active quads with both grouping fields curated."""
+    return (status_of(r) == 'active'
+            and bool((r.get('discipline') or '').strip())
+            and bool((r.get('class') or '').strip()))
+
+
 def rate_sort_key(r):
     """Group the rates view by discipline, then by size class, then alphabetically.
 
@@ -614,6 +677,22 @@ def rate_sort_key(r):
     return (rank(r.get('discipline'), DISCIPLINE_ORDER),
             rank(r.get('class'), CLASS_ORDER),
             r['quad'].lower())
+
+
+def build_mode_rows(latest_rows):
+    """Flatten each in-scope quad's configured AUX ranges into one CSV row per mode range."""
+    out = []
+    for r in sorted((row for row in latest_rows if in_modes_view(row)), key=rate_sort_key):
+        for mode in sorted(r.get('_modes', ()), key=lambda m: m['slot']):
+            out.append({
+                'quad': r['quad'],
+                'discipline': r.get('discipline', ''),
+                'class': r.get('class', ''),
+                **mode,
+                'bf_version': r.get('bf_version', ''),
+                'source': r.get('file', ''),
+            })
+    return out
 
 
 def build_rate_rows(latest_rows, presets, hw_preset):
@@ -1016,11 +1095,13 @@ def main():
     rate_rows = build_rate_rows(latest_rows, load_presets(PRESETS_CSV),
                                 load_hw_map(HW_CSV, "rate_preset"))
     rates_view = [r for r in rate_rows if r['in_view']]
+    mode_rows = build_mode_rows(latest_rows)
     spec_rows = build_spec_rows(load_specs(SPECS_CSV), latest_rows, load_hw_rows(HW_CSV))
 
     write_csv(OUT, rows)
     write_csv(OUT_LATEST, latest_rows)
     write_csv(OUT_RATES, rates_view, RATE_COLS)
+    write_csv(OUT_MODES, mode_rows, MODE_COLS)
     compliance_files = write_compliance_csvs(spec_rows, SRC)
     with open(OUT_SUMMARY, 'w') as f:
         # Checks see every quad; the tables show only the ones worth comparing.
@@ -1044,6 +1125,7 @@ def main():
     print(f"  {OUT}")
     print(f"  {OUT_LATEST}")
     print(f"  {OUT_RATES}")
+    print(f"  {OUT_MODES}")
     for p in compliance_files:
         print(f"  {p}")
     print(f"  {OUT_SUMMARY}")

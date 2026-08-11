@@ -24,6 +24,7 @@ backups/                 Betaflight CLI dumps (BTFL_cli_*.txt), one or more per 
 fpv_quads.csv            History — one row per dump (unchanged re-dumps collapsed), newest per quad flagged 'latest'
 fpv_quads_latest.csv     One row per quad, newest dump only
 rates.csv                Active rateprofile decoded to real deg/s (centre sensitivity, max rate, curve at 25/50/75% stick) — only quads that are active and have a discipline set
+modes.csv                Configured Betaflight modes, AUX channels and activation ranges — only active quads with discipline and class set
 rate_presets.csv         Hand-maintained named rateprofiles ('house-race', ...) that quads are meant to share; assigned per quad via hardware.csv's rate_preset
 flights.csv              One row per decoded blackbox flight (duration, sag, current, mAh, flags)
 hardware.csv             Hand-maintained per-quad build details (ESC, motors, props) + size class, status, discipline, aliases, rate_preset — none of it in dumps
@@ -46,7 +47,7 @@ python3 .claude/skills/fpv-fleet-update/scripts/update_fleet.py
 ```
 
 The script is the single source of truth: it only reads the dumps and the hand-maintained CSVs, and
-rewrites `fpv_quads.csv`, `fpv_quads_latest.csv`, `rates.csv`, `compliance_<spec>.csv` and
+rewrites `fpv_quads.csv`, `fpv_quads_latest.csv`, `rates.csv`, `modes.csv`, `compliance_<spec>.csv` and
 `FLEET_SUMMARY.md`, so it is safe to re-run any time. Don't hand-edit the generated files.
 
 Values are extracted from Betaflight `diff all` output, which only records settings that differ
@@ -96,6 +97,18 @@ Rows are limited to quads that are `active` with a `discipline` set, grouped by 
 — rates are only worth reading side by side against quads flown the same way, and a 1S whoop at
 667 °/s is not the same setup as a 6S five-inch at 667 °/s. The filter applies to the view only;
 "needs attention" still checks every quad.
+
+## Modes
+
+`modes.csv` decodes each `aux` line in the newest CLI backup into its Betaflight mode name, AUX
+channel, and exact activation range. It includes the permanent numeric mode ID, OR/AND logic,
+linked-mode fields, firmware version, and source dump so custom or newer firmware remains
+auditable. Unknown IDs are labeled rather than discarded.
+
+Like the rates view, it is grouped by discipline then class and quad. Rows are limited to quads
+that are `active` with both `discipline` and `class` set. The backup identifies `AUX1`, `AUX2`, and
+so on, but cannot identify the transmitter's physical switch label or prove that a configured mode
+was used during a flight.
 
 `rate_presets.csv` names rateprofiles that several quads are meant to share (`house-race`,
 `whoop-race`); `rate_preset` in `hardware.csv` assigns one. Nothing in a dump records what a quad was

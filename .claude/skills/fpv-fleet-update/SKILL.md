@@ -1,7 +1,8 @@
 ---
 name: fpv-fleet-update
 description: >-
-  Regenerate the FPV quad inventory (fpv_quads.csv, fpv_quads_latest.csv, FLEET_SUMMARY.md)
+  Regenerate the FPV quad inventory (fpv_quads.csv, fpv_quads_latest.csv, rates.csv, modes.csv,
+  FLEET_SUMMARY.md)
   from the Betaflight CLI dump files in this folder. Use this whenever a new BTFL CLI backup
   or dump (a BTFL_cli_*.txt file) is added, replaced, or removed, or whenever the user asks to
   refresh, rebuild, or update the fleet CSV / fleet summary / quad inventory — even if they
@@ -12,8 +13,8 @@ description: >-
 
 # FPV Fleet Update
 
-This folder holds Betaflight CLI dumps (`BTFL_cli_*.txt`) exported from FPV quads. Three tracked
-files are derived from them and must stay in sync whenever the set of dumps changes:
+This folder holds Betaflight CLI dumps (`BTFL_cli_*.txt`) exported from FPV quads. The generated
+files below must stay in sync whenever the set of dumps changes:
 
 - `fpv_quads.csv` — history, one row per dump, newest dump per quad flagged `latest`. Dumps whose
   extracted inventory values are identical (differing only in date/file) are collapsed to the most
@@ -26,6 +27,10 @@ files are derived from them and must stay in sync whenever the set of dumps chan
   first) rather than alphabetically, so quads flown the same way can be read against each other —
   and so a 1S whoop and a 6S five-inch never share a heading just because both race. The filter is
   on the VIEW only; "needs attention" checks still run over the whole fleet. See "Rates" below.
+- `modes.csv` — configured Betaflight modes decoded from `aux` lines, one row per activation range
+  with mode name/ID, AUX channel, exact range, condition logic/link, firmware, and source dump.
+  Covers only quads with `status` active and both `discipline` and `class` set, ordered like the
+  rates view. Unknown mode IDs remain visible for custom/newer firmware.
 - `FLEET_SUMMARY.md` — human-readable overview: fleet table, rollups, "needs attention", and (if
   `flights.csv` exists) a per-quad Flights section
 - `flights.csv` — one row per decoded blackbox flight (duration, battery sag, current, mAh, motor
@@ -51,7 +56,8 @@ files are derived from them and must stay in sync whenever the set of dumps chan
 ## What to do
 
 Run the bundled script from the folder that contains the dumps. It is the single source of truth —
-it only reads `*.txt` dumps and rewrites the three files above, so it is safe to re-run any time:
+it only reads `*.txt` dumps and hand-maintained CSVs and rewrites the generated files above, so it
+is safe to re-run any time:
 
 ```bash
 python3 .claude/skills/fpv-fleet-update/scripts/update_fleet.py
