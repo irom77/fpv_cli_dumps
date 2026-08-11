@@ -72,9 +72,6 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 - Race5 (last dump 2025-01-24)
 - Mob6 HDZERO RACE (last dump 2025-07-28)
 
-**Rates differ from their assigned preset (`rate_preset` in `hardware.csv`):**
-- openracer — on ACTUAL (default) 630/530/530 °/s max, expected `house-race`
-
 **Rate profile looks like it survived a firmware upgrade** — centre sensitivity meets or exceeds max rate on an ACTUAL profile, so the max-rate setting does nothing and the stick is linear to a very high ceiling. Usually old BETAFLIGHT-rates numbers left on a profile the firmware now reads as ACTUAL:
 - GEPRC_F722_AIO (4.5.1) — rc_rate 130/130/130 → centre 1300/1300/1300 °/s, which swamps the max-rate setting (670/670/670 °/s)
 
@@ -100,7 +97,7 @@ _Active rateprofile, decoded to deg/s (see `rates.csv`). **Center** is stick sen
 |---|---|---|---|---|---|---|---|
 | LS-Ultra | 186/160/160 | 620/533/533 | 0/0/0 | 143/123/123 | — | BETAFLIGHT | dump |
 | LS-Ultra HD | 190/160/160 | 633/533/533 | 0/0/0 | 146/123/123 | house-race ✓ | BETAFLIGHT | dump |
-| openracer | 190/160/160 | 630/530/530 | 0/0/0 | 205/172/172 | **house-race ⚠️** | ACTUAL (default) | dump |
+| openracer | 190/160/160 | 633/533/533 | 0/0/0 | 146/123/123 | house-race ✓ | BETAFLIGHT | dump |
 | openracer2 | 190/160/160 | 633/533/533 | 0/0/0 | 146/123/123 | house-race ✓ | BETAFLIGHT | dump |
 
 **freestyle — micro**

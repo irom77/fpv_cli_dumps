@@ -74,9 +74,9 @@ openracer is still on stock **Betaflight 4.5.1** from a Jul 2024 build — the o
 
 Do these in the same bench session, since they need the quad on USB anyway:
 
-- [ ] **Rates** — openracer is on firmware defaults (ACTUAL 70/670) while its `rate_preset` says
-      `house-race`. This is the one live entry in the summary's "needs attention" rate check.
-      Flashing resets rates regardless, so paste the preset afterwards:
+- [ ] **Rates — done 2026-08-11, but redo after flashing.** openracer now matches `house-race`
+      exactly (190/160/160 centre, 633/533/533 max) and the rate check is quiet. A flash resets
+      rateprofiles, so this has to be pasted again on the other side:
       ```
       rateprofile 0
       set rates_type = BETAFLIGHT
@@ -94,7 +94,9 @@ Do these in the same bench session, since they need the quad on USB anyway:
 
 Note: rate values do **not** transfer across the 4.2→4.3 default change or between rate types, so
 copy the raw CLI lines above rather than any remembered numbers. See `rates.csv` for what each quad
-actually flies at in deg/s.
+actually flies at in deg/s. Entering house-race as equivalent ACTUAL values was tried on 2026-08-11
+(rc_rate 19/16/16, srate 63/53/53): it matched centre and max exactly but ran ~40% hotter mid-stick,
+because ACTUAL and BETAFLIGHT draw different curves between the same endpoints.
 
 ## Auto-link ordered parts to builds (fpv-orders-update)
 
