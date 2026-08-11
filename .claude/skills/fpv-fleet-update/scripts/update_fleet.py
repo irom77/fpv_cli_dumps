@@ -644,8 +644,8 @@ RATE_COLS = ['quad', 'discipline', 'class',
              'dps25_rpy', 'dps50_rpy', 'dps75_rpy', 'rc_rate_rpy', 'super_rate_rpy',
              'rateprofile', 'note', 'source']
 
-MODE_COLS = ['quad', 'discipline', 'class', 'mode', 'mode_id', 'aux_channel',
-             'range_start', 'range_end', 'range_visual', 'logic', 'linked_to', 'linked_to_id',
+MODE_COLS = ['quad', 'discipline', 'class', 'mode', 'aux_channel',
+             'range_start', 'range_end', 'range_visual', 'mode_id', 'logic', 'linked_to', 'linked_to_id',
              'slot', 'bf_version', 'source']
 
 
