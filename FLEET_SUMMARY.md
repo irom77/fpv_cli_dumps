@@ -75,6 +75,12 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 **Rate profile looks like it survived a firmware upgrade** — centre sensitivity meets or exceeds max rate on an ACTUAL profile, so the max-rate setting does nothing and the stick is linear to a very high ceiling. Usually old BETAFLIGHT-rates numbers left on a profile the firmware now reads as ACTUAL:
 - GEPRC_F722_AIO (4.5.1) — rc_rate 130/130/130 → centre 1300/1300/1300 °/s, which swamps the max-rate setting (670/670/670 °/s)
 
+**Not Freedom Spec legal (see Spec compliance below):**
+- LS-Ultra — rpm limiter
+- LS-Ultra HD — rpm limiter
+- openracer — firmware, rpm limiter
+- openracer2 — rpm limiter
+
 _Note: BETAFPVF4SX1280, FLYWOOF405S_AIO, GEPRC_F722_AIO, HOBBYWING_XROTORF7CON, HOBBYWING_XROTORF7CONV, SPEEDYBEEF405MINI, XILOF4 are keyed by board name because their dumps had no craft name set (`set craft_name` / `# name:`). Setting a craft name makes future tracking more reliable._
 
 ## Rates
@@ -113,6 +119,43 @@ _Showing the 11 active quads that have a `discipline` set; 20 others are hidden 
 | Quad | Center °/s | Max °/s | Expo | @50% | Preset | Type | Source |
 |---|---|---|---|---|---|---|---|
 | FLYWOOF7NANO | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — | BETAFLIGHT (default) | default |
+
+## Spec compliance
+
+_Race-class requirements from `specs.csv`, checked against the newest dump and `hardware.csv`. ✓ meets it, ✗ does not, ? not enough recorded to tell, · can only be checked by hand. Each table is also written as `compliance_<spec>.csv`._
+
+### Freedom Spec (5-inch / race)
+
+_Rules: <https://freedomspec.com/>_
+
+| Quad | Motor | Battery | ESC | Firmware | RPM limiter | RPM cap | Weight | LEDs | Props | Verdict |
+|---|---|---|---|---|---|---|---|---|---|---|
+| LS-Ultra | ✓ | ✓ | ✓ | ✓ | ✗ | ✓ | ? | · | · | **1 to fix** |
+| LS-Ultra HD | ? | ? | ? | ✓ | ✗ | ✓ | ? | · | · | **1 to fix** |
+| openracer | ✓ | ✓ | ? | ✗ | ✗ | ✓ | ? | · | · | **2 to fix** |
+| openracer2 | ✓ | ✓ | ? | ✓ | ✗ | ✓ | ? | · | · | **1 to fix** |
+
+**LS-Ultra**
+- RPM limiter — fails: OFF (firmware default) (needs: rpm_limit enabled)
+- Weight — unconfirmed: 270g recorded, 533 g minimum — weigh it with the race pack in (needs: 533 g minimum race-ready weight)
+
+**LS-Ultra HD**
+- Motor — unconfirmed: nothing recorded either way in `motors` — "HeadsUp RC (MR-30 connectors)" (needs: Any 2207-class motor)
+- Battery — unconfirmed: `cells` not recorded in hardware.csv (needs: Any 6S pack)
+- ESC — unconfirmed: `esc_stack` not recorded in hardware.csv (needs: Any BLHeli32 or AM32 ESC)
+- RPM limiter — fails: OFF (firmware default) (needs: rpm_limit enabled)
+- Weight — unconfirmed: `weight` not recorded in hardware.csv (needs: 533 g minimum race-ready weight)
+
+**openracer**
+- ESC — unconfirmed: nothing recorded either way in `esc_stack` — "Hobbywing XRotor F722 (45A 4-in-1 ESC)" (needs: Any BLHeli32 or AM32 ESC)
+- Firmware — fails: 4.5.1 (needs: Betaflight KAACK build (Infinitee RPM limiter))
+- RPM limiter — fails: OFF (firmware default) (needs: rpm_limit enabled)
+- Weight — unconfirmed: 305g recorded, 533 g minimum — weigh it with the race pack in (needs: 533 g minimum race-ready weight)
+
+**openracer2**
+- ESC — unconfirmed: nothing recorded either way in `esc_stack` — "Foxeer Reaper 20x20 ESC + Foxeer Mini F722 V4 20x20 FC (MPU6000)" (needs: Any BLHeli32 or AM32 ESC)
+- RPM limiter — fails: OFF (firmware default) (needs: rpm_limit enabled)
+- Weight — unconfirmed: 280g dry (no props/battery) recorded, 533 g minimum — weigh it with the race pack in (needs: 533 g minimum race-ready weight)
 
 ## Hardware
 

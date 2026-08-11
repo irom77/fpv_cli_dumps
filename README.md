@@ -21,8 +21,10 @@ rates.csv                Active rateprofile decoded to real deg/s (centre sensit
 rate_presets.csv         Hand-maintained named rateprofiles ('house-race', ...) that quads are meant to share; assigned per quad via hardware.csv's rate_preset
 flights.csv              One row per decoded blackbox flight (duration, sag, current, mAh, flags)
 hardware.csv             Hand-maintained per-quad build details (ESC, motors, props) + size class, status, discipline, aliases, rate_preset — none of it in dumps
+specs.csv                Hand-maintained race-class rulebook (Freedom Spec, ...), one row per requirement, scoped to the class/discipline it applies to
+compliance_<spec>.csv    Generated — one file per spec, one row per quad in scope: per-requirement verdict plus what's missing / to confirm
 orders.csv               FPV parts ledger, one row per ordered line item, built from Gmail by the fpv-orders-update skill; 'build' (quad/'spare'/blank) and 'notes' hand-maintained, other columns from order emails, re-runs only add new — gitignored (personal purchase history; kept local, not committed)
-FLEET_SUMMARY.md         Overview: fleet table, rollups, "needs attention", rates, hardware, flights
+FLEET_SUMMARY.md         Overview: fleet table, rollups, "needs attention", rates, spec compliance, hardware, flights
 blackbox/                Raw .BBL/.BFL flight logs — gitignored (large binaries; not committed)
 .claude/skills/fpv-fleet-update/   Skill that regenerates the derived files above
 .claude/skills/fpv-orders-update/  Skill that builds orders.csv from Gmail order confirmations
@@ -94,6 +96,48 @@ Rows are limited to quads that are `active` with a `discipline` set, grouped by 
 *supposed* to be, so this is the one place intent lives — a quad whose dump disagrees with its preset
 is flagged in the summary, which is how a re-flash that silently reset rates gets caught on the bench
 instead of in the air.
+
+## Race class specs
+
+`specs.csv` is a rulebook: one row per requirement of one racing class, tagged with the `class` and
+`discipline` it applies to (MultiGP Freedom Spec applies to `5-inch` / `race`). Each row carries a
+declarative check — a regex against a `hardware.csv` field or a parsed dump setting, a minimum
+weight, or `manual` for rules no file can answer. The generator runs every rule against every quad
+in scope, writes a **Spec compliance** section into `FLEET_SUMMARY.md`, and emits the same table as
+`compliance_<spec>.csv` — quads down the side, requirements across, plus `verdict`, `missing` and
+`to_confirm` columns. Adding a class is adding rows; there is no code to change.
+
+There's a file per spec rather than one combined one because the columns *are* the requirements:
+two classes don't share them, so merging would produce a sparse union of every rule ever written.
+The flip side is that deleting a spec from `specs.csv` leaves its `compliance_*.csv` behind — the
+generator only writes, so remove that by hand.
+
+Results are four-valued, and the difference between the last three is the point:
+
+| | Meaning |
+|---|---|
+| ✓ | Meets the rule |
+| ✗ | Does not — the airframe would be turned away at tech check. Only these reach "needs attention" |
+| ? | Nothing recorded to judge by — a gap in `hardware.csv`, not in the quad |
+| · | Only checkable by hand (LED count, the prop an event calls) |
+
+Two things keep `?` honest rather than letting missing data read as failure. A rule can carry an
+`evidence` regex meaning "this field states the kind of fact being tested"; `esc_stack = "Hobbywing
+XRotor F722 (45A 4-in-1 ESC)"` names no ESC firmware at all, so an ESC-firmware rule returns `?`,
+not `✗`. And the weight rule never fails: a class minimum is a race-ready figure while
+`hardware.csv` records dry weight, and a 6S race pack is 200–260 g, so a low figure means "weigh it
+with the pack in", not "too light".
+
+That last one is worth a note, because the published Freedom Spec rules state the minimum bare —
+"533g Minimum Weight" — while the same MultiGP table qualifies Open as "800g **AUW**" and Pro Spec
+as "1200 grams **AUW**". Race-ready is the only reading that works arithmetically: a 5-inch 6S
+airframe is 270–310 g dry, so a dry 533 g floor would exclude the whole class.
+
+The check that pays for the whole file is `rpm_limit`. Freedom Spec is built on KAACK Betaflight's
+RPM limiter, and a limiter that was never switched on writes **nothing** to a `diff all` — the same
+blank as a setting you never touched. Judging that blank against the firmware default (`OFF`, with
+KAACK's `rpm_limit_value` already at 18000) is what turns an invisible non-compliance into a line
+on the bench list.
 
 ## Blackbox flight logs
 

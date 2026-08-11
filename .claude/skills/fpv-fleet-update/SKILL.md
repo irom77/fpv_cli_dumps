@@ -40,6 +40,13 @@ files are derived from them and must stay in sync whenever the set of dumps chan
   (which named rateprofile from `rate_presets.csv` this quad is *meant* to fly — see "Rates"). Largely seeded
   from the pilot's own fleet spreadsheet, so some rows may be stale — the `notes` column flags known
   conflicts. Optional; joined into the summary by quad name. Edit it directly.
+- `specs.csv` — hand-maintained race-class rulebook, one row per requirement, scoped to the
+  `class`/`discipline` it applies to. Drives the summary's "Spec compliance" section. See "Specs"
+  below.
+- `compliance_<spec>.csv` — generated, one file per spec in `specs.csv`: a row per quad in scope
+  with a state per requirement plus `verdict` / `missing` / `to_confirm`. Per spec, not combined,
+  because the columns are that spec's requirements. Deleting a spec from `specs.csv` leaves its
+  file orphaned — the script only writes, so remove it by hand.
 
 ## What to do
 
@@ -150,6 +157,41 @@ one rates check that encodes intent, since nothing in a dump says what a quad wa
 exceeds its max rate, the max-rate setting does nothing and the stick goes linear to a very high
 ceiling. That usually means BETAFLIGHT-era rc_rate values (100 = 1.0×) were left on a profile the
 firmware now reads as ACTUAL (100 = 1000 °/s centre) across an upgrade.
+
+**Specs.** `specs.csv` is a rulebook, not a per-quad file: one row per requirement of one race
+class (`spec,applies_class,applies_discipline,requirement,rule,check,field,value,evidence,notes,source`).
+`applies_class`/`applies_discipline` decide which quads are in scope — blank means "any", and every
+row of a spec carries the same scope. Adding a class is adding rows; no code changes.
+
+Each row names a declarative `check` the generator runs:
+
+- `hw_match` — `value` (a regex) must match `field` in `hardware.csv`
+- `dump_match` — same, against a parsed dump column (`bf_version`, `rpm_limit`, …)
+- `hw_weight_min` — `field` must parse to at least `value` grams
+- `manual` — not derivable from either source; always reported for a bench check
+
+`build_spec_rows()` evaluates every rule against every quad in scope once; `build_spec_section()`
+renders it as markdown and `write_compliance_csvs()` writes the same data as `compliance_<slug>.csv`,
+so the table and the CSV can't disagree. `spec_verdict()` is shared by both.
+
+Results are four-valued on purpose, and the distinction is the whole point of the section: `ok`,
+`fail`, `unknown` (nothing recorded to judge by — a gap in `hardware.csv`, not in the airframe) and
+`manual`. Only `fail` reaches "needs attention". Two rules keep `unknown` honest:
+
+- The optional `evidence` regex says "this field states the kind of fact being tested" (a stator
+  size, a cell count, an ESC firmware). If `field` has a value but no `evidence` match, the build
+  sheet is silent on the rule, so the result is `unknown` rather than `fail` — otherwise
+  `esc_stack = "Hobbywing XRotor F722 (45A 4-in-1 ESC)"` would fail an ESC-firmware rule for saying
+  nothing about firmware.
+- `hw_weight_min` never fails. `hardware.csv` weights are dry (no pack, often no props) while a
+  class minimum is a race-ready figure, and a 6S race pack is 200–260 g — so a figure under the
+  minimum returns `unknown` with what it would take to settle it. (Freedom Spec publishes its
+  533 g bare, without the `AUW` qualifier MultiGP puts on Open and Pro Spec; race-ready is the only
+  reading that works, since a 5-inch 6S airframe is 270–310 g dry.)
+
+`dump_match` reads `DUMP_DEFAULTS` for settings `diff all` omits, so a blank `rpm_limit` is judged
+as its firmware default `OFF` rather than as missing data — the case that matters, since a quad
+with the RPM limiter never switched on dumps no `rpm_limit` line at all.
 
 If the extraction is wrong or you want to capture a new field, edit
 `scripts/update_fleet.py` — the field extraction lives in `parse_dumps()`, the CSV columns in `COLS`,

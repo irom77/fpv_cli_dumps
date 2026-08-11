@@ -26,6 +26,7 @@ OUT_RATES = os.path.join(SRC, "rates.csv")
 OUT_SUMMARY = os.path.join(SRC, "FLEET_SUMMARY.md")
 HW_CSV = os.path.join(SRC, "hardware.csv")
 PRESETS_CSV = os.path.join(SRC, "rate_presets.csv")
+SPECS_CSV = os.path.join(SRC, "specs.csv")
 
 # Filename shapes handled:
 #   BTFL_cli_backup_<LABEL>_<YYYYMMDD>_<HHMMSS>_<BOARD>.txt
@@ -191,7 +192,8 @@ def parse_dumps():
                 'rx_protocol': '', 'video_system': '', 'vtx_band': '', 'vtx_channel': '',
                 'vtx_power': '', 'vtx_freq': '', 'cell_min_v': '', 'cell_max_v': '',
                 'cell_warn_v': '', 'rx_spi_protocol': '', 'elrs_uid': '', 'bind_group': '',
-                'gyro_align': '', 'pilot': '', 'file': base, 'note': 'EMPTY/INCOMPLETE DUMP'
+                'gyro_align': '', 'rpm_limit': '', 'rpm_limit_value': '',
+                'pilot': '', 'file': base, 'note': 'EMPTY/INCOMPLETE DUMP'
             })
             continue
 
@@ -249,6 +251,11 @@ def parse_dumps():
             'elrs_uid': val(text, 'expresslrs_uid'),
             'bind_group': '',
             'gyro_align': val(text, 'gyro_1_sensor_align'),
+            # RPM limiter — stock in Betaflight 4.5, and the mechanism spec race classes are built
+            # on. Blank means the diff left it at the firmware default (OFF / 18000 on KAACK), so
+            # blank reads as "limiter not enabled", not "not tracked". See DUMP_DEFAULTS.
+            'rpm_limit': val(text, 'rpm_limit'),
+            'rpm_limit_value': val(text, 'rpm_limit_value'),
             **extract_active_rates(text),
             'pilot': val(text, 'pilot_name'),
             'file': base,
@@ -324,6 +331,7 @@ COLS = ['quad', 'class', 'discipline', 'status', 'dump_date', 'craft_name', 'boa
         'motor_protocol', 'motor_poles', 'dshot_bidir', 'rx_protocol', 'rx_spi_protocol',
         'elrs_uid', 'bind_group', 'video_system', 'vtx_band', 'vtx_channel', 'vtx_power',
         'vtx_freq', 'cell_min_v', 'cell_max_v', 'cell_warn_v', 'gyro_align',
+        'rpm_limit', 'rpm_limit_value',
         'rateprofile', 'rates_type', 'rc_rate_rpy', 'super_rate_rpy', 'expo_rpy', 'pilot',
         'note', 'file']
 
@@ -367,7 +375,7 @@ def ver_tuple(v):
     return (int(nums[0]), int(nums[1])) if len(nums) >= 2 else (0, 0)
 
 
-def build_summary(latest_rows, rate_rows=()):
+def build_summary(latest_rows, rate_rows=(), spec_rows=()):
     from collections import Counter
     lines = []
     A = lines.append
@@ -525,6 +533,19 @@ def build_summary(latest_rows, rate_rows=()):
         A("**Undefined rate presets (referenced in `hardware.csv`, missing from `rate_presets.csv`):** "
           + ", ".join(f"`{p}`" for p in unknown) + ".")
         A("")
+
+    # Spec shortfalls: a quad that is in scope for a race class but wouldn't pass tech check. Only
+    # hard fails are nagged about here — `unknown` is a gap in hardware.csv, not in the airframe,
+    # and the Spec compliance section below lists those.
+    for name, rules, entries in spec_rows:
+        short = [(e, [rule for rule, (state, _) in zip(rules, e['results']) if state == 'fail'])
+                 for e in entries]
+        short = [(e, bad) for e, bad in short if bad]
+        if short:
+            A(f"**Not {spec_title(name)} legal (see Spec compliance below):**")
+            for e, bad in short:
+                A(f"- {e['quad']} — " + ", ".join(r['requirement'].lower() for r in bad))
+            A("")
 
     unclassed = [r for r in latest_rows if not r.get('class')]
     if unclassed:
@@ -689,6 +710,226 @@ def build_rates_section(rate_rows, total=None):
     return "\n".join(lines)
 
 
+# Settings whose absence from a `diff all` means "at firmware default" rather than "not tracked".
+# Only fields a spec check reads need an entry. rpm_limit_value's 18000 is KAACK's default (seen in
+# the one full `dump` in backups/, LS-Ultra on KAACK_V15) — stock Betaflight ships a different
+# ceiling, but a quad not on KAACK fails the firmware requirement anyway.
+DUMP_DEFAULTS = {'rpm_limit': 'OFF', 'rpm_limit_value': '18000'}
+
+SPEC_MARK = {'ok': '✓', 'fail': '✗', 'unknown': '?', 'manual': '·'}
+
+
+def load_specs(path):
+    """Hand-maintained race-class specs: an ordered list of requirement rows. Each row is one rule
+    of one spec, tagged with the class/discipline it applies to, plus a declarative check the
+    generator can run (see check_rule). Adding a spec is adding rows — no code change."""
+    if not os.path.exists(path):
+        return []
+    with open(path, newline='') as f:
+        return [r for r in csv.DictReader(f) if (r.get('spec') or '').strip()]
+
+
+def load_hw_rows(path):
+    """Map normalized quad name -> its whole hardware.csv row, for checks that read several build
+    fields. load_hw_map() covers the single-column case."""
+    if not os.path.exists(path):
+        return {}
+    with open(path, newline='') as f:
+        return {norm(r.get('quad', '')): r for r in csv.DictReader(f) if (r.get('quad') or '').strip()}
+
+
+def first_number(s):
+    m = re.search(r'\d+(?:\.\d+)?', s or '')
+    return float(m.group(0)) if m else None
+
+
+def check_rule(rule, row, hw):
+    """Run one specs.csv rule against a quad. Returns (state, detail).
+
+    States are deliberately four-valued: a requirement we can't see is not a failure. `unknown`
+    means the data to judge it isn't recorded (usually a blank hardware.csv cell), `manual` means
+    it isn't recordable at all — no dump or build sheet says how many LEDs are screwed to the frame.
+    Only `fail` is a real "this quad would be turned away at tech check"."""
+    kind = (rule.get('check') or '').strip()
+    field = (rule.get('field') or '').strip()
+    want = (rule.get('value') or '').strip()
+
+    if kind == 'manual' or not kind:
+        return 'manual', 'verify on the bench'
+
+    if kind == 'hw_match':
+        if hw is None:
+            return 'unknown', 'no hardware.csv row'
+        got = (hw.get(field) or '').strip()
+        if not got:
+            return 'unknown', f'`{field}` not recorded in hardware.csv'
+        if re.search(want, got, re.I):
+            return 'ok', got
+        # A cell that doesn't answer the question isn't a failure. `evidence` is a regex for "this
+        # field states the kind of fact being tested" — a stator size, a cell count, an ESC
+        # firmware. Without a match there, the build sheet is simply silent on the rule, and
+        # calling that non-compliant would fail a quad for a gap in the notes.
+        ev = (rule.get('evidence') or '').strip()
+        if ev and not re.search(ev, got, re.I):
+            return 'unknown', f'nothing recorded either way in `{field}` — "{got}"'
+        return 'fail', got
+
+    if kind == 'dump_match':
+        got = (row.get(field) or '').strip()
+        defaulted = not got
+        if defaulted:
+            got = DUMP_DEFAULTS.get(field, '')
+            if not got:
+                return 'unknown', f'`{field}` absent from the dump'
+        shown = got + (' (firmware default)' if defaulted else '')
+        return ('ok' if re.search(want, got, re.I) else 'fail'), shown
+
+    if kind == 'hw_weight_min':
+        floor = first_number(want) or 0
+        if hw is None:
+            return 'unknown', 'no hardware.csv row'
+        got = (hw.get(field) or '').strip()
+        grams = first_number(got)
+        if grams is None:
+            return 'unknown', f'`{field}` not recorded in hardware.csv'
+        if grams >= floor:
+            return 'ok', got
+        # hardware.csv weights for 5-inch builds are dry (no pack, often no props), and a 6S race
+        # pack is 200-260 g — enough to clear most minimums. Never fail on a figure that was never
+        # AUW; say what it would take to settle it.
+        return 'unknown', f'{got} recorded, {floor:.0f} g minimum — weigh it with the race pack in'
+
+    return 'unknown', f'unknown check `{kind}`'
+
+
+def spec_title(name):
+    return ' '.join(w.capitalize() for w in re.split(r'[-_]', name) if w)
+
+
+def slug(s):
+    return re.sub(r'[^a-z0-9]+', '_', (s or '').lower()).strip('_')
+
+
+def spec_scope(rule, r):
+    """Does a quad fall under this rule's class/discipline? A blank column means 'any'."""
+    for col, key in (('applies_class', 'class'), ('applies_discipline', 'discipline')):
+        want = (rule.get(col) or '').strip()
+        if want and want.lower() != (r.get(key) or '').strip().lower():
+            return False
+    return True
+
+
+def build_spec_rows(specs, latest_rows, hw_rows):
+    """Evaluate every spec against every quad in its scope.
+
+    Returns [(spec_name, [rule, ...], [{quad, row, results: [(state, detail), ...]}, ...])], in
+    specs.csv order. Callers render it and mine it for the needs-attention pass."""
+    out = []
+    for name in dict.fromkeys(r['spec'].strip() for r in specs):
+        rules = [r for r in specs if r['spec'].strip() == name]
+        # Scope is a property of the spec, not of each rule — every row of a spec carries the same
+        # applies_class/applies_discipline, so the first one decides who is in scope.
+        quads = [r for r in latest_rows if spec_scope(rules[0], r)]
+        entries = []
+        for r in sorted(quads, key=lambda r: r['quad'].lower()):
+            hw = hw_rows.get(norm(r['quad']))
+            entries.append({'quad': r['quad'], 'row': r,
+                            'results': [check_rule(rule, r, hw) for rule in rules]})
+        out.append((name, rules, entries))
+    return out
+
+
+def spec_verdict(states):
+    """One-phrase answer to "could I enter this quad?". A hard fail outranks anything unconfirmed —
+    there's no point chasing a missing weight while the RPM limiter is off."""
+    bad, unsure = states.count('fail'), states.count('unknown')
+    if bad:
+        return f"{bad} to fix"
+    if unsure:
+        return f"{unsure} to confirm"
+    return "eligible"
+
+
+def write_compliance_csvs(spec_rows, srcdir):
+    """One CSV per spec: the compliance table as data, quads down the side and requirements across.
+
+    Per spec rather than one combined file because the columns *are* the requirements — two classes
+    don't share them, and merging would give a sparse union of every rule ever written. Each new
+    spec in specs.csv simply produces its own file. Returns the paths written."""
+    written = []
+    for name, rules, entries in spec_rows:
+        if not entries:
+            continue
+        reqs = [(slug(r['requirement']), r) for r in rules]
+        cols = (['quad', 'class', 'discipline', 'status', 'verdict'] +
+                [c for c, _ in reqs] + ['missing', 'to_confirm'])
+        data = []
+        for e in entries:
+            r = e['row']
+            states = [s for s, _ in e['results']]
+            row = {'quad': e['quad'], 'class': r.get('class', ''),
+                   'discipline': r.get('discipline', ''), 'status': status_of(r),
+                   'verdict': spec_verdict(states),
+                   'missing': '; '.join(rule['requirement'] for (_, rule), s in zip(reqs, states)
+                                        if s == 'fail'),
+                   'to_confirm': '; '.join(rule['requirement'] for (_, rule), s in zip(reqs, states)
+                                           if s == 'unknown')}
+            row.update({c: s for (c, _), s in zip(reqs, states)})
+            data.append(row)
+        path = os.path.join(srcdir, f"compliance_{slug(name)}.csv")
+        write_csv(path, data, cols)
+        written.append(path)
+    return written
+
+
+def build_spec_section(spec_rows):
+    """'## Spec compliance' — one table per spec, quads down the side and requirements across, with
+    the shortfalls spelled out underneath. The table answers "could I enter this quad?"; the list
+    answers "what do I do about it?"."""
+    if not spec_rows:
+        return ""
+    lines = ["", "## Spec compliance", "",
+             "_Race-class requirements from `specs.csv`, checked against the newest dump and "
+             f"`hardware.csv`. {SPEC_MARK['ok']} meets it, {SPEC_MARK['fail']} does not, "
+             f"{SPEC_MARK['unknown']} not enough recorded to tell, {SPEC_MARK['manual']} can only "
+             "be checked by hand. Each table is also written as `compliance_<spec>.csv`._", ""]
+    for name, rules, entries in spec_rows:
+        scope = next(((r.get('applies_class', ''), r.get('applies_discipline', '')) for r in rules), ('', ''))
+        head = f"### {spec_title(name)}"
+        tag = " / ".join(x for x in scope if x)
+        if tag:
+            head += f" ({tag})"
+        lines += [head, ""]
+        src = next((r.get('source') for r in rules if r.get('source')), '')
+        if src:
+            lines += [f"_Rules: <{src}>_", ""]
+        if not entries:
+            lines += [f"_No quad currently matches {tag or 'this spec'}._", ""]
+            continue
+        lines.append("| Quad | " + " | ".join(r['requirement'] for r in rules) + " | Verdict |")
+        lines.append("|---|" + "---|" * (len(rules) + 1))
+        for e in entries:
+            states = [s for s, _ in e['results']]
+            verdict = spec_verdict(states)
+            if states.count('fail'):
+                verdict = f"**{verdict}**"
+            lines.append(f"| {e['quad']} | " + " | ".join(SPEC_MARK[s] for s in states) +
+                         f" | {verdict} |")
+        lines.append("")
+        for e in entries:
+            gaps = [(rule, state, detail) for rule, (state, detail) in zip(rules, e['results'])
+                    if state in ('fail', 'unknown')]
+            if not gaps:
+                continue
+            lines.append(f"**{e['quad']}**")
+            for rule, state, detail in gaps:
+                verb = 'fails' if state == 'fail' else 'unconfirmed'
+                lines.append(f"- {rule['requirement']} — {verb}: {md(detail)} "
+                             f"(needs: {md(rule['rule'])})")
+            lines.append("")
+    return "\n".join(lines)
+
+
 def build_hardware_section(path, latest_rows):
     """Optional '## Hardware' section from a hand-maintained hardware.csv. This data (ESC stack,
     motors, props, cell count) isn't in the Betaflight dumps, so it's curated separately and joined
@@ -775,14 +1016,17 @@ def main():
     rate_rows = build_rate_rows(latest_rows, load_presets(PRESETS_CSV),
                                 load_hw_map(HW_CSV, "rate_preset"))
     rates_view = [r for r in rate_rows if r['in_view']]
+    spec_rows = build_spec_rows(load_specs(SPECS_CSV), latest_rows, load_hw_rows(HW_CSV))
 
     write_csv(OUT, rows)
     write_csv(OUT_LATEST, latest_rows)
     write_csv(OUT_RATES, rates_view, RATE_COLS)
+    compliance_files = write_compliance_csvs(spec_rows, SRC)
     with open(OUT_SUMMARY, 'w') as f:
         # Checks see every quad; the tables show only the ones worth comparing.
-        f.write(build_summary(latest_rows, rate_rows).rstrip() + "\n")
+        f.write(build_summary(latest_rows, rate_rows, spec_rows).rstrip() + "\n")
         f.write(build_rates_section(rates_view, len(rate_rows)))
+        f.write(build_spec_section(spec_rows))
         f.write(build_hardware_section(HW_CSV, latest_rows))
         f.write(build_flights_section(os.path.join(SRC, "flights.csv"), load_aliases(HW_CSV)))
 
@@ -792,9 +1036,16 @@ def main():
           f"({dropped} duplicate{'s' if dropped != 1 else ''} collapsed) -> {len(latest_rows)} quads")
     if drift:
         print(f"  {drift} quad{'s differ' if drift != 1 else ' differs'} from their rate_preset")
+    for name, rules, entries in spec_rows:
+        bad = sum(1 for e in entries if any(s == 'fail' for s, _ in e['results']))
+        if bad:
+            print(f"  {bad} of {len(entries)} quad{'s' if len(entries) != 1 else ''} "
+                  f"in scope fail {spec_title(name)}")
     print(f"  {OUT}")
     print(f"  {OUT_LATEST}")
     print(f"  {OUT_RATES}")
+    for p in compliance_files:
+        print(f"  {p}")
     print(f"  {OUT_SUMMARY}")
 
 

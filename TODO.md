@@ -55,10 +55,39 @@ Next / ideas to extend:
 - [ ] Distinguish real flights from bench tests (both current logs are short bench hops).
 - [ ] Handle logs whose filename lacks a craft label; match to a quad another way.
 
+## Make the 5-inch racers Freedom Spec legal
+
+`specs.csv` now encodes the MultiGP Freedom Spec rules and `FLEET_SUMMARY.md` checks every 5-inch
+race quad against them. **All four fail on the same thing: the RPM limiter is off.** KAACK ships
+`rpm_limit_value` already at 18000, so on the three KAACK quads this is one line each:
+
+```
+set rpm_limit = ON
+save
+```
+
+- [ ] LS-Ultra, LS-Ultra HD, openracer2 — enable `rpm_limit`, re-dump, re-run `update_fleet.py`.
+- [ ] openracer — needs KAACK first (see below), then the same line.
+- [ ] Weigh each race-ready (pack and props in) and record that in `hardware.csv` — 533 g minimum.
+      Recorded weights are dry: openracer 305 g, openracer2 280 g, LS-Ultra 270 g. A 6S pack adds
+      200–260 g, so all three land near the line rather than clearly over it, and LS-Ultra on the
+      lightest pack could come in under. The rules publish the 533 g bare, without the `AUW`
+      qualifier MultiGP puts on Open and Pro Spec — if it ever matters at tech check, ask the race
+      director which reading they use.
+- [ ] Record ESC firmware (BLHeli32 / AM32) in `hardware.csv`'s `esc_stack` for openracer
+      (Hobbywing XRotor 45A) and openracer2 (Foxeer Reaper) — both currently name only the brand,
+      so the check can't confirm them.
+- [ ] Fill in LS-Ultra HD's build: `motors` says only "HeadsUp RC (MR-30 connectors)", and `cells`,
+      `esc_stack` and `weight` are blank, so four of its rules are unconfirmed.
+- [ ] Count the LEDs on each (3+ non-status required) and check the event's prop call — neither is
+      derivable from a dump.
+
 ## Upgrade openracer to KAACK firmware
 
 openracer is still on stock **Betaflight 4.5.1** from a Jul 2024 build — the oldest firmware of any
-5-inch racer in the fleet, and the only one not on KAACK:
+5-inch racer in the fleet, and the only one not on KAACK. That is also what makes it the only quad
+failing Freedom Spec on two counts rather than one: stock Betaflight has no Infinitee RPM limiter,
+so the class requirement can't be met without the flash.
 
 | Quad | Firmware |
 |---|---|
@@ -88,6 +117,8 @@ Do these in the same bench session, since they need the quad on USB anyway:
       set yaw_srate = 70
       save
       ```
+- [ ] **`rpm_limit = ON`** — the Freedom Spec requirement above. Do it in the same paste once the
+      KAACK build is on; confirm `rpm_limit_value` reads 18000.
 - [ ] **`motor_output_limit = 80`** — decide whether to keep the 20% output cap. It won't survive
       the flash either way, so it has to be a deliberate choice to re-apply it.
 
