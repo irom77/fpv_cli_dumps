@@ -55,6 +55,17 @@ Next / ideas to extend:
 - [ ] Distinguish real flights from bench tests (both current logs are short bench hops).
 - [ ] Handle logs whose filename lacks a craft label; match to a quad another way.
 
+## Refresh corrected mode assignments
+
+openracer and openracer2 both had `BLACKBOX ERASE` and `VTX PIT MODE` assigned to the same AUX4
+middle range. Selecting PIT mode therefore also started a flash erase, after which the quad would
+not arm until it was power-cycled. Removing the shared assignment fixed the behavior on both.
+
+- [x] Remove the overlapping `BLACKBOX ERASE` / `VTX PIT MODE` assignment from both quads.
+- [ ] Take fresh CLI backups of openracer and openracer2, then run `update_fleet.py` so `modes.csv`
+      reflects the corrected configuration. The current openracer2 backup predates the overlap and
+      the fix, so it cannot document either state.
+
 ## Make the 5-inch racers Freedom Spec legal
 
 `specs.csv` now encodes the MultiGP Freedom Spec rules and `FLEET_SUMMARY.md` checks every 5-inch

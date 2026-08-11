@@ -5,6 +5,16 @@ import update_fleet as fleet
 
 
 class ModeExtractionTests(unittest.TestCase):
+    def test_range_visual_is_compact_but_keeps_25_microsecond_boundaries(self):
+        self.assertEqual(
+            fleet.mode_range_visual(900, 1300),
+            '900 |████████················| 2100',
+        )
+        self.assertEqual(
+            fleet.mode_range_visual(925, 1425),
+            '900 |▐█████████▌·············| 2100',
+        )
+
     def test_extracts_mode_name_channel_range_and_condition_fields(self):
         modes = fleet.extract_modes("\n".join([
             "aux 0 0 0 900 1300 0 0",
@@ -14,12 +24,14 @@ class ModeExtractionTests(unittest.TestCase):
         self.assertEqual(modes, [
             {
                 'slot': 0, 'mode_id': 0, 'mode': 'ARM', 'aux_channel': 'AUX1',
-                'range_start': 900, 'range_end': 1300, 'logic': 'OR',
+                'range_start': 900, 'range_end': 1300,
+                'range_visual': '900 |████████················| 2100', 'logic': 'OR',
                 'linked_to_id': '', 'linked_to': '',
             },
             {
                 'slot': 3, 'mode_id': 26, 'mode': 'BLACKBOX', 'aux_channel': 'AUX4',
-                'range_start': 1300, 'range_end': 1700, 'logic': 'AND',
+                'range_start': 1300, 'range_end': 1700,
+                'range_visual': '900 |········████████········| 2100', 'logic': 'AND',
                 'linked_to_id': 39, 'linked_to': 'VTX PIT MODE',
             },
         ])

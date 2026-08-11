@@ -103,7 +103,9 @@ Rows are limited to quads that are `active` with a `discipline` set, grouped by 
 `modes.csv` decodes each `aux` line in the newest CLI backup into its Betaflight mode name, AUX
 channel, and exact activation range. It includes the permanent numeric mode ID, OR/AND logic,
 linked-mode fields, firmware version, and source dump so custom or newer firmware remains
-auditable. Unknown IDs are labeled rather than discarded.
+auditable. Unknown IDs are labeled rather than discarded. `range_visual` renders the same
+900–2100 slider as a compact text bar; each character covers 50 µs, with `▌` and `▐` retaining
+Betaflight's 25 µs half-steps. The numeric endpoints remain authoritative.
 
 Like the rates view, it is grouped by discipline then class and quad. Rows are limited to quads
 that are `active` with both `discipline` and `class` set. The backup identifies `AUX1`, `AUX2`, and

@@ -69,6 +69,23 @@ MODE_NAMES = {
 }
 
 
+def mode_range_visual(start, end):
+    """Render Betaflight's 900–2100 range as 24 cells without losing its 25 us resolution.
+
+    Each cell covers two 25 us steps: full block means both are active; left/right half blocks mean
+    only that half is active. Exact endpoints remain separate CSV columns for sorting and tooling.
+    """
+    start_step = max(0, min(48, (start - 900) // 25))
+    end_step = max(0, min(48, (end - 900) // 25))
+    symbols = {(False, False): '·', (True, True): '█',
+               (True, False): '▌', (False, True): '▐'}
+    cells = []
+    for step in range(0, 48, 2):
+        cells.append(symbols[(start_step <= step < end_step,
+                              start_step <= step + 1 < end_step)])
+    return '900 |' + ''.join(cells) + '| 2100'
+
+
 def extract_modes(text):
     """Decode configured Betaflight mode ranges from `aux` lines.
 
@@ -90,6 +107,7 @@ def extract_modes(text):
             'aux_channel': f'AUX{aux_index + 1}',
             'range_start': start,
             'range_end': end,
+            'range_visual': mode_range_visual(start, end),
             'logic': 'AND' if logic == 1 else 'OR',
             # linkedTo=0 is Betaflight's sentinel for no linked mode (ARM cannot be a link target).
             'linked_to_id': linked_id if linked_id else '',
@@ -388,9 +406,12 @@ COLS = ['quad', 'class', 'discipline', 'status', 'dump_date', 'craft_name', 'boa
         'note', 'file']
 
 
-def write_csv(path, data, cols=None):
+def write_csv(path, data, cols=None, lineterminator=None):
     with open(path, 'w', newline='') as f:
-        w = csv.DictWriter(f, fieldnames=cols or COLS, extrasaction='ignore')
+        options = {'fieldnames': cols or COLS, 'extrasaction': 'ignore'}
+        if lineterminator is not None:
+            options['lineterminator'] = lineterminator
+        w = csv.DictWriter(f, **options)
         w.writeheader()
         w.writerows(data)
 
@@ -624,7 +645,7 @@ RATE_COLS = ['quad', 'discipline', 'class',
              'rateprofile', 'note', 'source']
 
 MODE_COLS = ['quad', 'discipline', 'class', 'mode', 'mode_id', 'aux_channel',
-             'range_start', 'range_end', 'logic', 'linked_to', 'linked_to_id',
+             'range_start', 'range_end', 'range_visual', 'logic', 'linked_to', 'linked_to_id',
              'slot', 'bf_version', 'source']
 
 
@@ -1101,7 +1122,9 @@ def main():
     write_csv(OUT, rows)
     write_csv(OUT_LATEST, latest_rows)
     write_csv(OUT_RATES, rates_view, RATE_COLS)
-    write_csv(OUT_MODES, mode_rows, MODE_COLS)
+    # LF keeps the Unicode text bars clean in Git diffs; csv's default CRLF looks like trailing
+    # whitespace to `git diff --check` whenever every generated row changes.
+    write_csv(OUT_MODES, mode_rows, MODE_COLS, lineterminator='\n')
     compliance_files = write_compliance_csvs(spec_rows, SRC)
     with open(OUT_SUMMARY, 'w') as f:
         # Checks see every quad; the tables show only the ones worth comparing.
