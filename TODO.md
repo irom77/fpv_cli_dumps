@@ -88,8 +88,32 @@ Do these in the same bench session, since they need the quad on USB anyway:
       set yaw_srate = 70
       save
       ```
-- [ ] **`motor_output_limit = 80`** — decide whether the 20% throttle cap is still wanted, or a
-      leftover from the 2026-07 desync troubleshooting. It won't survive the flash either way.
+- [ ] **`motor_output_limit = 80`** — decide whether to keep the 20% output cap. It won't survive
+      the flash either way, so it has to be a deliberate choice to re-apply it.
+
+      Dump history says it is **not** crash-related, contrary to the first guess:
+
+      | Dump | `motor_output_limit` |
+      |---|---|
+      | 2024-12-30 (Kronos) | not set — full 100% |
+      | 2025-08-10 (Kronos) | **80** |
+      | 2026-08-11 ×3 (openracer) | 80 |
+
+      It was introduced somewhere between 2024-12 and 2025-08, roughly **eleven months before** the
+      2026-07-15 desync crash — so it predates the fault it was assumed to be a reaction to. That
+      makes "leftover from troubleshooting" the weaker reading and "deliberate power cap" the
+      stronger one: VCI Spark 2207 2050Kv on 6S is a lot of thrust for a 305g airframe.
+
+      The blackbox logs can't settle it. Both are short bench hops (7.7s and 14.3s at 10% and 18%
+      average throttle), and the only saturation reading — 7.2% on 2026-07-15 — is confounded by
+      the desync itself, since a desynced motor gets commanded to full and reads as saturated. The
+      clean 2026-07-20 log shows 0% saturation, but at 18% throttle that proves nothing about
+      whether the cap bites under race load.
+
+      To actually decide, fly a real pack and check `motor_sat_pct` in `flights.csv`: sustained
+      saturation means the cap is costing you thrust; near-zero means it's free headroom you're
+      not using. Until then, re-applying `set motor_output_limit = 80` after the flash preserves
+      the status quo and is the safer default.
 - [ ] Re-dump afterwards and re-run `update_fleet.py`; the rate check should go quiet.
 
 Note: rate values do **not** transfer across the 4.2→4.3 default change or between rate types, so
