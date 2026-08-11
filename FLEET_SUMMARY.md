@@ -86,79 +86,79 @@ _Active rateprofile, decoded to deg/s (see `rates.csv`). **Center** is stick sen
 
 **race — whoop**
 
-| Quad | Type | Source | Center °/s | Max °/s | Expo | @50% | Preset |
+| Quad | Type | Center °/s | Max °/s | Expo | @50% | Preset | Source |
 |---|---|---|---|---|---|---|---|
-| Mob6 AIO5 1st | BETAFLIGHT | dump | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | whoop-race ✓ |
-| Mob6 AIO5 2nd | BETAFLIGHT | dump | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | whoop-race ✓ |
-| Mob6 AIO5 RACE | BETAFLIGHT | dump | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | whoop-race ✓ |
-| Mob6 HDZERO RACE | BETAFLIGHT | dump | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | whoop-race ✓ |
-| Race5 | BETAFLIGHT | dump | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | whoop-race ✓ |
+| Mob6 AIO5 1st | BETAFLIGHT | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | whoop-race ✓ | dump |
+| Mob6 AIO5 2nd | BETAFLIGHT | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | whoop-race ✓ | dump |
+| Mob6 AIO5 RACE | BETAFLIGHT | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | whoop-race ✓ | dump |
+| Mob6 HDZERO RACE | BETAFLIGHT | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | whoop-race ✓ | dump |
+| Race5 | BETAFLIGHT | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | whoop-race ✓ | dump |
 
 **race — 5-inch**
 
-| Quad | Type | Source | Center °/s | Max °/s | Expo | @50% | Preset |
+| Quad | Type | Center °/s | Max °/s | Expo | @50% | Preset | Source |
 |---|---|---|---|---|---|---|---|
-| LS-Ultra | BETAFLIGHT | dump | 186/160/160 | 620/533/533 | 0/0/0 | 143/123/123 | — |
-| LS-Ultra HD | BETAFLIGHT | dump | 190/160/160 | 633/533/533 | 0/0/0 | 146/123/123 | house-race ✓ |
-| openracer | ACTUAL (default) | default | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | **house-race ⚠️** |
-| openracer2 | BETAFLIGHT | dump | 190/160/160 | 633/533/533 | 0/0/0 | 146/123/123 | house-race ✓ |
+| LS-Ultra | BETAFLIGHT | 186/160/160 | 620/533/533 | 0/0/0 | 143/123/123 | — | dump |
+| LS-Ultra HD | BETAFLIGHT | 190/160/160 | 633/533/533 | 0/0/0 | 146/123/123 | house-race ✓ | dump |
+| openracer | ACTUAL (default) | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | **house-race ⚠️** | default |
+| openracer2 | BETAFLIGHT | 190/160/160 | 633/533/533 | 0/0/0 | 146/123/123 | house-race ✓ | dump |
 
 **freestyle — micro**
 
-| Quad | Type | Source | Center °/s | Max °/s | Expo | @50% | Preset |
+| Quad | Type | Center °/s | Max °/s | Expo | @50% | Preset | Source |
 |---|---|---|---|---|---|---|---|
-| QAS JB | BETAFLIGHT | dump | 190/160/160 | 633/533/533 | 0/0/0 | 146/123/123 | house-race ✓ |
+| QAS JB | BETAFLIGHT | 190/160/160 | 633/533/533 | 0/0/0 | 146/123/123 | house-race ✓ | dump |
 
 **freestyle — 5-inch**
 
-| Quad | Type | Source | Center °/s | Max °/s | Expo | @50% | Preset |
+| Quad | Type | Center °/s | Max °/s | Expo | @50% | Preset | Source |
 |---|---|---|---|---|---|---|---|
-| XILOF4 | ACTUAL (default) | dump | 20/20/20 | 800/800/600 | 40/40/40 | 132/132/101 | — |
-| XILOF4-2 | ACTUAL (default) | dump | 700/700/700 | 840/840/810 | 30/30/30 | 375/375/370 | — |
+| XILOF4 | ACTUAL (default) | 20/20/20 | 800/800/600 | 40/40/40 | 132/132/101 | — | dump |
+| XILOF4-2 | ACTUAL (default) | 700/700/700 | 840/840/810 | 30/30/30 | 375/375/370 | — | dump |
 
 **cinematic — cinewhoop**
 
-| Quad | Type | Source | Center °/s | Max °/s | Expo | @50% | Preset |
+| Quad | Type | Center °/s | Max °/s | Expo | @50% | Preset | Source |
 |---|---|---|---|---|---|---|---|
-| cinelog-flyfish | ACTUAL (default) | default | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — |
-| CineLog30 | BETAFLIGHT (default) | default | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — |
+| cinelog-flyfish | ACTUAL (default) | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — | default |
+| CineLog30 | BETAFLIGHT (default) | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — | default |
 
 **long-range — micro**
 
-| Quad | Type | Source | Center °/s | Max °/s | Expo | @50% | Preset |
+| Quad | Type | Center °/s | Max °/s | Expo | @50% | Preset | Source |
 |---|---|---|---|---|---|---|---|
-| Crocodile5 baby | BETAFLIGHT (default) | dump | 208/203/208 | 867/867/867 | 20/22/20 | 165/161/165 | — |
-| FLYWOOF7NANO | BETAFLIGHT (default) | default | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — |
+| Crocodile5 baby | BETAFLIGHT (default) | 208/203/208 | 867/867/867 | 20/22/20 | 165/161/165 | — | dump |
+| FLYWOOF7NANO | BETAFLIGHT (default) | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — | default |
 
 **discipline not set — whoop**
 
-| Quad | Type | Source | Center °/s | Max °/s | Expo | @50% | Preset |
+| Quad | Type | Center °/s | Max °/s | Expo | @50% | Preset | Source |
 |---|---|---|---|---|---|---|---|
-| AIR65 R | ACTUAL (default) | default | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — |
-| BETAFPVF4SX1280 | ACTUAL (default) | dump | 70/70/70 | 650/650/650 | 0/0/0 | 180/180/180 | — |
-| Diamond | ACTUAL (default) | default | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — |
-| Ecofree | ACTUAL (default) | dump | 70/70/120 | 640/640/720 | 35/35/15 | 131/131/189 | — |
-| Happish | ACTUAL (default) | dump | 200/200/200 | 500/500/500 | 50/50/25 | 140/140/157 | — |
-| M6 ECO | ACTUAL (default) | default | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — |
-| M85 HDZero | ACTUAL (default) | dump | 70/70/70 | 650/650/650 | 0/0/0 | 180/180/180 | — |
-| Meteor85 | ACTUAL (default) | dump | 70/70/70 | 650/650/650 | 0/0/0 | 180/180/180 | — |
-| Mobula1 | ACTUAL (default) | dump | 200/200/200 | 500/500/500 | 50/50/25 | 140/140/157 | — |
+| AIR65 R | ACTUAL (default) | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — | default |
+| BETAFPVF4SX1280 | ACTUAL (default) | 70/70/70 | 650/650/650 | 0/0/0 | 180/180/180 | — | dump |
+| Diamond | ACTUAL (default) | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — | default |
+| Ecofree | ACTUAL (default) | 70/70/120 | 640/640/720 | 35/35/15 | 131/131/189 | — | dump |
+| Happish | ACTUAL (default) | 200/200/200 | 500/500/500 | 50/50/25 | 140/140/157 | — | dump |
+| M6 ECO | ACTUAL (default) | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — | default |
+| M85 HDZero | ACTUAL (default) | 70/70/70 | 650/650/650 | 0/0/0 | 180/180/180 | — | dump |
+| Meteor85 | ACTUAL (default) | 70/70/70 | 650/650/650 | 0/0/0 | 180/180/180 | — | dump |
+| Mobula1 | ACTUAL (default) | 200/200/200 | 500/500/500 | 50/50/25 | 140/140/157 | — | dump |
 
 **discipline not set — micro**
 
-| Quad | Type | Source | Center °/s | Max °/s | Expo | @50% | Preset |
+| Quad | Type | Center °/s | Max °/s | Expo | @50% | Preset | Source |
 |---|---|---|---|---|---|---|---|
-| FLYWOOF405S_AIO | ACTUAL (default) | default | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — |
-| HDZERO CRUX35 | ACTUAL (default) | default | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — |
-| SPEEDYBEEF405MINI | ACTUAL (default) | default | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — |
+| FLYWOOF405S_AIO | ACTUAL (default) | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — | default |
+| HDZERO CRUX35 | ACTUAL (default) | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — | default |
+| SPEEDYBEEF405MINI | ACTUAL (default) | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — | default |
 
 **discipline not set — 5-inch**
 
-| Quad | Type | Source | Center °/s | Max °/s | Expo | @50% | Preset |
+| Quad | Type | Center °/s | Max °/s | Expo | @50% | Preset | Source |
 |---|---|---|---|---|---|---|---|
-| GEPRC_F722_AIO | ACTUAL (default) | dump | 1300/1300/1300 | 1300/1300/1300 | 20/22/20 | 650/650/650 | — |
-| HOBBYWING_XROTORF7CON | ACTUAL (default) | default | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — |
-| HOBBYWING_XROTORF7CONV | ACTUAL (default) | default | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — |
+| GEPRC_F722_AIO | ACTUAL (default) | 1300/1300/1300 | 1300/1300/1300 | 20/22/20 | 650/650/650 | — | dump |
+| HOBBYWING_XROTORF7CON | ACTUAL (default) | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — | default |
+| HOBBYWING_XROTORF7CONV | ACTUAL (default) | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — | default |
 
 ## Hardware
 
