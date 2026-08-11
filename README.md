@@ -22,7 +22,7 @@ rate_presets.csv         Hand-maintained named rateprofiles ('house-race', ...) 
 flights.csv              One row per decoded blackbox flight (duration, sag, current, mAh, flags)
 hardware.csv             Hand-maintained per-quad build details (ESC, motors, props) + size class, status, discipline, aliases, rate_preset — none of it in dumps
 orders.csv               FPV parts ledger, one row per ordered line item, built from Gmail by the fpv-orders-update skill; 'build' (quad/'spare'/blank) and 'notes' hand-maintained, other columns from order emails, re-runs only add new — gitignored (personal purchase history; kept local, not committed)
-FLEET_SUMMARY.md         Overview: fleet table, rollups, "needs attention", hardware, flights
+FLEET_SUMMARY.md         Overview: fleet table, rollups, "needs attention", rates, hardware, flights
 blackbox/                Raw .BBL/.BFL flight logs — gitignored (large binaries; not committed)
 .claude/skills/fpv-fleet-update/   Skill that regenerates the derived files above
 .claude/skills/fpv-orders-update/  Skill that builds orders.csv from Gmail order confirmations
@@ -37,8 +37,9 @@ recursively), then regenerate the inventory:
 python3 .claude/skills/fpv-fleet-update/scripts/update_fleet.py
 ```
 
-The script is the single source of truth: it only reads the dumps and rewrites the two CSVs and
-`FLEET_SUMMARY.md`, so it is safe to re-run any time. Don't hand-edit the generated files.
+The script is the single source of truth: it only reads the dumps and rewrites `fpv_quads.csv`,
+`fpv_quads_latest.csv`, `rates.csv` and `FLEET_SUMMARY.md`, so it is safe to re-run any time.
+Don't hand-edit the generated files.
 
 Values are extracted from Betaflight `diff all` output, which only records settings that differ
 from firmware defaults — a blank cell means the setting is at its firmware default.
@@ -54,14 +55,45 @@ Each quad is keyed by the `craft_name` set in its dump (normalized — case, spa
 are ignored), falling back to the filename label, then the board name. Setting a real craft name in
 Betaflight makes the key stable across re-flashes and file renames.
 
+**Renaming a quad** in Betaflight would otherwise split one airframe into two entries with two
+half-histories. To fold them, rename the `quad` cell in `hardware.csv` and list the old name in that
+row's `aliases` column (`;`-separated for repeat renames); old dumps and old blackbox flights are
+remapped onto the current name, while each history row keeps the `craft_name` it was dumped under.
+
 ## Hardware details
 
 `hardware.csv` holds per-quad build details that Betaflight dumps can't carry (ESC/stack, motors,
-props, camera, VTX, cells, weight) plus three curated columns — `class` (size bucket), `status`
-(lifecycle), and `discipline` (what it's flown for). It is an annotation, never a source: it only
+props, camera, VTX, cells, weight) plus five curated columns — `class` (size bucket), `status`
+(lifecycle), `discipline` (what it's flown for), `aliases` (former craft names), and `rate_preset`
+(the rateprofile this quad is meant to fly). It is an annotation, never a source: it only
 decorates a quad that a dump already put in the inventory, joined by the same normalized name. A row
 whose name matches no dump is shown in the summary's Hardware section flagged as such, but does not
 create a fleet entry. Edit it by hand; the generator reads it but never writes it.
+
+## Rates
+
+Betaflight stores rates as raw integers whose meaning depends on the rate type, and `diff all` omits
+anything left at a default — so a quad that never had its rates set dumps no rate lines at all.
+`rates.csv` decodes them into real deg/s: centre sensitivity, max rate, and the curve at 25/50/75%
+stick. Two things that makes visible:
+
+- **Stock rates are not one thing.** The firmware default flipped at 4.3 (before: BETAFLIGHT rc 100 /
+  srate 70, centre 200 °/s; after: ACTUAL rc 7 / rates 67, centre 70 °/s), so defaults are filled per
+  the firmware that wrote each dump rather than shown as a blank that reads like "not tracked".
+- **The same endpoints can be a different quad.** ACTUAL and BETAFLIGHT draw different curves between
+  the same centre and max, so two profiles can match at both ends and still differ ~40% at mid-stick.
+  Compare the decoded deg/s, not the stored numbers.
+
+Rows are limited to quads that are `active` with a `discipline` set, grouped by discipline then class
+— rates are only worth reading side by side against quads flown the same way, and a 1S whoop at
+667 °/s is not the same setup as a 6S five-inch at 667 °/s. The filter applies to the view only;
+"needs attention" still checks every quad.
+
+`rate_presets.csv` names rateprofiles that several quads are meant to share (`house-race`,
+`whoop-race`); `rate_preset` in `hardware.csv` assigns one. Nothing in a dump records what a quad was
+*supposed* to be, so this is the one place intent lives — a quad whose dump disagrees with its preset
+is flagged in the summary, which is how a re-flash that silently reset rates gets caught on the bench
+instead of in the air.
 
 ## Blackbox flight logs
 
