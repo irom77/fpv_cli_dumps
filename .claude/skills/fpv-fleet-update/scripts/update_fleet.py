@@ -645,7 +645,7 @@ RATE_COLS = ['quad', 'discipline', 'class',
              'rateprofile', 'note', 'source']
 
 MODE_COLS = ['quad', 'discipline', 'class', 'mode', 'aux_channel',
-             'range_start', 'range_end', 'range_visual', 'mode_id', 'logic', 'linked_to', 'linked_to_id',
+             'range_visual', 'range_start', 'range_end', 'mode_id', 'logic', 'linked_to', 'linked_to_id',
              'slot', 'bf_version', 'source']
 
 
@@ -713,6 +713,24 @@ def build_mode_rows(latest_rows):
                 'bf_version': r.get('bf_version', ''),
                 'source': r.get('file', ''),
             })
+    return out
+
+
+def compact_mode_groups(rows):
+    """Blank repeated grouping cells for the human-facing CSV; blank means 'same as above'.
+
+    Work on copies so downstream checks can still use fully populated mode rows.
+    """
+    out = []
+    previous = {field: object() for field in ('quad', 'discipline', 'class')}
+    for row in rows:
+        compact = dict(row)
+        for field in previous:
+            value = row.get(field, '')
+            if value == previous[field]:
+                compact[field] = ''
+            previous[field] = value
+        out.append(compact)
     return out
 
 
@@ -1124,7 +1142,7 @@ def main():
     write_csv(OUT_RATES, rates_view, RATE_COLS)
     # LF keeps the Unicode text bars clean in Git diffs; csv's default CRLF looks like trailing
     # whitespace to `git diff --check` whenever every generated row changes.
-    write_csv(OUT_MODES, mode_rows, MODE_COLS, lineterminator='\n')
+    write_csv(OUT_MODES, compact_mode_groups(mode_rows), MODE_COLS, lineterminator='\n')
     compliance_files = write_compliance_csvs(spec_rows, SRC)
     with open(OUT_SUMMARY, 'w') as f:
         # Checks see every quad; the tables show only the ones worth comparing.

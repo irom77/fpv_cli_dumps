@@ -59,6 +59,24 @@ class ModeViewTests(unittest.TestCase):
         self.assertEqual(fleet.build_mode_rows([{**base, 'discipline': ''}]), [])
         self.assertEqual(fleet.build_mode_rows([{**base, 'class': ''}]), [])
 
+    def test_compact_view_blanks_repeated_group_fields_only(self):
+        rows = [
+            {'quad': 'A', 'discipline': 'race', 'class': 'whoop', 'mode': 'ARM'},
+            {'quad': 'A', 'discipline': 'race', 'class': 'whoop', 'mode': 'ANGLE'},
+            {'quad': 'B', 'discipline': 'race', 'class': 'whoop', 'mode': 'ARM'},
+            {'quad': 'C', 'discipline': 'freestyle', 'class': '5-inch', 'mode': 'ARM'},
+        ]
+
+        compact = fleet.compact_mode_groups(rows)
+
+        self.assertEqual(compact, [
+            {'quad': 'A', 'discipline': 'race', 'class': 'whoop', 'mode': 'ARM'},
+            {'quad': '', 'discipline': '', 'class': '', 'mode': 'ANGLE'},
+            {'quad': 'B', 'discipline': '', 'class': '', 'mode': 'ARM'},
+            {'quad': 'C', 'discipline': 'freestyle', 'class': '5-inch', 'mode': 'ARM'},
+        ])
+        self.assertEqual(rows[1]['quad'], 'A')  # output compaction does not mutate parsed rows
+
 
 if __name__ == '__main__':
     unittest.main()
