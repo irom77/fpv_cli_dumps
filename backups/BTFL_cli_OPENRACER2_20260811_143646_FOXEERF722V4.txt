@@ -1,0 +1,202 @@
+# 
+
+# diff all
+
+# version
+# Betaflight / STM32F7X2 (F722) 2025.12.3-alpha.KAACK_V19 Jul 25 2026 / 00:29:55 (3b419ca43) MSP API: 1.47
+# config rev: e378347
+
+# start the command batch
+batch start
+
+# reset configuration to default settings
+defaults nosave
+
+board_name FOXEERF722V4
+manufacturer_id FOXE
+mcu_id 005200243135510c30383233
+signature 
+
+# name: openracer2
+
+# feature
+feature TELEMETRY
+feature LED_STRIP
+feature OSD
+
+# serial
+serial UART1 64 115200 57600 0 115200
+serial UART5 8192 115200 57600 0 115200
+
+# aux
+aux 0 0 0 900 1300 0 0
+aux 1 1 1 1700 2100 0 0
+aux 2 13 2 1300 2100 0 0
+aux 3 26 3 1700 2100 0 0
+aux 4 35 1 1300 1700 0 0
+aux 5 39 3 1300 1700 0 0
+
+# vtxtable
+vtxtable bands 5
+vtxtable channels 8
+vtxtable band 1 BOSCAM_A A CUSTOM  5865 5845 5825 5805 5785 5765 5745 5725
+vtxtable band 2 BOSCAM_B B CUSTOM  5733 5752 5771 5790 5809 5828 5847 5866
+vtxtable band 3 BOSCAM_E E CUSTOM  5705 5685 5665    0 5885 5905    0    0
+vtxtable band 4 FATSHARK F CUSTOM  5740 5760 5780 5800 5820 5840 5860 5880
+vtxtable band 5 RACEBAND R CUSTOM  5658 5695 5732 5769 5806 5843 5880 5917
+vtxtable powerlevels 4
+vtxtable powervalues 25 100 200 400
+vtxtable powerlabels 25 100 200 350
+
+# master
+set gyro_lpf2_static_hz = 0
+set dyn_notch_count = 2
+set dyn_notch_q = 500
+set dyn_notch_min_hz = 150
+set dyn_notch_max_hz = 800
+set acc_calibration = -44,-56,0,1
+set rc_smoothing_auto_factor = 25
+set rc_smoothing_auto_factor_throttle = 25
+set dshot_bidir = ON
+set yaw_motors_reversed = ON
+set pid_process_denom = 2
+set simplified_gyro_filter_multiplier = 130
+set osd_tim1 = 2562
+set osd_vbat_pos = 2337
+set osd_rssi_pos = 395
+set osd_link_quality_pos = 2091
+set osd_link_tx_power_pos = 395
+set osd_rssi_dbm_pos = 395
+set osd_rsnr_pos = 395
+set osd_tim_1_pos = 2133
+set osd_tim_2_pos = 2101
+set osd_remaining_time_estimate_pos = 395
+set osd_flymode_pos = 395
+set osd_anti_gravity_pos = 395
+set osd_g_force_pos = 395
+set osd_throttle_pos = 89
+set osd_vtx_channel_pos = 2080
+set osd_crosshairs_pos = 405
+set osd_ah_sbar_pos = 406
+set osd_ah_pos = 308
+set osd_current_pos = 395
+set osd_mah_drawn_pos = 395
+set osd_wh_drawn_pos = 395
+set osd_motor_diag_pos = 395
+set osd_craft_name_pos = 2452
+set osd_pilot_name_pos = 2432
+set osd_gps_speed_pos = 395
+set osd_gps_lon_pos = 395
+set osd_gps_lat_pos = 395
+set osd_gps_sats_pos = 395
+set osd_home_dir_pos = 395
+set osd_home_dist_pos = 395
+set osd_flight_dist_pos = 395
+set osd_compass_bar_pos = 395
+set osd_altitude_pos = 395
+set osd_pid_roll_pos = 395
+set osd_pid_pitch_pos = 395
+set osd_pid_yaw_pos = 395
+set osd_debug_pos = 395
+set osd_debug2_pos = 395
+set osd_power_pos = 395
+set osd_pidrate_profile_pos = 395
+set osd_warnings_pos = 14697
+set osd_avg_cell_voltage_pos = 2305
+set osd_pit_ang_pos = 395
+set osd_rol_ang_pos = 395
+set osd_battery_usage_pos = 395
+set osd_disarmed_pos = 395
+set osd_nheading_pos = 395
+set osd_up_down_reference_pos = 405
+set osd_ready_mode_pos = 395
+set osd_nvario_pos = 395
+set osd_esc_tmp_pos = 395
+set osd_esc_rpm_pos = 395
+set osd_esc_rpm_freq_pos = 395
+set osd_rtc_date_time_pos = 395
+set osd_adjustment_range_pos = 395
+set osd_flip_arrow_pos = 395
+set osd_core_temp_pos = 395
+set osd_log_status_pos = 395
+set osd_stick_overlay_left_pos = 395
+set osd_stick_overlay_right_pos = 395
+set osd_rate_profile_name_pos = 395
+set osd_pid_profile_name_pos = 395
+set osd_profile_name_pos = 395
+set osd_rcchannels_pos = 395
+set osd_camera_frame_pos = 240
+set osd_efficiency_pos = 395
+set osd_total_flights_pos = 395
+set osd_aux_pos = 395
+set osd_spec_logo_pos = 14729
+set osd_sys_goggle_voltage_pos = 395
+set osd_sys_vtx_voltage_pos = 395
+set osd_sys_bitrate_pos = 395
+set osd_sys_delay_pos = 395
+set osd_sys_distance_pos = 395
+set osd_sys_lq_pos = 395
+set osd_sys_goggle_dvr_pos = 395
+set osd_sys_vtx_dvr_pos = 395
+set osd_sys_warnings_pos = 395
+set osd_sys_vtx_temp_pos = 395
+set osd_sys_fan_speed_pos = 395
+set osd_displayport_device = AUTO
+set osd_lidar_dist_pos = 395
+set vtx_band = 5
+set vtx_channel = 1
+set vtx_power = 1
+set vtx_freq = 5658
+set vcd_video_system = NTSC
+set rpm_filter_weights = 100,50,50
+set craft_name = openracer2
+set pilot_name = papfpv
+
+profile 0
+
+# profile 0
+set thrust_linear = 20
+set feedforward_jitter_factor = 3
+set feedforward_boost = 18
+set dyn_idle_min_rpm = 35
+set simplified_master_multiplier = 85
+set simplified_i_gain = 90
+set simplified_pi_gain = 115
+set simplified_d_max_gain = 0
+set simplified_pitch_d_gain = 85
+set simplified_pitch_pi_gain = 85
+set simplified_dterm_filter_multiplier = 110
+set tpa_breakpoint = 1650
+
+profile 1
+
+profile 2
+
+profile 3
+
+# restore original profile selection
+profile 0
+
+rateprofile 0
+
+# rateprofile 0
+set rates_type = BETAFLIGHT
+set roll_rc_rate = 95
+set pitch_rc_rate = 80
+set yaw_rc_rate = 80
+set roll_srate = 70
+set pitch_srate = 70
+set yaw_srate = 70
+
+rateprofile 1
+
+rateprofile 2
+
+rateprofile 3
+
+# restore original rateprofile selection
+rateprofile 0
+
+# save configuration
+save
+# 

@@ -41,6 +41,13 @@ def line_after(text, prefix):
     return m.group(1).strip() if m else ""
 
 
+def md(s):
+    """Escape a value for a markdown table cell. Hand-written hardware.csv text can legitimately
+    contain a pipe (e.g. a motor sold under two brands, `HeadsUp | Five33 2207`), which would
+    otherwise split the cell and shift every column after it."""
+    return str(s or '').replace('|', '\\|')
+
+
 def norm(s):
     return re.sub(r'[^A-Za-z0-9]', '', s).upper()
 
@@ -511,9 +518,9 @@ def build_hardware_section(path, latest_rows):
              "|---|---|---|---|---|---|---|---|---|"]
     for r in sorted(hw, key=lambda r: r['quad'].lower()):
         star = "" if norm(r['quad']) in known else " *(no matching dump)*"
-        lines.append(f"| {r.get('quad','')}{star} | {r.get('cells','')} | {r.get('weight','')} | "
-                     f"{r.get('esc_stack','')} | {r.get('motors','')} | {r.get('props','')} | "
-                     f"{r.get('camera','')} | {r.get('vtx','')} | {r.get('notes','')} |")
+        lines.append(f"| {md(r.get('quad',''))}{star} | {md(r.get('cells',''))} | {md(r.get('weight',''))} | "
+                     f"{md(r.get('esc_stack',''))} | {md(r.get('motors',''))} | {md(r.get('props',''))} | "
+                     f"{md(r.get('camera',''))} | {md(r.get('vtx',''))} | {md(r.get('notes',''))} |")
     lines.append("")
     return "\n".join(lines)
 
