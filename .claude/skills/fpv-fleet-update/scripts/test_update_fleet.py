@@ -59,6 +59,34 @@ class ModeViewTests(unittest.TestCase):
         self.assertEqual(fleet.build_mode_rows([{**base, 'discipline': ''}]), [])
         self.assertEqual(fleet.build_mode_rows([{**base, 'class': ''}]), [])
 
+    def test_groups_modes_by_aux_then_orders_each_switch_low_to_high(self):
+        row = {
+            'quad': 'Test', 'discipline': 'race', 'class': '5-inch', 'status': 'active',
+            'bf_version': '4.5.2', 'file': 'dump.txt',
+            '_modes': fleet.extract_modes('\n'.join([
+                'aux 0 0 0 900 1300 0 0',
+                'aux 1 1 1 1700 2100 0 0',
+                'aux 2 13 2 1700 2100 0 0',
+                'aux 3 26 3 1700 2100 0 0',
+                'aux 4 28 1 900 1300 0 0',
+                'aux 5 35 1 1300 1700 0 0',
+            ])),
+        }
+
+        modes = fleet.build_mode_rows([row])
+
+        self.assertEqual(
+            [(mode['aux_channel'], mode['range_start'], mode['mode']) for mode in modes],
+            [
+                ('AUX1', 900, 'ARM'),
+                ('AUX2', 900, 'AIRMODE'),
+                ('AUX2', 1300, 'FLIP OVER AFTER CRASH'),
+                ('AUX2', 1700, 'ANGLE'),
+                ('AUX3', 1700, 'BEEPER ON'),
+                ('AUX4', 1700, 'BLACKBOX'),
+            ],
+        )
+
     def test_compact_view_blanks_repeated_group_fields_only(self):
         rows = [
             {'quad': 'A', 'discipline': 'race', 'class': 'whoop', 'mode': 'ARM'},

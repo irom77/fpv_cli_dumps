@@ -701,10 +701,13 @@ def rate_sort_key(r):
 
 
 def build_mode_rows(latest_rows):
-    """Flatten each in-scope quad's configured AUX ranges into one CSV row per mode range."""
+    """Flatten configured ranges, grouping each quad's AUX channels and switch positions."""
     out = []
     for r in sorted((row for row in latest_rows if in_modes_view(row)), key=rate_sort_key):
-        for mode in sorted(r.get('_modes', ()), key=lambda m: m['slot']):
+        modes = sorted(r.get('_modes', ()),
+                       key=lambda m: (int(m['aux_channel'][3:]), m['range_start'],
+                                      m['range_end'], m['slot']))
+        for mode in modes:
             out.append({
                 'quad': r['quad'],
                 'discipline': r.get('discipline', ''),
