@@ -113,8 +113,9 @@ the row above”, not missing data.
 Like the rates view, it is grouped by discipline then class and quad. Rows are limited to quads
 that are `active` with both `discipline` and `class` set. Within each quad, rows are grouped by AUX
 channel and ordered from the lowest to highest activation range, so all positions of one switch sit
-together. The backup identifies `AUX1`, `AUX2`, and so on, but cannot identify the transmitter's
-physical switch label or prove that a configured mode was used during a flight.
+together. Channel labels use consistent markers (`🔴 AUX1`, `🔵 AUX2`, `🟢 AUX3`, `⚫ AUX4`; white
+for any higher channel). The backup cannot identify the transmitter's physical switch label or
+prove that a configured mode was used during a flight.
 
 `rate_presets.csv` names rateprofiles that several quads are meant to share (`house-race`,
 `whoop-race`); `rate_preset` in `hardware.csv` assigns one. Nothing in a dump records what a quad was

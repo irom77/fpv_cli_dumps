@@ -68,6 +68,8 @@ MODE_NAMES = {
     54: 'LAP TIMER RESET', 55: 'CHIRP', 56: 'AUTOPILOT',
 }
 
+AUX_MARKERS = {1: '🔴', 2: '🔵', 3: '🟢', 4: '⚫'}
+
 
 def mode_range_visual(start, end):
     """Render Betaflight's 900–2100 range as 24 cells without losing its 25 us resolution.
@@ -107,7 +109,7 @@ def extract_modes(text):
             'slot': slot,
             'mode_id': mode_id,
             'mode': MODE_NAMES.get(mode_id, f'UNKNOWN ({mode_id})'),
-            'aux_channel': f'AUX{aux_index + 1}',
+            'aux_channel': f"{AUX_MARKERS.get(aux_index + 1, '⚪')} AUX{aux_index + 1}",
             'range_start': start,
             'range_end': end,
             'range_visual': mode_range_visual(start, end),
@@ -708,7 +710,7 @@ def build_mode_rows(latest_rows):
     out = []
     for r in sorted((row for row in latest_rows if in_modes_view(row)), key=rate_sort_key):
         modes = sorted(r.get('_modes', ()),
-                       key=lambda m: (int(m['aux_channel'][3:]), m['range_start'],
+                       key=lambda m: (int(re.search(r'\d+', m['aux_channel']).group()), m['range_start'],
                                       m['range_end'], m['slot']))
         for mode in modes:
             out.append({

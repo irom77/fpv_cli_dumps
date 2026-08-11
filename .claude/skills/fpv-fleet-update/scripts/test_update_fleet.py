@@ -26,13 +26,13 @@ class ModeExtractionTests(unittest.TestCase):
 
         self.assertEqual(modes, [
             {
-                'slot': 0, 'mode_id': 0, 'mode': 'ARM', 'aux_channel': 'AUX1',
+                'slot': 0, 'mode_id': 0, 'mode': 'ARM', 'aux_channel': '🔴 AUX1',
                 'range_start': 900, 'range_end': 1300,
                 'range_visual': '900 |████████░░░░░░░░░░░░░░░░| 2100', 'logic': 'OR',
                 'linked_to_id': '', 'linked_to': '',
             },
             {
-                'slot': 3, 'mode_id': 26, 'mode': 'BLACKBOX', 'aux_channel': 'AUX4',
+                'slot': 3, 'mode_id': 26, 'mode': 'BLACKBOX', 'aux_channel': '⚫ AUX4',
                 'range_start': 1300, 'range_end': 1700,
                 'range_visual': '900 |░░░░░░░░████████░░░░░░░░| 2100', 'logic': 'AND',
                 'linked_to_id': 39, 'linked_to': 'VTX PIT MODE',
@@ -81,12 +81,12 @@ class ModeViewTests(unittest.TestCase):
         self.assertEqual(
             [(mode['aux_channel'], mode['range_start'], mode['mode']) for mode in modes],
             [
-                ('AUX1', 900, 'ARM'),
-                ('AUX2', 900, 'AIRMODE'),
-                ('AUX2', 1300, 'FLIP OVER AFTER CRASH'),
-                ('AUX2', 1700, 'ANGLE'),
-                ('AUX3', 1700, 'BEEPER ON'),
-                ('AUX4', 1700, 'BLACKBOX'),
+                ('🔴 AUX1', 900, 'ARM'),
+                ('🔵 AUX2', 900, 'AIRMODE'),
+                ('🔵 AUX2', 1300, 'FLIP OVER AFTER CRASH'),
+                ('🔵 AUX2', 1700, 'ANGLE'),
+                ('🟢 AUX3', 1700, 'BEEPER ON'),
+                ('⚫ AUX4', 1700, 'BLACKBOX'),
             ],
         )
 
