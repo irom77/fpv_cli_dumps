@@ -100,6 +100,27 @@ def load_hw_map(path, col):
     return out
 
 
+def load_aliases(path):
+    """Map normalized former quad name -> current display name, from hardware.csv's `aliases`
+    column (';'-separated list of old names). Quad identity comes from the craft name baked into
+    the dump, so renaming a quad in Betaflight (e.g. Kronos -> openracer) would otherwise split one
+    airframe into two quads with two half-histories. Listing the old name here folds its dumps and
+    its blackbox flights into the current quad. Self-references are ignored."""
+    if not os.path.exists(path):
+        return {}
+    out = {}
+    with open(path, newline='') as f:
+        for r in csv.DictReader(f):
+            cur = (r.get('quad') or '').strip()
+            if not cur:
+                continue
+            for a in (r.get('aliases') or '').split(';'):
+                a = a.strip()
+                if a and norm(a) != norm(cur):
+                    out[norm(a)] = cur
+    return out
+
+
 def extract_active_rates(text):
     """Pull the ACTIVE rateprofile's rates. The rate keys (rc_rate/srate/expo/rates_type) live
     inside a rateprofile block, and the same key name appears in every profile — so we must read
@@ -245,6 +266,17 @@ def parse_dumps():
     #   status     — lifecycle (active/retired/...); blank means active (see status_of()).
     #   discipline — what it's flown for (race/freestyle/cinematic); blank stays blank, no guesser.
     hw_path = os.path.join(SRC, "hardware.csv")
+
+    # Fold renamed quads onto their current name before any name-keyed join below, so a rename
+    # doesn't split one airframe's history in two. The per-dump craft_name column keeps the old
+    # name visible in the history rows.
+    aliases = load_aliases(hw_path)
+    for r in rows:
+        cur = aliases.get(r['_ident'])
+        if cur:
+            r['quad'] = cur
+            r['_ident'] = norm(cur)
+
     hw_class = load_hw_map(hw_path, "class")
     hw_status = load_hw_map(hw_path, "status")
     hw_discipline = load_hw_map(hw_path, "discipline")
@@ -525,9 +557,10 @@ def build_hardware_section(path, latest_rows):
     return "\n".join(lines)
 
 
-def build_flights_section(path):
+def build_flights_section(path, aliases=None):
     """Optional '## Flights' section, built from flights.csv if it exists (produced by
-    update_flights.py). Kept separate so this stdlib-only script never needs the blackbox parser."""
+    update_flights.py). Kept separate so this stdlib-only script never needs the blackbox parser.
+    `aliases` folds logs recorded under a quad's former craft name into its current one."""
     if not os.path.exists(path):
         return ""
     with open(path, newline='') as f:
@@ -541,9 +574,11 @@ def build_flights_section(path):
         except (ValueError, TypeError):
             return 0.0
 
+    aliases = aliases or {}
     groups = {}
     for fl in flights:
         key = fl.get('craft') or fl.get('quad') or '?'
+        key = aliases.get(norm(key), key)
         groups.setdefault(key, []).append(fl)
 
     lines = ["", "## Flights", "",
@@ -586,7 +621,8 @@ def main():
         f.write(build_summary(latest_rows).rstrip() + "\n")
         f.write(build_rates_section(latest_rows))
         f.write(build_hardware_section(os.path.join(SRC, "hardware.csv"), latest_rows))
-        f.write(build_flights_section(os.path.join(SRC, "flights.csv")))
+        f.write(build_flights_section(os.path.join(SRC, "flights.csv"),
+                                      load_aliases(os.path.join(SRC, "hardware.csv"))))
 
     dropped = scanned - len(rows)
     print(f"Scanned {scanned} dumps -> {len(rows)} rows "

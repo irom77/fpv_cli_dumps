@@ -28,7 +28,8 @@ files are derived from them and must stay in sync whenever the set of dumps chan
   (`cells, weight, esc_stack, motors, props, camera, vtx, notes`), plus three curated columns the
   dumps can't provide: `class` (whoop / cinewhoop / micro / 5-inch, overrides the auto-guess),
   `status` (lifecycle — active / building / rebuilding / broken / retired / lost; blank = active), and
-  `discipline` (what it's flown for — race / freestyle / cinematic / long-range; blank = unset). Largely seeded
+  `discipline` (what it's flown for — race / freestyle / cinematic / long-range; blank = unset), and
+  `aliases` (former craft names, `;`-separated — see "Renaming a quad" below). Largely seeded
   from the pilot's own fleet spreadsheet, so some rows may be stale — the `notes` column flags known
   conflicts. Optional; joined into the summary by quad name. Edit it directly.
 
@@ -87,6 +88,13 @@ back to the filename label, then the board. Names are normalized (case, spaces, 
 so `M85 HDZero` and `M85_HDZERO` count as one quad. Dumps that share an ExpressLRS UID
 (`set expresslrs_uid`) are grouped into bind groups (ELRS-A, ELRS-B, …); quads in a group bind to the
 same radio together.
+
+**Renaming a quad.** Because identity is the craft name, renaming a quad in Betaflight would split one
+airframe into two quads with two half-histories. To fold them, rename the `quad` cell in `hardware.csv`
+to the new name and list the old one in that row's `aliases` column (`;`-separated for repeat renames).
+`load_aliases()` remaps old dumps *and* old blackbox flights onto the current name before any name-keyed
+join; the per-dump `craft_name` column still shows what each dump was actually called at the time. Note
+`orders.csv` links parts by build name — grep it for the old name when renaming.
 
 The script reads values straight from `diff all` output, so anything left at a firmware default is
 blank by design — that is not a bug. Truncated/aborted dumps (essentially empty files) are kept but
