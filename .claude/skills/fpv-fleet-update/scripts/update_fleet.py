@@ -542,9 +542,11 @@ def build_summary(latest_rows, rate_rows=()):
     return "\n".join(lines).rstrip() + "\n"
 
 
-RATE_COLS = ['quad', 'discipline', 'class', 'bf_version', 'rates_type', 'preset', 'preset_status',
+# Identity, then the decoded deg/s figures, then everything that only qualifies them.
+RATE_COLS = ['quad', 'discipline', 'class',
              'center_rpy', 'max_rpy', 'expo_rpy', 'dps25_rpy', 'dps50_rpy', 'dps75_rpy',
-             'rc_rate_rpy', 'super_rate_rpy', 'rateprofile', 'note', 'source']
+             'rc_rate_rpy', 'super_rate_rpy',
+             'bf_version', 'preset', 'preset_status', 'rates_type', 'rateprofile', 'note', 'source']
 
 
 def load_presets(path):
@@ -643,7 +645,7 @@ def build_rates_section(rate_rows):
     for (disc, cls), rows in groups.items():
         lines.append(f"**{disc or 'discipline not set'} — {cls or 'class unknown'}**")
         lines.append("")
-        lines.append("| Quad | Type | Center °/s | Max °/s | Expo | @50% | Preset | Source |")
+        lines.append("| Quad | Center °/s | Max °/s | Expo | @50% | Preset | Type | Source |")
         lines.append("|---|---|---|---|---|---|---|---|")
         for r in rows:
             preset = r['preset'] or '—'
@@ -653,9 +655,9 @@ def build_rates_section(rate_rows):
                 preset = f"{preset} ✓"
             elif r['preset_status'] == 'unknown-preset':
                 preset = f"{preset} *(undefined)*"
-            lines.append(f"| {r['quad']} | {r['rates_type']} | "
+            lines.append(f"| {r['quad']} | "
                          f"{r['center_rpy'] or '—'} | {r['max_rpy'] or '—'} | {r['expo_rpy']} | "
-                         f"{r['dps50_rpy'] or '—'} | {preset} | {r['source']} |")
+                         f"{r['dps50_rpy'] or '—'} | {preset} | {r['rates_type']} | {r['source']} |")
         lines.append("")
     return "\n".join(lines)
 
