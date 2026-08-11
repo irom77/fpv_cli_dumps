@@ -88,11 +88,11 @@ _Active rateprofile, decoded to deg/s (see `rates.csv`). **Center** is stick sen
 
 | Quad | Type | Source | Center °/s | Max °/s | Expo | @50% | Preset |
 |---|---|---|---|---|---|---|---|
-| Mob6 AIO5 1st | BETAFLIGHT | dump | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — |
-| Mob6 AIO5 2nd | BETAFLIGHT | dump | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — |
-| Mob6 AIO5 RACE | BETAFLIGHT | dump | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — |
-| Mob6 HDZERO RACE | BETAFLIGHT | dump | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — |
-| Race5 | BETAFLIGHT | dump | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — |
+| Mob6 AIO5 1st | BETAFLIGHT | dump | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | whoop-race ✓ |
+| Mob6 AIO5 2nd | BETAFLIGHT | dump | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | whoop-race ✓ |
+| Mob6 AIO5 RACE | BETAFLIGHT | dump | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | whoop-race ✓ |
+| Mob6 HDZERO RACE | BETAFLIGHT | dump | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | whoop-race ✓ |
+| Race5 | BETAFLIGHT | dump | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | whoop-race ✓ |
 
 **race — 5-inch**
 
