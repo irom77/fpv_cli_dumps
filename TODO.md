@@ -55,6 +55,47 @@ Next / ideas to extend:
 - [ ] Distinguish real flights from bench tests (both current logs are short bench hops).
 - [ ] Handle logs whose filename lacks a craft label; match to a quad another way.
 
+## Upgrade openracer to KAACK firmware
+
+openracer is still on stock **Betaflight 4.5.1** from a Jul 2024 build — the oldest firmware of any
+5-inch racer in the fleet, and the only one not on KAACK:
+
+| Quad | Firmware |
+|---|---|
+| openracer | 4.5.1 (stock, Jul 2024) |
+| LS-Ultra | 4.5.2.KAACK_V15 |
+| LS-Ultra HD | 4.5.3.KAACK_V18 |
+| openracer2 | 2025.12.3-alpha.KAACK_V19 |
+
+- [ ] Pick a KAACK target for HOBBYWING_XROTORF7CONV (F7X2) — match LS-Ultra's V15/V18 rather than
+      openracer2's 2025.12 alpha unless the alpha has proven itself.
+- [ ] Back up first: take a fresh `diff all` before flashing, so the pre-upgrade config is in
+      `backups/` and the rename history stays intact.
+
+Do these in the same bench session, since they need the quad on USB anyway:
+
+- [ ] **Rates** — openracer is on firmware defaults (ACTUAL 70/670) while its `rate_preset` says
+      `house-race`. This is the one live entry in the summary's "needs attention" rate check.
+      Flashing resets rates regardless, so paste the preset afterwards:
+      ```
+      rateprofile 0
+      set rates_type = BETAFLIGHT
+      set roll_rc_rate = 95
+      set pitch_rc_rate = 80
+      set yaw_rc_rate = 80
+      set roll_srate = 70
+      set pitch_srate = 70
+      set yaw_srate = 70
+      save
+      ```
+- [ ] **`motor_output_limit = 80`** — decide whether the 20% throttle cap is still wanted, or a
+      leftover from the 2026-07 desync troubleshooting. It won't survive the flash either way.
+- [ ] Re-dump afterwards and re-run `update_fleet.py`; the rate check should go quiet.
+
+Note: rate values do **not** transfer across the 4.2→4.3 default change or between rate types, so
+copy the raw CLI lines above rather than any remembered numbers. See `rates.csv` for what each quad
+actually flies at in deg/s.
+
 ## Auto-link ordered parts to builds (fpv-orders-update)
 
 The `fpv-orders-update` skill currently leaves the `build` column blank for the pilot to fill.
