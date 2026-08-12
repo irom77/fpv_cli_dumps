@@ -21,6 +21,7 @@ at all about an RPM limiter that was never switched on.
 
 ```
 backups/                 Betaflight CLI dumps (BTFL_cli_*.txt), one or more per quad
+CLI_SNIPPETS.md          Paste-ready, reusable Betaflight CLI presets derived from the fleet
 fpv_quads.csv            History — one row per dump (unchanged re-dumps collapsed), newest per quad flagged 'latest'
 fpv_quads_latest.csv     One row per quad, newest dump only
 rates.csv                Active rateprofile decoded to real deg/s (centre sensitivity, max rate, curve at 25/50/75% stick) — only quads that are active and have a discipline set
@@ -52,6 +53,18 @@ rewrites `fpv_quads.csv`, `fpv_quads_latest.csv`, `rates.csv`, `modes.csv`, `com
 
 Values are extracted from Betaflight `diff all` output, which only records settings that differ
 from firmware defaults — a blank cell means the setting is at its firmware default.
+
+## CLI snippets
+
+[`CLI_SNIPPETS.md`](CLI_SNIPPETS.md) is the reusable, paste-ready side of the repository. It starts
+with separate standard OSD layouts for analog (`30x13`) and digital MSP DisplayPort (`50x18`),
+distilled from the recurring settings in the backups. It is also the home for future named rate,
+mode, battery, race and blackbox presets.
+
+The snippets intentionally exclude settings that should not be copied blindly between flight
+controllers, including UART assignments, receiver configuration, VTX power/channel and craft
+identity. Before applying one, save a fresh `diff all`, paste only the relevant block, check the CLI
+for rejected settings, enter `save`, and verify the result on the bench before flying.
 
 ## What counts as a quad
 
