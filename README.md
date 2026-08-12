@@ -35,6 +35,7 @@ compliance_<spec>.csv    Generated — one file per spec, one row per quad in sc
 orders.csv               FPV parts ledger, one row per ordered line item, built from Gmail by the fpv-orders-update skill; 'build' (quad/'spare'/blank) and 'notes' hand-maintained, other columns from order emails, re-runs only add new — gitignored (personal purchase history; kept local, not committed)
 FLEET_SUMMARY.md         Overview: fleet table, rollups, "needs attention", rates, spec compliance, hardware, flights
 blackbox/                Raw .BBL/.BFL flight logs — gitignored (large binaries; not committed)
+upgrades/                Reproducible firmware upgrade records: binaries, restores, provenance and verification
 .claude/skills/fpv-fleet-update/   Skill that regenerates the derived files above
 .claude/skills/fpv-orders-update/  Skill that builds orders.csv from Gmail order confirmations
 ```
@@ -54,6 +55,13 @@ rewrites `fpv_quads.csv`, `fpv_quads_latest.csv`, `rates.csv`, `modes.csv`, `com
 
 Values are extracted from Betaflight `diff all` output, which only records settings that differ
 from firmware defaults — a blank cell means the setting is at its firmware default.
+
+## Firmware upgrade records
+
+[`upgrades/`](upgrades/) preserves upgrade-specific artifacts that cannot be reconstructed from a
+CLI dump alone. Each package records the exact firmware binary and checksum, source/config commits,
+selective restore, flashing procedure and post-flash evidence. The first package documents the
+[OpenRacer KAACK V19 upgrade](upgrades/OPENRACER_KAACK_V19_UPGRADE/README.md).
 
 ## CLI snippets
 

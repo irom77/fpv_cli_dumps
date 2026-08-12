@@ -238,6 +238,18 @@ def extract_active_rates(text):
     }
 
 
+def mark_latest_rows(rows):
+    """Mark exactly one newest complete dump per quad, including same-day filename timestamps."""
+    latest = {}
+    for r in rows:
+        candidate = (r['dump_date'], r['file'])
+        if r['_ident'] not in latest or candidate > latest[r['_ident']]:
+            latest[r['_ident']] = candidate
+    for r in rows:
+        if (r['dump_date'], r['file']) == latest[r['_ident']] and 'EMPTY' not in r['note']:
+            r['note'] = 'latest' + (('; ' + r['note']) if r['note'] else '')
+
+
 def parse_dumps():
     rows = []
     # Recursive so dumps organized into subfolders (e.g. backups/) are still found.
@@ -390,14 +402,8 @@ def parse_dumps():
 
     rows.sort(key=lambda r: (r['_ident'], r['dump_date'], r['file']))
 
-    latest = {}
-    for r in rows:
-        k = r['_ident']
-        if k not in latest or r['dump_date'] > latest[k]:
-            latest[k] = r['dump_date']
-    for r in rows:
-        if r['dump_date'] == latest[r['_ident']] and 'EMPTY' not in r['note']:
-            r['note'] = 'latest' + (('; ' + r['note']) if r['note'] else '')
+    # The filename contains HHMMSS, so same-day pre/post-flash dumps still have one latest row.
+    mark_latest_rows(rows)
 
     return rows, scanned
 

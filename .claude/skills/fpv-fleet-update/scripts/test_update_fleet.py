@@ -109,5 +109,24 @@ class ModeViewTests(unittest.TestCase):
         self.assertEqual(rows[1]['quad'], 'A')  # output compaction does not mutate parsed rows
 
 
+class LatestMarkerTests(unittest.TestCase):
+    def test_same_day_pre_and_post_flash_dumps_have_one_latest_row(self):
+        rows = [
+            {
+                '_ident': 'OPENRACER', 'dump_date': '2026-08-12',
+                'file': 'BTFL_cli_backup_OPENRACER_20260812_120242_BOARD.txt', 'note': '',
+            },
+            {
+                '_ident': 'OPENRACER', 'dump_date': '2026-08-12',
+                'file': 'BTFL_cli_backup_OPENRACER_20260812_122055_BOARD.txt', 'note': '',
+            },
+        ]
+
+        fleet.mark_latest_rows(rows)
+
+        self.assertEqual(rows[0]['note'], '')
+        self.assertEqual(rows[1]['note'], 'latest')
+
+
 if __name__ == '__main__':
     unittest.main()

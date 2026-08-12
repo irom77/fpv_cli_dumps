@@ -121,30 +121,27 @@ Ideas, not yet needed:
 - Deleting a spec from `specs.csv` orphans its `compliance_*.csv` (the generator only writes).
   Cheap to fix with a cleanup pass if specs ever churn; not worth it for two.
 
-## Upgrade openracer to KAACK firmware
+## Upgrade openracer to KAACK firmware — completed 2026-08-12
 
-openracer is still on stock **Betaflight 4.5.1** from a Jul 2024 build — the oldest firmware of any
-5-inch racer in the fleet, and the only one not on KAACK. That is also what makes it the only quad
-failing Freedom Spec on two counts rather than one: stock Betaflight has no Infinitee RPM limiter,
-so the class requirement can't be met without the flash.
+openracer was upgraded from stock **Betaflight 4.5.1** to **4.5.3.KAACK_V19**. The complete build,
+flash, restore and verification record is in
+[`upgrades/OPENRACER_KAACK_V19_UPGRADE/`](upgrades/OPENRACER_KAACK_V19_UPGRADE/README.md).
 
 | Quad | Firmware |
 |---|---|
-| openracer | 4.5.1 (stock, Jul 2024) |
+| openracer | 4.5.3.KAACK_V19 |
 | LS-Ultra | 4.5.2.KAACK_V15 |
 | LS-Ultra HD | 4.5.3.KAACK_V18 |
 | openracer2 | 2025.12.3-alpha.KAACK_V19 |
 
-- [ ] Pick a KAACK target for HOBBYWING_XROTORF7CONV (F7X2) — match LS-Ultra's V15/V18 rather than
-      openracer2's 2025.12 alpha unless the alpha has proven itself.
-- [ ] Back up first: take a fresh `diff all` before flashing, so the pre-upgrade config is in
-      `backups/` and the rename history stays intact.
+- [x] Built KAACK V19 from the 4.5-based branch for the exact `HOBBYWING_XROTORF7CONV` target,
+      avoiding the 2025.12 alpha line.
+- [x] Saved the 12:02:42 pre-flash `diff all` in `backups/`.
 
 Do these in the same bench session, since they need the quad on USB anyway:
 
-- [ ] **Rates — done 2026-08-11, but redo after flashing.** openracer now matches `house-race`
-      exactly (190/160/160 centre, 633/533/533 max) and the rate check is quiet. A flash resets
-      rateprofiles, so this has to be pasted again on the other side:
+- [x] **Rates restored after flashing.** openracer matches `house-race` exactly (190/160/160 centre,
+      633/533/533 max), and the generated rate check is quiet:
       ```
       rateprofile 0
       set rates_type = BETAFLIGHT
@@ -156,10 +153,9 @@ Do these in the same bench session, since they need the quad on USB anyway:
       set yaw_srate = 70
       save
       ```
-- [ ] **`rpm_limit = ON`** — the Freedom Spec requirement above. Do it in the same paste once the
-      KAACK build is on; confirm `rpm_limit_value` reads 18000.
-- [ ] **`motor_output_limit = 80`** — decide whether to keep the 20% output cap. It won't survive
-      the flash either way, so it has to be a deliberate choice to re-apply it.
+- [x] **`rpm_limit = ON`** with `rpm_limit_value = 18000`, satisfying the firmware and RPM-limiter
+      parts of the Freedom Spec check.
+- [x] **Removed the 80% motor-output cap deliberately:** `motor_output_limit = 100`.
 
       Dump history says it is **not** crash-related, contrary to the first guess:
 
@@ -180,11 +176,11 @@ Do these in the same bench session, since they need the quad on USB anyway:
       clean 2026-07-20 log shows 0% saturation, but at 18% throttle that proves nothing about
       whether the cap bites under race load.
 
-      To actually decide, fly a real pack and check `motor_sat_pct` in `flights.csv`: sustained
-      saturation means the cap is costing you thrust; near-zero means it's free headroom you're
-      not using. Until then, re-applying `set motor_output_limit = 80` after the flash preserves
-      the status quo and is the safer default.
-- [ ] Re-dump afterwards and re-run `update_fleet.py`; the rate check should go quiet.
+      The cap was removed by decision on 2026-08-12. Use a real flight log to watch
+      `motor_sat_pct` and re-check for desync under load; the existing short bench logs cannot
+      predict full-power behavior.
+- [x] Re-dumped after flashing, finalized the OSD, and re-ran `update_fleet.py`. The final source is
+      `BTFL_cli_backup_OPENRACER_20260812_122513_HOBBYWING_XROTORF7CONV.txt`.
 
 Note: rate values do **not** transfer across the 4.2→4.3 default change or between rate types, so
 copy the raw CLI lines above rather than any remembered numbers. See `rates.csv` for what each quad
