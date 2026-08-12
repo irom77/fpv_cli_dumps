@@ -2,6 +2,29 @@
 
 Betaflight CLI backups for my FPV quads, plus a derived fleet inventory.
 
+## Quick start
+
+Run these from the repository root in Claude Code.
+
+Update `orders.csv` from Gmail order confirmations (Gmail access required):
+
+```text
+/fpv-orders-update
+```
+
+Update the fleet after adding a Betaflight CLI dump to `backups/`:
+
+```text
+/fpv-fleet-update
+```
+
+Or run the fleet updater directly:
+
+```bash
+cp ~/Downloads/BTFL_cli_MYQUAD_*.txt backups/
+python3 .claude/skills/fpv-fleet-update/scripts/update_fleet.py
+```
+
 ## About
 
 I use AI to help build, tune, and troubleshoot my FPV quads — extracting fleet configs from
