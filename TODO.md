@@ -193,3 +193,13 @@ because ACTUAL and BETAFLIGHT draw different curves between the same endpoints.
 The `fpv-orders-update` skill currently leaves the `build` column blank for the pilot to fill.
 Future: propose a best-guess `build` from order timing vs. quad dump dates (e.g. motors bought
 just before a Kronos dump → `Kronos?`), left as a `?`-flagged suggestion to confirm.
+
+## Back up radios and EdgeTX configuration here too
+
+- [ ] Try backing up each radio's EdgeTX configuration into this repo, including radio settings,
+      models, Lua scripts, widgets, themes, sounds, and any other files needed for a practical
+      restore.
+- [ ] Record each radio model and its EdgeTX firmware/version, and document how to create and
+      restore the backups.
+- [ ] Decide which generated, device-specific, or sensitive files should be excluded before
+      committing the backups.
