@@ -22,6 +22,7 @@ at all about an RPM limiter that was never switched on.
 ```
 backups/                 Betaflight CLI dumps (BTFL_cli_*.txt), one or more per quad
 CLI_SNIPPETS.md          Paste-ready, reusable Betaflight CLI presets derived from the fleet
+velocidrone.md           VelociDrone profiles matched to the active 5-inch race quads
 fpv_quads.csv            History — one row per dump (unchanged re-dumps collapsed), newest per quad flagged 'latest'
 fpv_quads_latest.csv     One row per quad, newest dump only
 rates.csv                Active rateprofile decoded to real deg/s (centre sensitivity, max rate, curve at 25/50/75% stick) — only quads that are active and have a discipline set
@@ -65,6 +66,17 @@ The snippets intentionally exclude settings that should not be copied blindly be
 controllers, including UART assignments, receiver configuration, VTX power/channel and craft
 identity. Before applying one, save a fresh `diff all`, paste only the relevant block, check the CLI
 for rejected settings, enter `save`, and verify the result on the bench before flying.
+
+## VelociDrone setup
+
+[`velocidrone.md`](velocidrone.md) translates the active 5-inch race builds into practical
+VelociDrone profiles. It includes the shared `house-race` rates, separate OpenRacer and Lightswitch
+PID/TPA baselines, prop and power settings, and a calibration procedure for simulator-only controls
+such as percentage-based weight, drag and camera FOV.
+
+Values available in the CLI dumps or `hardware.csv` are identified explicitly. Settings that the
+repository cannot determine, including camera angle and the selected VelociDrone model's weight
+baseline, are left as measured or feel-based calibration rather than presented as exact values.
 
 ## What counts as a quad
 
