@@ -41,6 +41,8 @@ Done:
       avg throttle & motor, motor saturation %. Units calibrated from log headers.
 - [x] Link each flight to its quad (craft name from log header) and per-quad rollup in the summary.
 - [x] Wired into the `fpv-fleet-update` skill.
+- [x] Preserve descriptive post-analysis comments in hand-maintained `flight_notes.csv`; copy them
+      into generated `flights.csv` and display them in the fleet summary.
 - [x] Omit internal captures without flight activity: require at least 1.0 second of decoded data
       and a throttle command above the 1000 idle value. Rebuilds replace rows for logs still present
       while retaining durable history for raw logs that have been archived or removed.

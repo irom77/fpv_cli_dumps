@@ -34,8 +34,12 @@ files below must stay in sync whenever the set of dumps changes:
 - `FLEET_SUMMARY.md` — human-readable overview: fleet table, rollups, "needs attention", and (if
   `flights.csv` exists) a per-quad Flights section
 - `flights.csv` — one row per decoded blackbox flight (duration, battery sag, current, mAh, motor
-  saturation, and a `flags` column for detected issues like `MOTOR_DESYNC`/`LOW_CELL`). Optional —
-  only present once blackbox logs have been processed.
+  saturation, a `flags` column for detected issues like `MOTOR_DESYNC`/`LOW_CELL`, and the generated
+  copy of any matching descriptive comment). Optional — only present once blackbox logs have been
+  processed.
+- `flight_notes.csv` — hand-maintained descriptive post-analysis comments, keyed by exact raw
+  `file` name plus internal `log_index`. `update_flights.py` copies matching comments into
+  `flights.csv`, and the fleet summary displays them. Edit this file, never the generated copies.
 - `hardware.csv` — hand-maintained per-quad build details that aren't in the dumps
   (`cells, weight, esc_stack, motors, props, camera, vtx, notes`), plus three curated columns the
   dumps can't provide: `class` (whoop / cinewhoop / micro / 5-inch, overrides the auto-guess),
@@ -91,6 +95,12 @@ and rejection reason for each skipped section, plus a skipped count in its final
 are calibrated from each log's headers
 (vbat/current in 0.01 units, cell count inferred from start voltage). A duplicated header marker can
 look like a phantom extra flight; `valid_logs()` skips those by ignoring near-empty logs.
+
+After analysis, record human context and conclusions in `flight_notes.csv` using columns
+`file,log_index,comment`. The filename and internal index form the stable join key. Re-running the
+flight decoder refreshes the `comment` column in `flights.csv` from this file—including clearing a
+generated comment when its source note is removed—and `update_fleet.py` then refreshes the Comment
+column in `FLEET_SUMMARY.md`. Unmatched note rows remain in `flight_notes.csv` for archived raw logs.
 
 **Motor desync detection:** the summary flags a frame as a desync/thrust-loss event when a motor is
 commanded near max (≥90% of the output range) yet its bidirectional-DShot eRPM is well below the

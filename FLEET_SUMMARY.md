@@ -192,8 +192,8 @@ _From decoded Betaflight blackbox logs (see `flights.csv`). Raw `.BBL` logs are 
 
 **openracer** — 3 flights, 28s total, 27 mAh total, worst sag 7.31V (2026-08-21).  ⚠️ 2 flagged flights.
 
-| Date | Dur | Batt | Min | Sag | Avg A | Peak A | mAh | Motor sat | Flags |
-|---|---|---|---|---|---|---|---|---|---|
-| 2026-07-15 | 8s | 6S 24.96V | 20.3V | 4.66V | 5.0A | 54.5A | 11 | 7.2% | MOTOR_DESYNC(m0,m3) |
-| 2026-07-20 | 14s | 6S 24.72V | 24.03V | 0.69V | 1.9A | 7.1A | 7 | 0.0% | — |
-| 2026-08-21 | 6s | 6S 24.62V | 17.31V | 7.31V | 5.5A | 105.1A | 9 | 7.9% | MOTOR_DESYNC(m0,m1,m3); LOW_CELL |
+| Date | Dur | Batt | Min | Sag | Avg A | Peak A | mAh | Motor sat | Flags | Comment |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 2026-07-15 | 8s | 6S 24.96V | 20.3V | 4.66V | 5.0A | 54.5A | 11 | 7.2% | MOTOR_DESYNC(m0,m3) | — |
+| 2026-07-20 | 14s | 6S 24.72V | 24.03V | 0.69V | 1.9A | 7.1A | 7 | 0.0% | — | — |
+| 2026-08-21 | 6s | 6S 24.62V | 17.31V | 7.31V | 5.5A | 105.1A | 9 | 7.9% | MOTOR_DESYNC(m0,m1,m3); LOW_CELL | Motor 1 had been replaced before this flight; the log shows a high-current event with MOTOR_DESYNC(m0,m1,m3) and LOW_CELL. |

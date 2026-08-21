@@ -1,0 +1,2 @@
+file,log_index,comment
+BTFL_BLACKBOX_LOG_OPENRACER_20260821_084648_HOBBYWING_XROTORF7CONV.BBL,9,"Motor 1 had been replaced before this flight; the log shows a high-current event with MOTOR_DESYNC(m0,m1,m3) and LOW_CELL."

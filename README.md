@@ -52,6 +52,7 @@ rates.csv                Active rateprofile decoded to real deg/s (centre sensit
 modes.csv                Configured Betaflight modes, AUX channels and activation ranges — only active quads with discipline and class set
 rate_presets.csv         Hand-maintained named rateprofiles ('house-race', ...) that quads are meant to share; assigned per quad via hardware.csv's rate_preset
 flights.csv              One row per decoded blackbox flight (duration, sag, current, mAh, flags)
+flight_notes.csv         Hand-maintained descriptive comments keyed by blackbox filename + internal log index
 hardware.csv             Hand-maintained per-quad build details (ESC, motors, props) + size class, status, discipline, aliases, rate_preset — none of it in dumps
 specs.csv                Hand-maintained race-class rulebook (Freedom Spec, ...), one row per requirement, scoped to the class/discipline it applies to
 compliance_<spec>.csv    Generated — one file per spec, one row per quad in scope: per-requirement verdict plus what's missing / to confirm
@@ -248,6 +249,12 @@ Raw logs are large and stay out of git; `flights.csv` is the committed, durable 
 reprocesses logs currently in `blackbox/` and replaces their existing rows, so a new filter or metric
 can remove or update stale sections. Rows belonging to raw logs that are no longer present are retained
 as historical records.
+
+Put post-analysis observations in `flight_notes.csv`, keyed by the raw log's exact `file` name and
+its `log_index`. This file is hand-maintained and is never rewritten. The flight decoder copies each
+matching comment into `flights.csv`, and the fleet rebuild displays it in `FLEET_SUMMARY.md`. Edit or
+remove the authoritative comment in `flight_notes.csv`, then run both commands above; do not edit the
+generated copy in `flights.csv` or the summary.
 
 ## Orders ledger
 

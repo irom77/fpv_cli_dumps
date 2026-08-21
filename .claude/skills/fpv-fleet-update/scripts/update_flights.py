@@ -32,6 +32,7 @@ except ModuleNotFoundError:
 
 LOGS_DIR = os.path.abspath(sys.argv[1]) if len(sys.argv) > 1 else os.path.join(os.getcwd(), "blackbox")
 OUT = os.path.join(os.getcwd(), "flights.csv")
+NOTES = os.path.join(os.getcwd(), "flight_notes.csv")
 
 fname_re = re.compile(
     r'BTFL_BLACKBOX_LOG_(?P<label>.+?)_(?P<date>\d{8})_(?P<time>\d{6})_(?P<board>.+)\.(?:bbl|bfl)$', re.I)
@@ -39,7 +40,7 @@ fname_re = re.compile(
 COLS = ['quad', 'date', 'time', 'board', 'craft', 'firmware', 'duration_s', 'frames', 'cells',
         'v_start', 'v_min', 'v_end', 'sag_v', 'cell_min_v', 'a_avg', 'a_peak', 'mah',
         'avg_throttle_pct', 'avg_motor_pct', 'motor_sat_pct', 'desync_pct', 'desync_motors',
-        'flags', 'log_index', 'file']
+        'flags', 'comment', 'log_index', 'file']
 
 # Motor desync / thrust-loss detection. A healthy motor's RPM tracks its command; a desynced or
 # failing motor is commanded hard but doesn't spin up. We flag a frame as a desync event when a
@@ -95,6 +96,25 @@ def merge_flight_rows(existing, current, present_files):
     retained = {key: row for key, row in existing.items() if key[0] not in present_files}
     retained.update(current)
     return retained
+
+
+def load_flight_notes(path):
+    """Load hand-maintained comments keyed by raw filename and internal log index."""
+    if not os.path.exists(path):
+        return {}
+    with open(path, newline='') as f:
+        return {
+            (row.get('file', ''), str(row.get('log_index', ''))): row.get('comment', '')
+            for row in csv.DictReader(f)
+            if row.get('file') and row.get('log_index')
+        }
+
+
+def apply_flight_notes(rows, notes):
+    """Copy authoritative comments into generated flight rows."""
+    for key, row in rows.items():
+        normalized_key = (key[0], str(key[1]))
+        row['comment'] = notes.get(normalized_key, '')
 
 
 def summarize_log(path, log_index):
@@ -229,6 +249,7 @@ def main():
 
     previous_keys = set(existing)
     existing = merge_flight_rows(existing, current, present_files)
+    apply_flight_notes(existing, load_flight_notes(NOTES))
     added = len(set(existing) - previous_keys)
 
     rows = sorted(existing.values(), key=lambda r: (str(r['quad']).lower(), r['date'], r['time']))

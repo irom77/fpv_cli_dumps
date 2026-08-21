@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+import csv
+import os
+import tempfile
 import unittest
 
 import update_flights
@@ -70,6 +73,48 @@ class DurableFlightMergeTests(unittest.TestCase):
             set(merged),
             {('present.BBL', '9'), ('archived.BBL', '1')},
         )
+
+
+class FlightNotesTests(unittest.TestCase):
+    def test_applies_hand_maintained_comment_to_matching_flight(self):
+        rows = {
+            ('capture.BBL', '9'): {'file': 'capture.BBL', 'log_index': 9, 'flags': 'LOW_CELL'},
+        }
+        notes = {
+            ('capture.BBL', '9'): 'Motor 1 was replaced before this flight.',
+        }
+
+        update_flights.apply_flight_notes(rows, notes)
+
+        self.assertEqual(rows[('capture.BBL', '9')]['comment'],
+                         'Motor 1 was replaced before this flight.')
+
+    def test_clears_stale_generated_comment_when_note_is_removed(self):
+        rows = {
+            ('capture.BBL', '9'): {
+                'file': 'capture.BBL', 'log_index': '9', 'comment': 'Old generated copy'
+            },
+        }
+
+        update_flights.apply_flight_notes(rows, {})
+
+        self.assertEqual(rows[('capture.BBL', '9')]['comment'], '')
+
+    def test_loads_notes_keyed_by_file_and_internal_log_index(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = os.path.join(folder, 'flight_notes.csv')
+            with open(path, 'w', newline='') as f:
+                writer = csv.DictWriter(f, fieldnames=['file', 'log_index', 'comment'])
+                writer.writeheader()
+                writer.writerow({
+                    'file': 'capture.BBL',
+                    'log_index': 9,
+                    'comment': 'Crash after gate contact.',
+                })
+
+            notes = update_flights.load_flight_notes(path)
+
+        self.assertEqual(notes, {('capture.BBL', '9'): 'Crash after gate contact.'})
 
 
 if __name__ == '__main__':

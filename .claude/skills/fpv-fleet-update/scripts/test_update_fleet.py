@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+import csv
+import os
+import tempfile
 import unittest
 
 import update_fleet as fleet
@@ -126,6 +129,31 @@ class LatestMarkerTests(unittest.TestCase):
 
         self.assertEqual(rows[0]['note'], '')
         self.assertEqual(rows[1]['note'], 'latest')
+
+
+class FlightsSummaryTests(unittest.TestCase):
+    def test_includes_descriptive_comments_for_each_flight(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = os.path.join(folder, 'flights.csv')
+            fields = [
+                'quad', 'craft', 'date', 'time', 'duration_s', 'mah', 'sag_v', 'cells',
+                'v_start', 'v_min', 'a_avg', 'a_peak', 'motor_sat_pct', 'flags', 'comment'
+            ]
+            with open(path, 'w', newline='') as f:
+                writer = csv.DictWriter(f, fieldnames=fields)
+                writer.writeheader()
+                writer.writerow({
+                    'quad': 'OPENRACER', 'craft': 'openracer', 'date': '2026-08-21',
+                    'time': '08:46:48', 'duration_s': '6.2', 'mah': '9', 'sag_v': '7.31',
+                    'cells': '6', 'v_start': '24.62', 'v_min': '17.31', 'a_avg': '5.5',
+                    'a_peak': '105.1', 'motor_sat_pct': '7.9', 'flags': 'LOW_CELL',
+                    'comment': 'Motor 1 was replaced before this flight.',
+                })
+
+            rendered = fleet.build_flights_section(path)
+
+        self.assertIn('| Comment |', rendered)
+        self.assertIn('Motor 1 was replaced before this flight.', rendered)
 
 
 if __name__ == '__main__':

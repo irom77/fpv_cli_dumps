@@ -1128,13 +1128,13 @@ def build_flights_section(path, aliases=None):
             head += f"  ⚠️ {len(flagged)} flagged flight{'s' if len(flagged) != 1 else ''}."
         lines.append(head)
         lines.append("")
-        lines.append("| Date | Dur | Batt | Min | Sag | Avg A | Peak A | mAh | Motor sat | Flags |")
-        lines.append("|---|---|---|---|---|---|---|---|---|---|")
+        lines.append("| Date | Dur | Batt | Min | Sag | Avg A | Peak A | mAh | Motor sat | Flags | Comment |")
+        lines.append("|---|---|---|---|---|---|---|---|---|---|---|")
         for f in fs:
             lines.append(f"| {f['date']} | {num(f['duration_s']):.0f}s | {f['cells']}S "
                          f"{f['v_start']}V | {f['v_min']}V | {num(f['sag_v']):.2f}V | "
                          f"{f['a_avg']}A | {f['a_peak']}A | {f['mah']} | {num(f['motor_sat_pct']):.1f}% | "
-                         f"{f.get('flags') or '—'} |")
+                         f"{f.get('flags') or '—'} | {md(f.get('comment') or '—')} |")
         lines.append("")
     return "\n".join(lines)
 
