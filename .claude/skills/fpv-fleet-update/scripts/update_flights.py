@@ -50,6 +50,8 @@ DESYNC_CMD_FRAC = 0.90
 DESYNC_ERPM_RATIO = 0.55
 DESYNC_MIN_FRAMES = 20  # absolute frame count above which we raise the MOTOR_DESYNC flag
 LOW_CELL_V = 3.3        # sagged cell voltage under load below this raises LOW_CELL
+MIN_FLIGHT_DURATION_S = 1.0
+THROTTLE_IDLE = 1000
 
 
 def valid_logs(path):
@@ -62,6 +64,37 @@ def valid_logs(path):
                 yield i
         except Exception:
             continue
+
+
+def flight_capture_rejection_reasons(summary):
+    """Explain why a decoded section does not qualify as a flight."""
+    duration = summary.get('_duration_s', summary.get('duration_s', 0))
+    throttle = summary.get('_max_throttle')
+    reasons = []
+    if duration < MIN_FLIGHT_DURATION_S:
+        reasons.append(f"duration {duration:.3f}s is below {MIN_FLIGHT_DURATION_S:.3f}s")
+    if throttle is None:
+        reasons.append("throttle field is unavailable")
+    elif throttle <= THROTTLE_IDLE:
+        reasons.append(f"peak throttle {throttle} did not exceed idle {THROTTLE_IDLE}")
+    return reasons
+
+
+def is_flight_capture(summary):
+    """Return whether a decoded section contains a plausible flight."""
+    return not flight_capture_rejection_reasons(summary)
+
+
+def format_skipped_log(filename, log_index, reasons):
+    """Format a visible explanation for an omitted internal log section."""
+    return f"Skipped {filename} log {log_index}: {'; '.join(reasons)}"
+
+
+def merge_flight_rows(existing, current, present_files):
+    """Replace rows for present raw logs while retaining archived-log history."""
+    retained = {key: row for key, row in existing.items() if key[0] not in present_files}
+    retained.update(current)
+    return retained
 
 
 def summarize_log(path, log_index):
@@ -86,6 +119,7 @@ def summarize_log(path, log_index):
     motor_sum = 0.0
     sat_frames = 0
     thr_sum = 0.0
+    thr_max = None
     for fr in p.frames():
         d = fr.data
         t = d[tm]
@@ -117,6 +151,7 @@ def summarize_log(path, log_index):
                             desync_per_motor[i] += 1
         if thr is not None:
             thr_sum += d[thr]
+            thr_max = d[thr] if thr_max is None else max(thr_max, d[thr])
         n += 1
 
     if n == 0 or t0 is None:
@@ -135,6 +170,8 @@ def summarize_log(path, log_index):
     if cell_min is not None and cell_min < LOW_CELL_V:
         flags.append("LOW_CELL")
     return {
+        '_duration_s': dur,
+        '_max_throttle': thr_max,
         'craft': p.headers.get('Craft name', ''),
         'firmware': p.headers.get('Firmware revision', ''),
         'duration_s': round(dur, 1),
@@ -167,7 +204,9 @@ def main():
 
     logs = sorted(glob.glob(os.path.join(LOGS_DIR, '*.BBL')) + glob.glob(os.path.join(LOGS_DIR, '*.bbl')) +
                   glob.glob(os.path.join(LOGS_DIR, '*.BFL')) + glob.glob(os.path.join(LOGS_DIR, '*.bfl')))
-    added = 0
+    current = {}
+    present_files = {os.path.basename(path) for path in logs}
+    skipped = 0
     for path in logs:
         base = os.path.basename(path)
         m = fname_re.search(base)
@@ -180,12 +219,17 @@ def main():
         }
         for li in valid_logs(path):
             key = (base, str(li))
-            if key in existing:
-                continue
             s = summarize_log(path, li)
-            if s:
-                existing[key] = {**meta, **s, 'log_index': li}
-                added += 1
+            reasons = flight_capture_rejection_reasons(s) if s else ["no decodable frames"]
+            if reasons:
+                skipped += 1
+                print(format_skipped_log(base, li, reasons))
+            else:
+                current[key] = {**meta, **s, 'log_index': li}
+
+    previous_keys = set(existing)
+    existing = merge_flight_rows(existing, current, present_files)
+    added = len(set(existing) - previous_keys)
 
     rows = sorted(existing.values(), key=lambda r: (str(r['quad']).lower(), r['date'], r['time']))
     with open(OUT, 'w', newline='') as f:
@@ -194,7 +238,7 @@ def main():
         w.writerows(rows)
 
     print(f"Logs folder: {LOGS_DIR} ({len(logs)} file(s))")
-    print(f"flights.csv: {len(rows)} flight(s) total, {added} new -> {OUT}")
+    print(f"flights.csv: {len(rows)} flight(s) total, {added} new, {skipped} skipped -> {OUT}")
 
 
 if __name__ == '__main__':

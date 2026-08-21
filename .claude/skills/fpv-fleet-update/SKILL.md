@@ -7,7 +7,7 @@ description: >-
   or dump (a BTFL_cli_*.txt file) is added, replaced, or removed, or whenever the user asks to
   refresh, rebuild, or update the fleet CSV / fleet summary / quad inventory — even if they
   don't name the files explicitly. Also use when the user mentions re-flashing a quad, taking a
-  new backup, adding a build, or "I dumped my <quad>". After adding any dump, the CSVs and
+  new backup, adding a build, or "I dumped my quad". After adding any dump, the CSVs and
   summary are stale until this runs.
 ---
 
@@ -82,13 +82,15 @@ python3 .claude/skills/fpv-fleet-update/scripts/update_fleet.py
 ```
 
 `update_flights.py` auto-re-execs under `./.venv` if `orangebox` isn't already importable. It writes
-`flights.csv` and **merges** with any existing rows keyed by `(file, log_index)`, so summarized
-flights persist even after the raw log is moved or deleted — important because the large `.BBL` files
-are gitignored and never committed. Because merging skips rows already present, **delete `flights.csv`
-and re-run** if you change the metrics/columns so old rows get recomputed. Units are calibrated from
-each log's headers (vbat/current in 0.01 units, cell count inferred from start voltage). A quirk of
-the parser is that a duplicated header marker can look like a phantom extra flight; `valid_logs()`
-skips those by ignoring near-empty logs.
+`flights.csv`, replacing rows for raw logs currently present while retaining summarized flights after
+their raw log is moved or deleted — important because the large `.BBL` files are gitignored and never
+committed. Internal log sections count as flights only when they last at least 1.0 second and contain
+a throttle command above the 1000 idle value; this omits short and no-throttle captures created while
+connecting, configuring, or rebooting the quad. The script prints the filename, internal log index,
+and rejection reason for each skipped section, plus a skipped count in its final status line. Units
+are calibrated from each log's headers
+(vbat/current in 0.01 units, cell count inferred from start voltage). A duplicated header marker can
+look like a phantom extra flight; `valid_logs()` skips those by ignoring near-empty logs.
 
 **Motor desync detection:** the summary flags a frame as a desync/thrust-loss event when a motor is
 commanded near max (≥90% of the output range) yet its bidirectional-DShot eRPM is well below the

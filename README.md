@@ -231,7 +231,23 @@ python3 .claude/skills/fpv-fleet-update/scripts/update_flights.py   # -> flights
 python3 .claude/skills/fpv-fleet-update/scripts/update_fleet.py     # folds Flights into FLEET_SUMMARY.md
 ```
 
-Raw logs are large and stay out of git; `flights.csv` is the committed, durable record.
+One `.BBL`/`.BFL` file can contain several internal log sections, including short captures created
+while connecting, configuring, or rebooting the quad. The decoder records a section as a flight only
+when both conditions are true:
+
+- its decoded duration is at least 1.0 second; and
+- its peak `rcCommand[3]` is above the Betaflight idle value of 1000.
+
+This removes no-throttle and very short captures from `flights.csv` without relying on filenames or
+log-index assumptions. It does not try to distinguish a brief throttle-active bench test from a real
+flight; both satisfy the observable flight criteria. Each omitted section is reported on the console
+with its filename, internal log index, and every rejection reason; the final status line includes the
+total skipped count.
+
+Raw logs are large and stay out of git; `flights.csv` is the committed, durable record. Each rebuild
+reprocesses logs currently in `blackbox/` and replaces their existing rows, so a new filter or metric
+can remove or update stale sections. Rows belonging to raw logs that are no longer present are retained
+as historical records.
 
 ## Orders ledger
 

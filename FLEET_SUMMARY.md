@@ -190,14 +190,10 @@ _Curated per-quad build details (not captured in Betaflight dumps), largely seed
 
 _From decoded Betaflight blackbox logs (see `flights.csv`). Raw `.BBL` logs are not committed._
 
-**openracer** — 7 flights, 31s total, 27 mAh total, worst sag 7.31V (2026-08-21).  ⚠️ 2 flagged flights.
+**openracer** — 3 flights, 28s total, 27 mAh total, worst sag 7.31V (2026-08-21).  ⚠️ 2 flagged flights.
 
 | Date | Dur | Batt | Min | Sag | Avg A | Peak A | mAh | Motor sat | Flags |
 |---|---|---|---|---|---|---|---|---|---|
 | 2026-07-15 | 8s | 6S 24.96V | 20.3V | 4.66V | 5.0A | 54.5A | 11 | 7.2% | MOTOR_DESYNC(m0,m3) |
 | 2026-07-20 | 14s | 6S 24.72V | 24.03V | 0.69V | 1.9A | 7.1A | 7 | 0.0% | — |
 | 2026-08-21 | 6s | 6S 24.62V | 17.31V | 7.31V | 5.5A | 105.1A | 9 | 7.9% | MOTOR_DESYNC(m0,m1,m3); LOW_CELL |
-| 2026-08-21 | 1s | 6S 24.56V | 24.56V | 0.00V | -0.1A | 1.2A | 0 | 0.0% | — |
-| 2026-08-21 | 1s | 6S 24.65V | 24.58V | 0.07V | -0.1A | 1.9A | 0 | 0.0% | — |
-| 2026-08-21 | 0s | 6S 24.64V | 24.59V | 0.05V | -0.2A | 0.8A | 0 | 0.0% | — |
-| 2026-08-21 | 1s | 6S 24.64V | 24.53V | 0.11V | -0.2A | 0.9A | 0 | 0.0% | — |

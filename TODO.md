@@ -41,6 +41,9 @@ Done:
       avg throttle & motor, motor saturation %. Units calibrated from log headers.
 - [x] Link each flight to its quad (craft name from log header) and per-quad rollup in the summary.
 - [x] Wired into the `fpv-fleet-update` skill.
+- [x] Omit internal captures without flight activity: require at least 1.0 second of decoded data
+      and a throttle command above the 1000 idle value. Rebuilds replace rows for logs still present
+      while retaining durable history for raw logs that have been archived or removed.
 
 - [x] Motor desync / thrust-loss detection (motor commanded high while its eRPM collapses vs peers),
       surfaced as `MOTOR_DESYNC(m#)` in flights.csv flags + ⚠️ in the summary. Validated against the
@@ -52,7 +55,8 @@ Next / ideas to extend:
       throttle histogram, per-motor imbalance (worn motor / prop detection).
 - [ ] More auto-flags: excessive sag → aging pack (partial: LOW_CELL); motor saturation →
       underpowered/overweight. Roll flagged flights up into the summary's "needs attention".
-- [ ] Distinguish real flights from bench tests (both current logs are short bench hops).
+- [ ] Distinguish throttle-active bench tests from real flights; the current filter intentionally
+      admits both because duration and throttle alone cannot reliably tell them apart.
 - [ ] Handle logs whose filename lacks a craft label; match to a quad another way.
 
 ## Refresh corrected mode assignments
