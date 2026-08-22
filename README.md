@@ -1,5 +1,7 @@
 # fpv_cli_dumps
 
+![FPV data flowing through AI skills into fleet management, tuning, race compliance, and fault diagnosis](assets/readme-hero.png)
+
 Betaflight CLI backups for my FPV quads, plus a derived fleet inventory.
 
 ## Quick start
