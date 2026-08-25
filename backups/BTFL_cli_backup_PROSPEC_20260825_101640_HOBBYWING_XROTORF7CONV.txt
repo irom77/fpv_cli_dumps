@@ -1,0 +1,76 @@
+defaults nosave
+
+# diff all
+
+# version
+# Betaflight / STM32F7X2 (S7X2) 4.5.3.KAACK_V19 Aug 25 2026 / 09:51:06 (8cd4438) MSP API: 1.46
+# config rev: 7b1f01a
+
+# start the command batch
+batch start
+
+# reset configuration to default settings
+defaults nosave
+
+board_name HOBBYWING_XROTORF7CONV
+manufacturer_id HOWI
+mcu_id 0026002d3234510f31353335
+signature 
+
+# name: prospec
+
+# feature
+feature LED_STRIP
+feature OSD
+
+# serial
+serial 0 64 115200 57600 0 115200
+
+# aux
+aux 0 0 0 1600 2100 0 0
+
+# master
+set acc_calibration = 93,-85,113,1
+set serialrx_provider = SBUS
+set motor_kv = 1300
+set dshot_bidir = ON
+set ibata_offset = -350
+set rpm_limit = ON
+set rpm_limit_value = 13000
+set osd_vbat_pos = 14360
+set osd_flymode_pos = 14369
+set osd_crosshairs_pos = 14574
+set osd_ah_sbar_pos = 14575
+set osd_ah_pos = 14447
+set osd_current_pos = 14423
+set osd_home_dir_pos = 14402
+set osd_warnings_pos = 14794
+set osd_avg_cell_voltage_pos = 14392
+set osd_disarmed_pos = 14337
+set osd_spec_logo_pos = 14403
+set gyro_1_sensor_align = DEFAULT
+set craft_name = prospec
+
+profile 0
+
+profile 1
+
+profile 2
+
+profile 3
+
+# restore original profile selection
+profile 0
+
+rateprofile 0
+
+rateprofile 1
+
+rateprofile 2
+
+rateprofile 3
+
+# restore original rateprofile selection
+rateprofile 0
+
+# save configuration
