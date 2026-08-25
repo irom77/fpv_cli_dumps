@@ -1,0 +1,52 @@
+# PROSPEC selective restore after flashing:
+# betaflight_4.5.3.KAACK_V19_STM32F7X2_HOBBYWING_XROTORF7CON.hex
+#
+# Source configuration:
+# BTFL_cli_backup_PROSPEC_20260825_092510_HOBBYWING_XROTORF7CON.txt
+#
+# Props must be removed. Paste this entire file into the Betaflight CLI only
+# after the KAACK firmware has been flashed successfully.
+
+batch start
+
+defaults nosave
+
+feature -RX_PARALLEL_PWM
+feature RX_SERIAL
+feature LED_STRIP
+feature OSD
+
+serial 0 64 115200 57600 0 115200
+
+aux 0 0 0 1600 2100 0 0
+
+set acc_calibration = 93,-85,113,1
+set serialrx_provider = SBUS
+set motor_pwm_protocol = DSHOT600
+set dshot_bidir = ON
+set motor_poles = 14
+set motor_kv = 1300
+set ibata_offset = -350
+set osd_vbat_pos = 14360
+set osd_flymode_pos = 14369
+set osd_crosshairs_pos = 14574
+set osd_ah_sbar_pos = 14575
+set osd_ah_pos = 14447
+set osd_current_pos = 14423
+set osd_home_dir_pos = 14402
+set osd_warnings_pos = 14794
+set osd_avg_cell_voltage_pos = 14392
+set osd_disarmed_pos = 14337
+set gyro_1_sensor_align = DEFAULT
+set craft_name = prospec
+
+# KAACK MGP PRO 13K / ProSpec 7-inch preset, recorded explicitly.
+set rpm_limit = ON
+set rpm_limit_p = 25
+set rpm_limit_i = 10
+set rpm_limit_d = 8
+set rpm_limit_value = 13000
+
+profile 0
+rateprofile 0
+save
