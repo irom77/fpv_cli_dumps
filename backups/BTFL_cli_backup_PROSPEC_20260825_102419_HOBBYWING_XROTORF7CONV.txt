@@ -1,0 +1,92 @@
+defaults nosave
+
+
+# version
+# Betaflight / STM32F7X2 (S7X2) 4.5.3.KAACK_V19 Aug 25 2026 / 09:51:06 (8cd4438) MSP API: 1.46
+# config rev: 7b1f01a
+
+# start the command batch
+batch start
+
+# reset configuration to default settings
+defaults nosave
+
+board_name HOBBYWING_XROTORF7CONV
+manufacturer_id HOWI
+mcu_id 0026002d3234510f31353335
+signature 
+
+# name: prospec
+
+# feature
+feature LED_STRIP
+feature OSD
+
+# serial
+serial 0 64 115200 57600 0 115200
+
+# aux
+aux 0 0 0 900 1300 0 0
+aux 1 1 1 1700 2100 0 0
+aux 2 13 2 1700 2100 0 0
+aux 3 26 3 1700 2100 0 0
+aux 4 28 1 900 1300 0 0
+aux 5 35 1 1300 1725 0 0
+aux 6 39 3 1300 1725 0 0
+
+# master
+set acc_calibration = 93,-85,113,1
+set serialrx_provider = SBUS
+set motor_kv = 1300
+set dshot_bidir = ON
+set ibata_offset = -350
+set rpm_limit = ON
+set rpm_limit_value = 13000
+set osd_tim2 = 2563
+set osd_vbat_pos = 14689
+set osd_link_quality_pos = 2070
+set osd_tim_1_pos = 3146
+set osd_tim_2_pos = 3114
+set osd_flymode_pos = 3555
+set osd_vtx_channel_pos = 2049
+set osd_crosshairs_pos = 238
+set osd_ah_sbar_pos = 8431
+set osd_ah_pos = 111
+set osd_current_pos = 404
+set osd_craft_name_pos = 3587
+set osd_pilot_name_pos = 2561
+set osd_home_dir_pos = 66
+set osd_warnings_pos = 14865
+set osd_avg_cell_voltage_pos = 2433
+set osd_disarmed_pos = 2546
+set osd_spec_logo_pos = 14817
+set osd_sys_vtx_temp_pos = 14465
+set osd_canvas_width = 50
+set osd_canvas_height = 18
+set gyro_1_sensor_align = DEFAULT
+set craft_name = prospec
+set pilot_name = papfpv
+
+profile 0
+
+profile 1
+
+profile 2
+
+profile 3
+
+# restore original profile selection
+profile 0
+
+rateprofile 0
+
+rateprofile 1
+
+rateprofile 2
+
+rateprofile 3
+
+# restore original rateprofile selection
+rateprofile 0
+
+# save configuration
