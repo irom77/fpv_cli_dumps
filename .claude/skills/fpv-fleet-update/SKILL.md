@@ -2,7 +2,7 @@
 name: fpv-fleet-update
 description: >-
   Regenerate the FPV quad inventory (fpv_quads.csv, fpv_quads_latest.csv, rates.csv, modes.csv,
-  FLEET_SUMMARY.md)
+  FLEET_SUMMARY.md) and keep FLIGHT_CONTROLLER_REFERENCE.md current when new controllers appear
   from the Betaflight CLI dump files in this folder. Use this whenever a new BTFL CLI backup
   or dump (a BTFL_cli_*.txt file) is added, replaced, or removed, or whenever the user asks to
   refresh, rebuild, or update the fleet CSV / fleet summary / quad inventory — even if they
@@ -49,6 +49,10 @@ files below must stay in sync whenever the set of dumps changes:
   (which named rateprofile from `rate_presets.csv` this quad is *meant* to fly — see "Rates"). Largely seeded
   from the pilot's own fleet spreadsheet, so some rows may be stale — the `notes` column flags known
   conflicts. Optional; joined into the summary by quad name. Edit it directly.
+- `FLIGHT_CONTROLLER_REFERENCE.md` — curated catalog of physical flight-controller families,
+  Betaflight targets, official manufacturer pinout sources, and wiring-oriented diagrams. Unlike
+  the CSVs and fleet summary, the script does not generate or overwrite it; check and extend it
+  when a dump or `hardware.csv` introduces a controller not already represented.
 - `specs.csv` — hand-maintained race-class rulebook, one row per requirement, scoped to the
   `class`/`discipline` it applies to. Drives the summary's "Spec compliance" section. See "Specs"
   below.
@@ -70,6 +74,33 @@ python3 .claude/skills/fpv-fleet-update/scripts/update_fleet.py
 The script prints how many dumps it scanned and how many distinct quads it found. That's the whole
 update — do not hand-edit the CSVs or the summary, because the next run overwrites them. If something
 in the output looks wrong, fix the script rather than the generated files (see "How it works" below).
+
+### Flight-controller reference check
+
+After regeneration, compare the distinct non-empty `board` values in `fpv_quads_latest.csv` with
+the backticked Betaflight targets in `FLIGHT_CONTROLLER_REFERENCE.md`. Also inspect the affected
+quad's `hardware.csv` row: a familiar target can represent a new physical PCB, product, or revision.
+The check is complete when every current target and every physical controller named by the new or
+changed hardware row is represented in the guide.
+
+When a controller is new:
+
+1. Identify it from the newest CLI target plus `hardware.csv`, filename/craft name, purchase records,
+   and PCB photos if present. Treat the firmware target as evidence, not as a unique product ID.
+2. Find the exact manufacturer's product page, manual, or wiring diagram. Prefer the manufacturer
+   source; use a retailer-hosted manufacturer manual when the original is unavailable.
+3. Add the controller to the inventory table and add or extend its pinout section. Include affected
+   quads, target string, identification confidence, official links, power limits, UART crossover,
+   and the pads/connectors needed for receiver, video, ESC, GPS/I2C, buzzer, and LEDs where documented.
+4. Preserve the guide's curated entries. If the exact PCB/revision cannot be proven, add a
+   revision-sensitive entry with the facts that are supported and request front/back board photos;
+   leave physical pad positions unasserted rather than borrowing a related board's diagram.
+5. Run `git diff --check` and confirm every distinct current `board` value appears backticked in the
+   guide. Report whether the reference was updated or already covered, plus any identification that
+   still needs a board photo.
+
+If `FLIGHT_CONTROLLER_REFERENCE.md` does not exist, tell the user and create it only when the task
+includes maintaining documentation; otherwise report that the catalog check could not be completed.
 
 ### Blackbox flight logs (optional)
 
