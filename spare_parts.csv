@@ -1,0 +1,27 @@
+category,item,quantity,condition,compatibility,notes,source
+frame,TBS Source One V4 or V5 5-inch,1,available,5-inch,,FPV (4).xlsx:Spares!A2
+frame,TBS Source Two V0.1,1,available,,Model identification was marked uncertain in the source sheet.,FPV (4).xlsx:Spares!A3
+flight_controller_stack,SpeedyBee F405 V3 BLS 50A FC and ESC stack,1,broken,30x30,Went to Dracula and subsequently broke.,FPV (4).xlsx:Spares!A6:B6
+flight_controller,LEFEI Sparrow3-OSD flight controller with GPS,1,available,,,FPV (4).xlsx:Spares!A7
+flight_controller,SuperX HD ELRS,1,available,whoop,,FPV (4).xlsx:Spares!A8:B8
+esc,T-Motor F55A Pro II 32-bit 55A 4-in-1 ESC with BEC,1,transferred,3-6S; 30x30,Went to JohnnyFPV to replace a failed ESC.,FPV (4).xlsx:Spares!A11:B11
+esc,Skystars KO45 BLHeli_32 45A/60A 4-in-1 ESC,1,available,3-6S; 30x30,,FPV (4).xlsx:Spares!A12
+esc,30A BLHeli_S EFM8BB21 4-in-1 ESC,1,available,16x16,Previously associated with Darwin59S; source says the size appears to be 16x16 mm.,FPV (4).xlsx:Spares!A13:B13
+esc,Holybro Tekko32 F4 45A ESC,1,available,,,FPV (4).xlsx:Spares!A14
+motor,DarwinFPV 1104 8600KV motor,2,available,,,FPV (4).xlsx:Spares!D11:E11
+motor,EX0820 19000KV motor,1,available,,,FPV (4).xlsx:Spares!D14
+motor,802 17500KV motor,1,available,,,FPV (4).xlsx:Spares!D15
+prop,Gemfan Hurricane MCK 51466-3 V2 tri-blade prop 4-pack,1,available,5.1-inch,Quantity is one four-prop pack.,FPV (4).xlsx:Spares!A18
+receiver,RadioMaster ER4 PWM receiver,1,available,2.4GHz ELRS v2,,FPV (4).xlsx:Spares!D18
+receiver,HGLRC Hermes receiver,1,available,2.4GHz,,FPV (4).xlsx:Spares!D19
+vtx,HappyModel OVX300 25-300mW VTX,1,available,5.8GHz; U.FL; OpenVTX,,FPV (4).xlsx:Spares!A23
+vtx,GEP-STABLE V2 F4 35A,1,broken,5V,Listed in the VTX section of the source sheet.,FPV (4).xlsx:Spares!A24:B24
+vtx,SpeedyBee TX800 VTX,1,available,,,FPV (4).xlsx:Spares!A25
+vtx_camera,HDZero Eco VTX with camera,1,available,HDZero,Source contained the typo "viwt Camera".,FPV (4).xlsx:Spares!A26
+vtx,XILO STAX 25-600mW video transmitter,1,available,5.8GHz,,FPV (4).xlsx:Spares!A27
+camera,Runcam Racer 3 1000TVL micro FPV camera,1,available,4:3; NTSC/PAL,,FPV (4).xlsx:Spares!A29
+camera,HDZero Nano 90 camera,1,available,HDZero,,FPV (4).xlsx:Spares!A30
+camera,XILO Micro Mutant 1200TVL 2.1mm camera,1,available,,,FPV (4).xlsx:Spares!A31
+camera,Runcam Nano 3 camera,1,available,,,FPV (4).xlsx:Spares!A32
+accessory,Matek lost-model beeper and 5V FPV FC buzzer,1,available,5V,,FPV (4).xlsx:Spares!F21
+accessory,U.FL to MMCX female RG316 extension cable,1,available,U.FL to MMCX female,,FPV (4).xlsx:Spares!F22

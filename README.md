@@ -56,6 +56,7 @@ rate_presets.csv         Hand-maintained named rateprofiles ('house-race', ...) 
 flights.csv              One row per decoded blackbox flight (duration, sag, current, mAh, flags)
 flight_notes.csv         Hand-maintained descriptive comments keyed by blackbox filename + internal log index
 hardware.csv             Hand-maintained per-quad build details (ESC, motors, props) + size class, status, discipline, aliases, rate_preset — none of it in dumps
+spare_parts.csv          Hand-maintained parts inventory (frames, electronics, motors, props, and accessories), including quantity, condition, compatibility, and provenance
 specs.csv                Hand-maintained race-class rulebook (Freedom Spec, ...), one row per requirement, scoped to the class/discipline it applies to
 compliance_<spec>.csv    Generated — one file per spec, one row per quad in scope: per-requirement verdict plus what's missing / to confirm
 orders.csv               FPV parts ledger, one row per ordered line item, built from Gmail by the fpv-orders-update skill; 'build' (quad/'spare'/blank) and 'notes' hand-maintained, other columns from order emails, re-runs only add new — gitignored (personal purchase history; kept local, not committed)
@@ -137,6 +138,12 @@ props, camera, VTX, cells, weight) plus five curated columns — `class` (size b
 decorates a quad that a dump already put in the inventory, joined by the same normalized name. A row
 whose name matches no dump is shown in the summary's Hardware section flagged as such, but does not
 create a fleet entry. Edit it by hand; the generator reads it but never writes it.
+
+`spare_parts.csv` tracks build hardware that is not currently assigned to a quad. Each row records
+the part category, item name, quantity, condition, compatibility notes, and source. Filter
+`condition = available` when planning a build; broken or transferred parts remain in the file as
+inventory history but are not usable stock. Edit it by hand—the fleet generator does not overwrite
+it.
 
 ## Rates
 
