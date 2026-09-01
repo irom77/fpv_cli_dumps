@@ -1,7 +1,6 @@
 # FPV flight-controller catalog and wiring reference
 
-Generated from the CLI dumps (including dumps newer than the currently generated
-`fpv_quads_latest.csv`) and `hardware.csv` on 2026-08-31. The newest CLI dump for each
+Generated from the CLI dumps and `hardware.csv` on 2026-09-01. The newest CLI dump for each
 craft is the inventory authority. Product identity is then refined
 with the curated build notes and manufacturer documentation.
 
@@ -13,7 +12,7 @@ with the curated build notes and manufacturer documentation.
 ## Inventory
 
 The dump set contains **32 current craft/unnamed identities and 18 distinct Betaflight
-board strings** (31 in the last generated CSV plus PROSPEC's newer dumps).
+board strings**.
 Those strings resolve to the physical controller families below; rows marked
 **revision-sensitive** must be visually identified before their pinout is trusted.
 
@@ -228,8 +227,8 @@ Official [XRotor F7 manual](https://www.hobbywing.com/en/uploads/file/20221104/0
 other:     SDA/SCL, RSSI, BUZ+/BUZ-, LED-Strip
 ```
 
-PROSPEC's newest dumps (`20260825_101316` and `20260825_102419`) use `...CONV`; its
-earlier same-day dump used `...CON`. Its order/build record identifies the newer XRotor
+PROSPEC's newest dump (`20260901_164018`) and later 2026-08-25 dumps use `...CONV`; its
+initial 2026-08-25 dump used `...CON`. Its order/build record identifies the newer XRotor
 Convertible F7/65A HD AM32 30×30 stack. That proves why the suffix alone is not a
 physical-board identifier: use the diagram packed with the stack and visually match
 the PCB. Manufacturer support: [Hobbywing flight controllers](https://www.hobbywing.com/en/drone-propulsion/rc-aircraft-power-systems/fpv-racing/flight-controller).
