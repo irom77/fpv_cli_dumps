@@ -63,6 +63,7 @@ orders.csv               FPV parts ledger, one row per ordered line item, built 
 FLEET_SUMMARY.md         Overview: fleet table, rollups, "needs attention", rates, spec compliance, hardware, flights
 blackbox/                Raw .BBL/.BFL flight logs — gitignored (large binaries; not committed)
 upgrades/                Reproducible firmware upgrade records: binaries, restores, provenance and verification
+docs/troubleshooting/     Bench investigations with evidence, open hypotheses and next diagnostic tests
 .claude/skills/fpv-fleet-update/   Skill that regenerates the derived files above
 .claude/skills/fpv-orders-update/  Skill that builds orders.csv from Gmail order confirmations
 ```
@@ -89,6 +90,13 @@ from firmware defaults — a blank cell means the setting is at its firmware def
 CLI dump alone. Each package records the exact firmware binary and checksum, source/config commits,
 selective restore, flashing procedure and post-flash evidence. The first package documents the
 [OpenRacer KAACK V19 upgrade](upgrades/OPENRACER_KAACK_V19_UPGRADE/README.md).
+
+## Troubleshooting records
+
+[`docs/troubleshooting/`](docs/troubleshooting/) preserves bench investigations that are not yet
+resolved. Each record separates verified measurements from assumptions and leaves a specific next
+test. The first record covers the open
+[ProSpec racing LED kit investigation](docs/troubleshooting/prospec-led-kit.md).
 
 ## CLI snippets
 
