@@ -11,7 +11,7 @@ with the curated build notes and manufacturer documentation.
 
 ## Inventory
 
-The dump set contains **33 current craft/unnamed identities and 18 distinct Betaflight
+The dump set contains **34 current craft/unnamed identities and 19 distinct Betaflight
 board strings**.
 Those strings resolve to the physical controller families below; rows marked
 **revision-sensitive** must be visually identified before their pinout is trusted.
@@ -33,6 +33,7 @@ Those strings resolve to the physical controller families below; rows marked
 | HDZero Halo H743 | `HDZERO_HALO` | LS-Ultra HD, PRO-SPEC2 | Confirmed |
 | Hobbywing XRotor F7 / Convertible family | `HOBBYWING_XROTORF7CONV` | openracer, PROSPEC, unnamed Hobbywing dump | Family confirmed; PROSPEC's newest dump is `CONV` |
 | Hobbywing XRotor F7 legacy target | `HOBBYWING_XROTORF7CON` | unnamed Hobbywing dump; an older PROSPEC dump only | Physical revision unresolved |
+| iFlight SucceX-E F7 family | `IFLIGHT_SUCCEX_E_F7` | Green Hornet V3 | Target/family confirmed; exact PCB revision-sensitive |
 | Lumenier LUX HD AIO G4 | `LUXHDAIO-G4` | QAS JB | Target/build-family identification; exact board revision unconfirmed |
 | SpeedyBee F405 Mini | `SPEEDYBEEF405MINI` | unnamed Massive Droner 3-inch | Confirmed |
 | T-Motor F7 family | `TMOTORF7` | LS-Ultra | Dump conflicts with curated “Foxeer Mini F722” note; **verify PCB** |
@@ -232,6 +233,19 @@ initial 2026-08-25 dump used `...CON`. Its order/build record identifies the new
 Convertible F7/65A HD AM32 30×30 stack. That proves why the suffix alone is not a
 physical-board identifier: use the diagram packed with the stack and visually match
 the PCB. Manufacturer support: [Hobbywing flight controllers](https://www.hobbywing.com/en/drone-propulsion/rc-aircraft-power-systems/fpv-racing/flight-controller).
+
+### iFlight SucceX-E F7 family — Green Hornet V3
+
+The dump proves target `IFLIGHT_SUCCEX_E_F7`, manufacturer `IFRC`, an STM32F7X2 MCU,
+and the Green Hornet V3 craft identity. It exposes UART1, UART2, UART4 and UART5,
+I2C2, camera control, LED, buzzer, analog video OSD, and onboard flash resources.
+Those resource assignments identify functions but not physical pad locations.
+
+iFlight's current [technical-support archive](https://www.iflight.com/en-tech-support)
+does not expose a legacy Green Hornet/SucceX-E diagram in its indexed product list.
+The similarly named SucceX Mini F7 and SucceX-D boards use other targets and must not
+be treated as interchangeable. Photograph both PCB faces and record the printed board
+revision before adding a pad-level diagram or rewiring this controller.
 
 ### Lumenier LUX HD AIO G4 — QAS JB
 
