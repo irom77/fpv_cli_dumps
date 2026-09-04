@@ -34,7 +34,7 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 | Mobula1 | whoop | — | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2025-11-12 |
 | openracer | 5-inch | race | active | HOBBYWING_XROTORF7CONV | F7X2 | 4.5.3.KAACK_V19 | - | - | - | 2026-09-02 |
 | openracer2 | 5-inch | race | active | FOXEERF722V4 | F7X2 | 2025.12.3-alpha.KAACK_V19 | - | Analog | - | 2026-08-11 |
-| PRO-SPEC2 | 7-inch | race | active | HDZERO_HALO | H743 | 2025.12.3-alpha.KAACK_V19 | DSHOT600 | HD | CRSF | 2026-09-04 |
+| PRO-SPEC2 | 7-inch | race | active | HDZERO_HALO | H743 | 2025.12.3-alpha.KAACK_V19 | - | - | - | 2026-09-04 |
 | prospec | 7-inch | race | active | HOBBYWING_XROTORF7CONV | F7X2 | 4.5.3.KAACK_V19 | - | - | - | 2026-09-02 |
 | QAS JB | micro | freestyle | **broken** | LUXHDAIO-G4 | G47X | 4.5.0 | DSHOT300 | - | CRSF | 2026-07-21 |
 | Race5 | whoop | race | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2025-01-24 |
@@ -49,9 +49,9 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 - **Discipline:** 11× race, 3× freestyle, 2× cinematic, 2× long-range, 15 unset. Hand-entered in `hardware.csv` (no heuristic — the dump gives no signal).
 - **Flight controllers:** 14× F411, 8× F7X2, 4× F405, 2× G47X, 2× H743, 1× F745, 1× F411SX1280, 1× SPEEDYBEEF405MINI.
 - **Firmware:** 12 on BF 4.4.x, 11 on BF 4.5.x, 5 on BF 4.3.x, 3 on BF 4.2.x, 2 on BF 2025.12.x.
-- **ESC protocol:** 20× DSHOT300, 3× DSHOT600.
+- **ESC protocol:** 20× DSHOT300, 2× DSHOT600.
 - **ExpressLRS bind groups:** **ELRS-A** (10 quads, UID `7,48,91,69,202,173`); **ELRS-B** (2 quads, UID `65,245,33,230,58,226`). Quads in the same group share a binding phrase and bind to the same radio together.
-- **Video:** 11× HD, 2× Analog. Quads showing `-` have `vcd_video_system` at firmware default in the diff — not necessarily video-less.
+- **Video:** 10× HD, 2× Analog. Quads showing `-` have `vcd_video_system` at firmware default in the diff — not necessarily video-less.
 
 ## Needs attention
 
@@ -187,8 +187,8 @@ _Curated per-quad build details (not captured in Betaflight dumps), largely seed
 | Mobula1 | 1S 650mAh | 29.5g | Built-in 5A BLHeli_S 4-in-1 | EX 1002 20000KV | Gemfan 1610-2 40mm bi-blade | HDZero Nano Lite | HDZero Whoop Lite VTX | HappyModel Moblite7 -> Moblite6 (SuperbeeF4 Lite); 75mm; Mobula7 v4 frame |
 | openracer | 6S | 305g | Hobbywing XRotor F722 (45A 4-in-1 ESC; AM32 2.17) | VCI Spark 2207 Pro 2050Kv | Hurricane MCK 51466 V2 | Runcam HDZero Nano 90 | HDZero Race V3 HD | OpenRacer racing frame (renamed from Kronos 2026-08-11), Tattu 6S 1400mAh. Motor replaced 2026-07-20 after a rear-corner desync/crash under load (see flights); bench-fine at 0% DShot error, fault only under aero load. Raw dated ESC exports: esc-configs/openracer/. |
 | openracer2 | 6S | 280g dry (no props/battery) | Foxeer Reaper 20x20 ESC + Foxeer Mini F722 V4 20x20 FC (MPU6000) | HeadsUp \| Five33 2207 1960KV (MR30 connectors) | Hurricane MCK 51466 V2 | Foxeer Predator Nano | HGLRC Zeus Nano | Analog Open Racer (RTF); RX HappyModel EP1/EP2 2.4G ELRS fw 3.5.6 ISM2G4 (upgraded 2026-08-11 from 3.0.1), serial on UART1; Core 5.8 RHCP antenna; VTX control via Tramp on UART5. Second OpenRacer build (see openracer); same props as openracer. |
-| PRO-SPEC2 |  |  |  |  |  |  |  | New Pro Spec race quad; CLI craft name=PRO-SPEC2; FC target HDZERO_HALO; Betaflight 2025.12.3-alpha.KAACK_V19 as of 2026-09-04. Hardware details still TBD. |
-| PROSPEC | 6S | 1215g with battery | HobbyWing XRotor Convertible F7 + 65A HD AM32 30x30 stack | HeadsUp \| Five33 2207 (MR30 connectors) |  | Runcam HDZero Nano 90 V2 | HDZero Race V3 HD | New 7-inch race quad; CLI craft name=prospec; current FC target HOBBYWING_XROTORF7CONV; Betaflight 4.5.3.KAACK_V19 as of 2026-09-01 (initial 2026-08-25 dump used HOBBYWING_XROTORF7CON on 4.3.2). Components from orders flyfive33 20003 and Pyrodrone 500322 (2026-07-31 / 2026-08-08). |
+| PRO-SPEC2 | 6S | 1178g with battery, no props | HDZero Halo H743 FC (ICM gyro) + Foxeer Reaper 60A 4-in-1 ESC | EMAX ECO II Series 2807 1300KV | HQProp 7x4x3 7-inch tri-blade | HDZero Nano 90 V2 | HDZero Race V3 | New Pro Spec race quad; CLI craft name=PRO-SPEC2; FC target HDZERO_HALO; onboard 2.4GHz Gemini ELRS RX firmware 3.5.3 (40555e), ISM2G4; Betaflight 2025.12.3-alpha.KAACK_V19 as of 2026-09-04. |
+| PROSPEC | 6S | 1215g with battery | HobbyWing XRotor Convertible F7 + 65A HD AM32 30x30 stack | Hobbywing XRotor 2807 1300KV | HQProp 7x4x3 7-inch tri-blade | Runcam HDZero Nano 90 V2 | HDZero Race V3 HD | New 7-inch race quad; CLI craft name=prospec; current FC target HOBBYWING_XROTORF7CONV; Betaflight 4.5.3.KAACK_V19 as of 2026-09-01 (initial 2026-08-25 dump used HOBBYWING_XROTORF7CON on 4.3.2). Frame parts from flyfive33 order 20003 and video components from Pyrodrone order 500322 (2026-07-31 / 2026-08-08); motors confirmed separately by pilot. |
 | QAS JB | 4S | sub-250g | 35A AM32 3-6S | XILO Stealth 1404 4500KV | Gemfan Hurricane 3020 3-blade | Caddx (analog) | SpeedyBee analog VTX | Lumenier QAV-S 2 Sub-250, JB Special Edition, 3in / 1404 build (matches sheet Fleet2 QAV-S 2). Converted from HDZero to analog: SpeedyBee VTX + Caddx cam. Broken 2026-07-21 - blackbox analysis pending |
 | Race5 |  |  |  |  |  |  |  | Race whoop on the shared 100/100/100 + 70/70/70 rate; build details TBD. |
 | SPEEDYBEEF405MINI | 3-4S (850mAh 4S) |  | SpeedyBee F405 Mini (20x20) | e.g. EMAX ECO 1404 3700KV | 3in | Caddx Vista | Caddx Vista (DJI HD) | Massive Droner 3in HD (sheet Racing frames/retire); 3in HD micro; no craft_name in dump; board=SPEEDYBEEF405MINI; BF 4.3.2; motors/props per sheet options - verify |
