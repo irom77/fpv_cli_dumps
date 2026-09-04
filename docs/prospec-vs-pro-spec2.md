@@ -134,6 +134,111 @@ PROSPEC `diff all`; use short first flights, inspect motor temperature immediate
 blackbox logs. Do not transfer PRO-SPEC2's board alignment, accelerometer calibration, serial setup,
 receiver smoothing, PID loop denominator, OSD coordinates, or LED definitions.
 
+## Staged CLI procedure for PROSPEC
+
+Do not apply every stage at once. First save a fresh PROSPEC `diff all`, then apply and flight-test
+one stage at a time. After each tuning stage, make a short conservative flight, land, and immediately
+check all four motor temperatures. Retain comparable blackbox logs when possible.
+
+### Stage 1: match PRO-SPEC2 rates
+
+This is the recommended change:
+
+```text
+rateprofile 0
+set rates_type = BETAFLIGHT
+set roll_rc_rate = 88
+set pitch_rc_rate = 78
+set yaw_rc_rate = 78
+set roll_srate = 70
+set pitch_srate = 70
+set yaw_srate = 70
+set roll_expo = 0
+set pitch_expo = 0
+set yaw_expo = 0
+save
+```
+
+To restore the original PROSPEC rates:
+
+```text
+rateprofile 0
+set rates_type = BETAFLIGHT
+set roll_rc_rate = 95
+set pitch_rc_rate = 80
+set yaw_rc_rate = 80
+set roll_srate = 70
+set pitch_srate = 70
+set yaw_srate = 70
+set roll_expo = 0
+set pitch_expo = 0
+set yaw_expo = 0
+save
+```
+
+### Stage 2: test dynamic idle
+
+Apply only after evaluating the rates:
+
+```text
+profile 0
+set dyn_idle_min_rpm = 35
+save
+```
+
+Check for clean idle, improved low-throttle recovery, valid RPM telemetry, and normal motor
+temperature. To disable dynamic idle again:
+
+```text
+profile 0
+set dyn_idle_min_rpm = 0
+save
+```
+
+### Stage 3: test thrust linearization
+
+Apply only after deciding whether to retain Stage 2:
+
+```text
+profile 0
+set thrust_linear = 20
+save
+```
+
+To restore zero thrust linearization:
+
+```text
+profile 0
+set thrust_linear = 0
+save
+```
+
+### Stage 4: optional feedforward experiment
+
+Do this only after settling on the rates. First record PROSPEC's exact current values so the change
+has an exact rollback:
+
+```text
+profile 0
+get simplified_feedforward_gain
+get feedforward_boost
+get feedforward_jitter_factor
+```
+
+Then test the PRO-SPEC2 feedforward values:
+
+```text
+profile 0
+set simplified_feedforward_gain = 115
+set feedforward_boost = 18
+set feedforward_jitter_factor = 3
+save
+```
+
+Restore the three values printed by the `get` commands if the result is worse. This stage is an
+experiment rather than a general recommendation because changing the rates also changes the demanded
+rotational motion to which feedforward responds.
+
 ## Bottom line
 
 Apply the PRO-SPEC2 rates if the goal is to make PROSPEC's stick feel match the Five33 build. Keep the
