@@ -1,6 +1,6 @@
 # FPV flight-controller catalog and wiring reference
 
-Generated from the CLI dumps and `hardware.csv` on 2026-09-01. The newest CLI dump for each
+Generated from the CLI dumps and `hardware.csv` on 2026-09-04. The newest CLI dump for each
 craft is the inventory authority. Product identity is then refined
 with the curated build notes and manufacturer documentation.
 
@@ -11,7 +11,7 @@ with the curated build notes and manufacturer documentation.
 
 ## Inventory
 
-The dump set contains **32 current craft/unnamed identities and 18 distinct Betaflight
+The dump set contains **33 current craft/unnamed identities and 18 distinct Betaflight
 board strings**.
 Those strings resolve to the physical controller families below; rows marked
 **revision-sensitive** must be visually identified before their pinout is trusted.
@@ -30,7 +30,7 @@ Those strings resolve to the physical controller families below; rows marked
 | GEPRC GEP-F411-35A AIO family | `GEPRC_F411_AIO`, `GEPRCF411_AIO` | CineLog30, cinelog-flyfish | Likely old/new target aliases; revision-sensitive |
 | GEPRC GEP-F722-35A AIO family | `GEPRC_F722_AIO` | Crocodile5 baby, unnamed GEPRC dump | Product confirmed; gyro/PCB revisions exist |
 | Happymodel CrazyF411 ELRS 20A AIO | `BETAFLIGHTF4` | HDZERO CRUX35 | Confirmed by Crux35 manual; generic target name |
-| HDZero Halo H743 | `HDZERO_HALO` | LS-Ultra HD | Confirmed |
+| HDZero Halo H743 | `HDZERO_HALO` | LS-Ultra HD, PRO-SPEC2 | Confirmed |
 | Hobbywing XRotor F7 / Convertible family | `HOBBYWING_XROTORF7CONV` | openracer, PROSPEC, unnamed Hobbywing dump | Family confirmed; PROSPEC's newest dump is `CONV` |
 | Hobbywing XRotor F7 legacy target | `HOBBYWING_XROTORF7CON` | unnamed Hobbywing dump; an older PROSPEC dump only | Physical revision unresolved |
 | Lumenier LUX HD AIO G4 | `LUXHDAIO-G4` | QAS JB | Target/build-family identification; exact board revision unconfirmed |
@@ -199,7 +199,7 @@ Official [Crux35/Crux35HD/HDZero manual](https://www.happymodel.cn/wp-content/up
 The manual documents a solder bridge for reclaiming UART2; inspect the exact revision
 before changing it.
 
-### HDZero Halo H743 — LS-Ultra HD
+### HDZero Halo H743 — LS-Ultra HD / PRO-SPEC2
 
 Official [Halo wiring guide](https://docs.hd-zero.com/de/halo-wiring), [specification](https://docs.hd-zero.com/halo-introduction), and [manual downloads](https://www.hd-zero.com/document).
 

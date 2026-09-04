@@ -1,5 +1,5 @@
 quad,class,discipline,status,verdict,motor,battery,esc,firmware,rpm_limiter,rpm_cap,weight,leds,props,missing,to_confirm
 LS-Ultra,5-inch,race,active,1 to fix,ok,ok,ok,ok,fail,ok,unknown,manual,manual,RPM limiter,Weight
 LS-Ultra HD,5-inch,race,active,1 to fix,unknown,unknown,unknown,ok,fail,ok,unknown,manual,manual,RPM limiter,Motor; Battery; ESC; Weight
-openracer,5-inch,race,active,2 to confirm,ok,ok,unknown,ok,ok,ok,unknown,manual,manual,,ESC; Weight
+openracer,5-inch,race,active,1 to confirm,ok,ok,ok,ok,ok,ok,unknown,manual,manual,,Weight
 openracer2,5-inch,race,active,1 to fix,ok,ok,unknown,ok,fail,ok,unknown,manual,manual,RPM limiter,ESC; Weight

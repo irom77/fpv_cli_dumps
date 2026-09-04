@@ -72,6 +72,29 @@ not arm until it was power-cycled. Removing the shared assignment fixed the beha
       reflects the corrected configuration. The current openracer2 backup predates the overlap and
       the fix, so it cannot document either state.
 
+## Trial the Mondo MultiGP Pro Spec 7-inch preset
+
+Evaluate Armando Gallegos (Mondo)'s **Experimental Presets for MultiGP PRO Spec 7\"** tune on
+ProSpec. The compatibility assessment, rollback plan, staged test procedure, and acceptance criteria
+are recorded in
+[`docs/prospec-mondo-experimental-preset.md`](docs/prospec-mondo-experimental-preset.md).
+
+- [x] Set and verify the shared `house-race` rates: BETAFLIGHT RC rate `95/80/80`, super rate
+      `70/70/70` (approximately 633/533/533 deg/s).
+- [x] Save the known-good pre-preset rollback dump as
+      `BTFL_cli_backup_PROSPEC_20260902_111305_HOBBYWING_XROTORF7CONV.txt`.
+- [ ] Before applying, confirm the current preset explicitly supports Betaflight 4.5.x and review
+      its options, warnings, and linked discussion.
+- [ ] Apply the preset with props removed, save a post-preset `diff all`, and verify receiver,
+      failsafe, modes, motor order/direction, DShot telemetry, RPM filtering, OSD, LEDs, rates, and
+      the 13,000 RPM limiter.
+- [ ] Resolve the preset's `acc_hardware = NONE` setting: restore the accelerometer if AUX2 Angle
+      mode is still required, or deliberately remove/accept the unavailable mode.
+- [ ] Perform the staged hover, motor-temperature, gentle-flight, and race-flight checks. Capture a
+      blackbox log for comparison with the baseline.
+- [ ] Record the results and keep/revert decision in the proposal document, add the post-test dump
+      to `backups/`, then run `update_fleet.py`.
+
 ## Make the 5-inch racers Freedom Spec legal
 
 `specs.csv` now encodes the MultiGP Freedom Spec rules and `FLEET_SUMMARY.md` checks every 5-inch

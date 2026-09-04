@@ -56,6 +56,7 @@ rate_presets.csv         Hand-maintained named rateprofiles ('house-race', ...) 
 flights.csv              One row per decoded blackbox flight (duration, sag, current, mAh, flags)
 flight_notes.csv         Hand-maintained descriptive comments keyed by blackbox filename + internal log index
 hardware.csv             Hand-maintained per-quad build details (ESC, motors, props) + size class, status, discipline, aliases, rate_preset — none of it in dumps
+esc-configs/             Raw, dated ESC configurator exports grouped by quad
 spare_parts.csv          Hand-maintained parts inventory (frames, electronics, motors, props, and accessories), including quantity, condition, compatibility, and provenance
 specs.csv                Hand-maintained race-class rulebook (Freedom Spec, ...), one row per requirement, scoped to the class/discipline it applies to
 compliance_<spec>.csv    Generated — one file per spec, one row per quad in scope: per-requirement verdict plus what's missing / to confirm

@@ -1,2 +1,4 @@
 file,log_index,comment
 BTFL_BLACKBOX_LOG_OPENRACER_20260821_084648_HOBBYWING_XROTORF7CONV.BBL,9,"Motor 1 had been replaced before this flight; the log shows a high-current event with MOTOR_DESYNC(m0,m1,m3) and LOW_CELL."
+BTFL_BLACKBOX_LOG_OPENRACER_20260902_165307_HOBBYWING_XROTORF7CONV.BBL,1,"Centered-stick event begins as a sudden yaw-rate disturbance at 11.060 s before voltage sag; motor outputs then rail and detector hits alternate across all motors. This does not isolate ESC channel 1."
+BTFL_BLACKBOX_LOG_OPENRACER_20260902_165307_HOBBYWING_XROTORF7CONV.BBL,2,"Second centered-stick event repeats the sudden yaw-rate onset at 10.655 s before voltage sag; first detector hit is m3, not m0. This weakens the single-channel ESC hypothesis."
