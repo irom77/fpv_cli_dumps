@@ -1,0 +1,161 @@
+
+# version
+# Betaflight / STM32F722 (F722) 2026.6.1 Aug  7 2026 / 07:28:20 (6dbc4218f) MSP API: 1.48
+# config rev: 749fff1
+
+# start the command batch
+batch start
+
+# reset configuration to default settings
+defaults nosave
+
+board_name IFLIGHT_SUCCEX_E_F7
+manufacturer_id IFRC
+mcu_id 000b0014345650072030324b
+signature 
+
+# name: Green Hornet V3
+
+# feature
+feature LED_STRIP
+feature OSD
+
+# serial
+serial UART1 8192 115200 57600 0 115200
+serial UART5 64 115200 57600 0 115200
+
+# beacon
+beacon RX_LOST
+beacon RX_SET
+
+# aux
+aux 0 0 0 900 1300 0 0
+aux 1 13 2 1700 2100 0 0
+aux 2 26 3 1300 1700 0 0
+aux 3 31 3 1700 2100 0 0
+aux 4 35 1 1300 2100 0 0
+
+# vtxtable
+vtxtable bands 5
+vtxtable channels 8
+vtxtable band 1 BOSCAM_A A CUSTOM  5865 5845 5825 5805 5785 5765 5745 5725
+vtxtable band 2 BOSCAM_B B CUSTOM  5733 5752 5771 5790 5809 5828 5847 5866
+vtxtable band 3 BOSCAM_E E CUSTOM  5705 5685 5665    0 5885 5905    0    0
+vtxtable band 4 FATSHARK F CUSTOM  5740 5760 5780 5800 5820 5840 5860 5880
+vtxtable band 5 RACEBAND R CUSTOM  5658 5695 5732 5769 5806 5843 5880 5917
+vtxtable powerlevels 4
+vtxtable powervalues 25 100 200 400
+vtxtable powerlabels 25 100 200 300
+
+# master
+set dyn_notch_min_hz = 200
+set dyn_notch_max_hz = 500
+set acc_calibration = 0,-43,85,1
+set baro_hardware = NONE
+set rssi_channel = 16
+set dshot_bidir = ON
+set motor_pwm_protocol = DSHOT300
+set motor_poles = 12
+set yaw_motors_reversed = ON
+set small_angle = 180
+set pid_process_denom = 2
+set osd_tim1 = 2562
+set osd_vbat_pos = 2529
+set osd_rssi_pos = 2068
+set osd_link_quality_pos = 2073
+set osd_rssi_dbm_pos = 299
+set osd_tim_1_pos = 3245
+set osd_tim_2_pos = 3277
+set osd_flymode_pos = 546
+set osd_vtx_channel_pos = 2081
+set osd_current_pos = 352
+set osd_mah_drawn_pos = 384
+set osd_craft_name_pos = 3653
+set osd_pilot_name_pos = 2625
+set osd_warnings_pos = 14900
+set osd_avg_cell_voltage_pos = 2497
+set osd_disarmed_pos = 2644
+set osd_flip_arrow_pos = 2049
+set vtx_band = 5
+set vtx_channel = 8
+set vtx_power = 2
+set vtx_low_power_disarm = UNTIL_FIRST_ARM
+set vtx_freq = 5917
+set craft_name = Green Hornet V3
+set pilot_name = papfpv
+
+profile 0
+
+# profile 0
+set iterm_relax_type = GYRO
+set iterm_relax_cutoff = 10
+set yaw_lowpass_hz = 70
+set throttle_boost = 10
+set p_pitch = 60
+set i_pitch = 110
+set d_pitch = 48
+set f_pitch = 115
+set p_roll = 55
+set i_roll = 100
+set d_roll = 43
+set f_roll = 110
+set p_yaw = 59
+set i_yaw = 100
+set f_yaw = 110
+set d_max_roll = 0
+set d_max_pitch = 0
+set thrust_linear = 50
+set feedforward_transition = 40
+set tpa_breakpoint = 1370
+
+profile 1
+
+profile 2
+
+profile 3
+
+# restore original profile selection
+profile 0
+
+rateprofile 0
+
+# rateprofile 0
+set thr_expo = 50
+set yaw_rc_rate = 172
+set throttle_limit_percent = 75
+
+rateprofile 1
+
+rateprofile 2
+
+rateprofile 3
+
+# rateprofile 3
+set thr_mid = 100
+set thr_expo = 20
+set roll_rc_rate = 19
+set pitch_rc_rate = 19
+set yaw_rc_rate = 19
+set roll_expo = 60
+set pitch_expo = 60
+set yaw_expo = 60
+set roll_srate = 90
+set pitch_srate = 90
+set yaw_srate = 90
+set throttle_limit_type = SCALE
+set throttle_limit_percent = 75
+
+battery_profile 0
+
+battery_profile 1
+
+battery_profile 2
+
+# restore original rateprofile selection
+rateprofile 0
+
+# restore original battery_profile selection
+battery_profile 0
+
+# save configuration
+save

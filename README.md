@@ -87,10 +87,11 @@ from firmware defaults — a blank cell means the setting is at its firmware def
 
 ## Firmware upgrade records
 
-[`upgrades/`](upgrades/) preserves upgrade-specific artifacts that cannot be reconstructed from a
-CLI dump alone. Each package records the exact firmware binary and checksum, source/config commits,
-selective restore, flashing procedure and post-flash evidence. The first package documents the
-[OpenRacer KAACK V19 upgrade](upgrades/OPENRACER_KAACK_V19_UPGRADE/README.md).
+[`upgrades/`](upgrades/) preserves upgrade logs and upgrade-specific artifacts that cannot be
+reconstructed from a CLI dump alone. Its [upgrade record index](upgrades/README.md) defines the
+standard format for future quad upgrades. When available, each package records the exact firmware
+binary and checksum, source/config commits, selective restore, flashing procedure and post-flash
+evidence; records for online flashes explicitly note when the firmware artifact was not archived.
 
 ## Troubleshooting records
 
