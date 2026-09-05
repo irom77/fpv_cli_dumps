@@ -63,6 +63,35 @@ files below must stay in sync whenever the set of dumps changes:
 
 ## What to do
 
+### Runtime diagnostic snapshot
+
+Whenever the user provides a new CLI backup/dump or Blackbox log, remind them to connect that quad,
+open the Betaflight CLI, and provide the output of:
+
+```text
+version
+status
+flash_info
+tasks
+```
+
+Ask only when current output for that quad was not supplied with the new files. Continue processing
+the available backup or logs while requesting it; the reminder is not a reason to block the update.
+Use this snapshot to confirm the exact firmware build and target, current sensors and arming-disable
+flags, actual Blackbox-storage detection/capacity, and runtime task load.
+
+Request additional CLI diagnostics only when relevant to an upgrade or reported hardware problem:
+
+```text
+resource show all
+dma show
+timer show
+serial
+```
+
+These larger outputs help diagnose pin assignments, DMA/timer mapping, motors and peripherals, and
+UART configuration; do not make them part of every routine reminder.
+
 Run the bundled script from the folder that contains the dumps. It is the single source of truth —
 it only reads `*.txt` dumps and hand-maintained CSVs and rewrites the generated files above, so it
 is safe to re-run any time:
