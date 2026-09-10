@@ -35,7 +35,7 @@ Those strings resolve to the physical controller families below; rows marked
 | Hobbywing XRotor F7 legacy target | `HOBBYWING_XROTORF7CON` | unnamed Hobbywing dump; an older PROSPEC dump only | Physical revision unresolved |
 | iFlight SucceX-E F7 family | `IFLIGHT_SUCCEX_E_F7` | Green Hornet V3 | Target/family confirmed; exact PCB revision-sensitive |
 | Lumenier LUX HD AIO G4 | `LUXHDAIO-G4` | QAS JB | Target/build-family identification; exact board revision unconfirmed |
-| SpeedyBee F405 Mini | `SPEEDYBEEF405MINI` | unnamed Massive Droner 3-inch | Confirmed |
+| SpeedyBee F405 Mini | `SPEEDYBEEF405MINI` | Mass (Massive Droner 3-inch) | Confirmed |
 | T-Motor F7 family | `TMOTORF7` | LS-Ultra | Dump conflicts with curated “Foxeer Mini F722” note; **verify PCB** |
 | XILO Stax F4 | `XILOF4` | XILOF4, XILOF4-2 | Confirmed; V1.1/V1.2 revision-sensitive |
 
