@@ -10,3 +10,7 @@ from hypotheses, and leave a concrete next test when a fault is still open.
   AM32 channel settings otherwise match, and a props-off swap test is the next discriminator.
 - [ProSpec racing LED kit does not illuminate](prospec-led-kit.md) — power is present, but valid
   WS2812 data has not yet been observed at the InfiniPowerPDB.
+## Resolved grounding issues
+
+- [Mass video failure](mass-vtx-troubleshooting.md) — TX800 on 5V restored video; unlocking resolved
+  R8 failure. Mass active; original Rush fault remains unexplained.

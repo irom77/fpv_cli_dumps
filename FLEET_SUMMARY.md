@@ -27,7 +27,7 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 | LS-Ultra HD | 5-inch | race | active | HDZERO_HALO | H743 | 4.5.3.KAACK_V18 | - | - | - | 2026-07-21 |
 | M6 ECO | whoop | — | active | CRAZYBEEF4DX | F411 | 4.4.2 | DSHOT300 | HD | - | 2025-10-25 |
 | M85 HDZero | whoop | — | active | BETAFPVF4SX1280 | F411SX1280 | 4.3.1 | DSHOT300 | - | RX_SERIAL / CRSF **[B]** | 2024-07-04 |
-| Mass | 3-inch | — | **broken** | SPEEDYBEEF405MINI | SPEEDYBEEF405MINI | 4.3.2 | DSHOT600 | Auto | CRSF | 2026-09-10 |
+| Mass | 3-inch | — | active | SPEEDYBEEF405MINI | SPEEDYBEEF405MINI | 4.3.2 | DSHOT600 | Auto | CRSF | 2026-09-10 |
 | Meteor85 | whoop | — | **broken** | BETAFPVF4SX1280 | F411 | 4.4.3 | DSHOT300 | HD | ELRS **[A]** | 2025-01-10 |
 | Mob6 AIO5 1st | whoop | race | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2025-10-25 |
 | Mob6 AIO5 2nd | whoop | race | active | CRAZYBEEF4SX1280 | F411 | 4.5.2 | - | - | ELRS **[A]** | 2025-10-25 |
@@ -46,7 +46,7 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 ## Fleet rollups
 
 - **Class:** 14× whoop, 3× cinewhoop, 5× micro, 9× 5-inch, 1× 3-inch, 2× 7-inch. Size class inferred from craft name / board where `hardware.csv` doesn't set it.
-- **Status:** 24× active, 4× broken, 3× retired, 3× incomplete. Lifecycle from `hardware.csv`; a blank there counts as active.
+- **Status:** 25× active, 3× broken, 3× retired, 3× incomplete. Lifecycle from `hardware.csv`; a blank there counts as active.
 - **Discipline:** 11× race, 3× freestyle, 3× cinematic, 2× long-range, 15 unset. Hand-entered in `hardware.csv` (no heuristic — the dump gives no signal).
 - **Flight controllers:** 14× F411, 8× F7X2, 4× F405, 2× G47X, 2× H743, 1× F745, 1× F722, 1× F411SX1280, 1× SPEEDYBEEF405MINI.
 - **Firmware:** 12 on BF 4.4.x, 11 on BF 4.5.x, 5 on BF 4.3.x, 3 on BF 4.2.x, 2 on BF 2025.12.x, 1 on BF 2026.6.x.
@@ -56,12 +56,13 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 
 ## Needs attention
 
-**Broken (needs repair — grounded until fixed):** Diamond, Mass, Meteor85, QAS JB.
+**Broken (needs repair — grounded until fixed):** Diamond, Meteor85, QAS JB.
 
 **Aging firmware (older than BF 4.4):**
 - FLYWOOF7NANO (4.2.11)
 - HOBBYWING_XROTORF7CON (4.3.0)
 - M85 HDZero (4.3.1)
+- Mass (4.3.2)
 
 **Not re-dumped in over a year (take a fresh backup next time on the bench):**
 - M85 HDZero (last dump 2024-07-04)
@@ -188,7 +189,7 @@ _Curated per-quad build details (not captured in Betaflight dumps), largely seed
 | LS-Ultra | 6S | 270g | T-Motor Mini F45A 6S 4-in-1 (AM32) | Five33 2207 Champion Ed. 2070KV | Gemfan Fury 5128 | Runcam HDZero Nano 90 | HDZero Race V3 | Five33 Lightswitch V2 Ultra; sheet FC=Foxeer Mini F722 but dump board=TMOTORF7 - verify |
 | LS-Ultra HD |  |  |  | HeadsUp RC (MR-30 connectors) |  | HDZero (upgraded lens) | HDZero | Five33 Lightswitch V2 Ultra - HDZero build on Halo AIO (H743); ELRS 2.4G; upgraded camera lens; sister to LS-Ultra. esc/props/weight/cells still TBD |
 | M6 ECO | 1S | 23.16g | SuperX HD ELRS AIO (built-in) | SE 0702 28000KV | Gemfan 1208-3 31mm tri-blade | HDZero ECO | HDZero ECO VTX | HappyModel Mobula6 ECO 2024; dump board CrazybeeF4DX differs from sheet - verify |
-| Mass | 3-4S (850mAh 4S) |  | SpeedyBee F405 Mini (20x20) | e.g. EMAX ECO 1404 3700KV | 3in | Caddx Vista | Caddx Vista (DJI HD) | Massive Droner 3in HD (sheet Racing frames/retire); 3in HD micro; craft name Mass (renamed from SPEEDYBEEF405MINI 2026-09-10); board=SPEEDYBEEF405MINI; BF 4.3.2; motors/props per sheet options - verify |
+| Mass | 3-4S (850mAh 4S) |  | SpeedyBee F405 Mini (20x20) | e.g. EMAX ECO 1404 3700KV | 3in | RunCam Nano 3 (tentative) | SpeedyBee TX800 (analog) | Massive Droner 3in (Caddx Vista moved to spares 2026-09-10; RunCam Nano 3 camera (tentative identification; one removed from spares 2026-09-10)); craft name Mass (renamed from SPEEDYBEEF405MINI 2026-09-10); board=SPEEDYBEEF405MINI; BF 4.3.2; motors/props per sheet options - verify. Video restored 2026-09-10: replaced Rush Tank Ultimate Mini with SpeedyBee TX800 on 5V; clear video confirmed at a few metres on R5 (5806 MHz). R8 (5917 MHz) subsequently restored by unlocking TX800 with IRC temporarily disconnected; channel changes via Betaflight. Latest saved backup still records R5. Original Rush fault unresolved. Troubleshooting: [Mass VTX log](docs/troubleshooting/mass-vtx-troubleshooting.md). |
 | Meteor85 | 2S 450mAh | 48.3g | Built-in 1S/2S 12A ESC | 1103 11000KV | Gemfan 2015 2-blade | Runcam HDZero Nano Lite / Caddx Ant Nano | HDZero Whoop Lite / M03 analog | BetaFPV Meteor85 Brushless Whoop |
 | Mob6 AIO5 1st | 1S | 19g | CrazybeeF4SX1280 (built-in) | SE 0702 28000KV | HQ ultralight 1.2x1.1x3 | HDZero Eco | AIO5 | crash recovery off, airmode on |
 | Mob6 AIO5 2nd | 1S | 19g | CrazybeeF4SX1280 (built-in) | SE 0702 28000KV | HQ ultralight 1.2x1.1x3 | HDZero Eco | AIO5 | crash recovery on, airmode on |
