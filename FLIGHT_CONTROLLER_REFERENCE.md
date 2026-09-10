@@ -27,9 +27,9 @@ Those strings resolve to the physical controller families below; rows marked
 | Flywoo GOKU Versatile F405 1–2S 12A AIO | `FLYWOOF405S_AIO` | unnamed Firefly 2S Nano Baby 20 | Confirmed by build/order evidence |
 | Flywoo GOKU F745 Nano stack | `FLYWOOF745NANO` | FLYWOOF7NANO | Product family confirmed |
 | Foxeer Mini F722 V4 | `FOXEERF722V4` | openracer2 | Confirmed |
-| GEPRC GEP-F411-35A AIO family | `GEPRC_F411_AIO`, `GEPRCF411_AIO` | CineLog30, cinelog-flyfish | Likely old/new target aliases; revision-sensitive |
+| GEPRC GEP-F411-35A AIO family | `GEPRC_F411_AIO`, `GEPRCF411_AIO` | CineLog30, Cine-fish | Likely old/new target aliases; revision-sensitive |
 | GEPRC GEP-F722-35A AIO family | `GEPRC_F722_AIO` | Crocodile5 baby, unnamed GEPRC dump | Product confirmed; gyro/PCB revisions exist |
-| Happymodel CrazyF411 ELRS 20A AIO | `BETAFLIGHTF4` | HDZERO CRUX35 | Confirmed by Crux35 manual; generic target name |
+| Happymodel CrazyF411 ELRS 20A AIO | `BETAFLIGHTF4` | Crux-fish | Confirmed by Crux35 manual; generic target name |
 | HDZero Halo H743 | `HDZERO_HALO` | LS-Ultra HD, PRO-SPEC2 | Confirmed |
 | Hobbywing XRotor F7 / Convertible family | `HOBBYWING_XROTORF7CONV` | openracer, PROSPEC, unnamed Hobbywing dump | Family confirmed; PROSPEC's newest dump is `CONV` |
 | Hobbywing XRotor F7 legacy target | `HOBBYWING_XROTORF7CON` | unnamed Hobbywing dump; an older PROSPEC dump only | Physical revision unresolved |
@@ -185,7 +185,7 @@ Official [GEP-F722-35A product page](https://geprc.com/product/gep-f722-35a-aio-
  HD connector power | GND | MSP RX/TX
 ```
 
-### Happymodel CrazyF411 ELRS 20A AIO — HDZero CRUX35
+### Happymodel CrazyF411 ELRS 20A AIO — Crux-fish (formerly HDZero CRUX35)
 
 Official [Crux35/Crux35HD/HDZero manual](https://www.happymodel.cn/wp-content/uploads/2023/02/Crux35-Crux35HD-DJI-and-Crux35-HDZERO-FPV-Racer-Drone-ELRS-V2-manual.pdf).
 

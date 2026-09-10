@@ -232,3 +232,7 @@ just before a Kronos dump → `Kronos?`), left as a `?`-flagged suggestion to co
       restore the backups.
 - [ ] Decide which generated, device-specific, or sensitive files should be excluded before
       committing the backups.
+
+## Crux-fish (formerly HDZERO CRUX35) repair
+
+- [ ] Buy 1 [HappyModel EX1404 3500KV motor](https://pyrodrone.com/products/happymodel-ex1404-1404-motor-3500kv) for Crux-fish Motor 3, reported not moving on 2026-09-10 (model per hardware.csv; confirm against the installed motor before ordering).

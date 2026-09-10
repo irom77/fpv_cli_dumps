@@ -10,9 +10,10 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 |---|---|---|---|---|---|---|---|---|---|---|
 | AIR65 R | whoop | — | active | BETAFPVG473 | G47X | 4.5.2 | DSHOT300 | - | - | 2025-10-25 |
 | BETAFPVF4SX1280 *(unnamed)* | whoop | — | active | BETAFPVF4SX1280 | F411 | 4.4.0 | DSHOT300 | - | ELRS **[A]** | 2024-07-12 |
-| cinelog-flyfish | cinewhoop | cinematic | **incomplete** | GEPRCF411_AIO | F411 | 4.5.2 | - | - | - | 2025-06-19 |
+| Cine-fish | cinewhoop | cinematic | **incomplete** | GEPRCF411_AIO | F411 | 4.5.2 | DSHOT300 | HD | CRSF | 2026-09-10 |
 | CineLog30 | cinewhoop | cinematic | **retired** | GEPRC_F411_AIO | F411 | 4.2.3 | DSHOT600 | - | RX_SERIAL / CRSF | 2025-06-19 |
 | Crocodile5 baby | micro | long-range | **retired** | GEPRC_F722_AIO | F7X2 | 4.2.4 | DSHOT300 | - | RX_SERIAL / CRSF | 2024-08-27 |
+| Crux-fish | micro | — | **incomplete** | BETAFLIGHTF4 | F405 | 4.4.3 | DSHOT300 | HD | CRSF | 2026-09-10 |
 | Diamond | whoop | — | **broken** | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | Analog | RX_SPI **[A]** | 2025-01-24 |
 | Ecofree | whoop | — | active | CRAZYBEEF4DX | F411 | 4.4.2 | DSHOT300 | HD | - | 2025-11-14 |
 | FLYWOOF405S_AIO *(unnamed)* | micro | — | **incomplete** | FLYWOOF405S_AIO | F405 | 4.3.1 | DSHOT300 | - | RX_SERIAL / CRSF **[B]** | 2026-07-23 |
@@ -20,7 +21,6 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 | GEPRC_F722_AIO *(unnamed)* | 5-inch | — | active | GEPRC_F722_AIO | F7X2 | 4.5.1 | DSHOT300 | - | - | 2024-08-27 |
 | Green Hornet V3 | cinewhoop | cinematic | active | IFLIGHT_SUCCEX_E_F7 | F722 | 2026.6.1 | DSHOT300 | - | - | 2026-09-05 |
 | Happish | whoop | — | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2024-12-06 |
-| HDZERO CRUX35 | micro | — | **incomplete** | BETAFLIGHTF4 | F405 | 4.4.3 | DSHOT300 | HD | - | 2025-03-12 |
 | HOBBYWING_XROTORF7CON *(unnamed)* | 5-inch | — | active | HOBBYWING_XROTORF7CON | F7X2 | 4.3.0 | DSHOT600 | - | RX_SERIAL / CRSF | 2024-07-27 |
 | HOBBYWING_XROTORF7CONV *(unnamed)* | 5-inch | — | active | HOBBYWING_XROTORF7CONV | F7X2 | 4.5.3.KAACK_V19 | - | - | - | 2026-08-25 |
 | LS-Ultra | 5-inch | race | active | TMOTORF7 | F7X2 | 4.5.2.KAACK_V15 | - | - | - | 2026-07-21 |
@@ -50,9 +50,9 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 - **Discipline:** 11× race, 3× freestyle, 3× cinematic, 2× long-range, 15 unset. Hand-entered in `hardware.csv` (no heuristic — the dump gives no signal).
 - **Flight controllers:** 14× F411, 8× F7X2, 4× F405, 2× G47X, 2× H743, 1× F745, 1× F722, 1× F411SX1280, 1× SPEEDYBEEF405MINI.
 - **Firmware:** 12 on BF 4.4.x, 11 on BF 4.5.x, 5 on BF 4.3.x, 3 on BF 4.2.x, 2 on BF 2025.12.x, 1 on BF 2026.6.x.
-- **ESC protocol:** 21× DSHOT300, 3× DSHOT600.
+- **ESC protocol:** 22× DSHOT300, 3× DSHOT600.
 - **ExpressLRS bind groups:** **ELRS-A** (10 quads, UID `7,48,91,69,202,173`); **ELRS-B** (2 quads, UID `65,245,33,230,58,226`). Quads in the same group share a binding phrase and bind to the same radio together.
-- **Video:** 10× HD, 2× Analog, 1× Auto. Quads showing `-` have `vcd_video_system` at firmware default in the diff — not necessarily video-less.
+- **Video:** 11× HD, 2× Analog, 1× Auto. Quads showing `-` have `vcd_video_system` at firmware default in the diff — not necessarily video-less.
 
 ## Needs attention
 
@@ -176,20 +176,20 @@ _Curated per-quad build details (not captured in Betaflight dumps), largely seed
 | Quad | Cells | Weight | ESC / stack | Motors | Props | Camera | VTX | Notes |
 |---|---|---|---|---|---|---|---|---|
 | AIR65 R | 1S | 17.3g | Air 5-in-1 (built-in) | 0702 SE II 27000KV | Gemfan 1219S 3-blade | C03 | Onboard 5.8G 25-400mW | BetaFPV Air65; ELRS 2.4G |
-| cinelog-flyfish | 4S |  | GEPRC F411 AIO (built-in) | GR1404 3850KV | T3x3x3 | Polar | Caddx Vista | Successor of CineLog30 (migrated to Flyfish30 frame); GR1404 3850KV motors moved from CineLog30; missing camera; props/cells/VTX carried from CineLog30 - verify |
-| CineLog30 | 4S | 158.5g | BLHeli_S 35A (GEP-F411-35A AIO) | GR1404 3850KV | T3x3x3 | Polar | Caddx Vista | GEPRC GEP-CL30; RETIRED -> migrated to cinelog-flyfish (Flyfish30) |
+| Cine-fish | 4S |  | GEPRC F411 AIO (built-in) | GR1404 3850KV | T3x3x3 | Polar | Caddx Vista | Successor of CineLog30 (migrated to Flyfish30 frame); GR1404 3850KV motors moved from CineLog30; missing camera; props/cells/VTX carried from CineLog30 - verify |
+| CineLog30 | 4S | 158.5g | BLHeli_S 35A (GEP-F411-35A AIO) | GR1404 3850KV | T3x3x3 | Polar | Caddx Vista | GEPRC GEP-CL30; RETIRED -> migrated to Cine-fish (Flyfish30) |
 | Crocodile5 baby | 4S | 252.29g | GEP-F722-35A AIO (built-in) | GEP 2004 2550KV | Gemfan 5130 | Caddx Air Unit | HD air unit | GEPRC GEP-CB5; RETIRED; sheet size 5in but 2004 motors = 4in class |
+| Crux-fish | 4S | 115g | Built-in 20A BLHeli_S 4-in-1 | HappyModel EX1404 3500KV | HQProp T3.5x2x3 | CruxF405 HD ELRS AIO cam | Onboard HDZero | HDZero Crux35; 113mm. Motor 3 not moving (owner report 2026-09-10); cause unconfirmed; replacement motor purchase tracked in TODO.md. |
 | Diamond | 1S 300mAh | 17.5g | Built-in 5A BLHeli_S 4-in-1 | SE 0702 23000KV | Gemfan 1210 31mm bi-blade | RunCam Nano 3 | Built-in 25-400mW 5.8G | HappyModel Mobeetle6 (Diamond F4 ELRS AIO); analog |
 | Ecofree | 1S | 23g | 12A 1-2S BLHeli_S (built-in) | SE 0702 28000KV | Gemfan Durable 1210 31mm bi-blade | HDZero ECO | HDZero ECO VTX | HappyModel Mobula6 SuperECOfree; sheet FC=SuperX AIO but dump board=CrazybeeF4DX - verify |
 | FLYWOOF405S_AIO | 2S | 33.8g | GOKU Versatile F405 2S 12A AIO (built-in 12A 4-in-1) | Flywoo ROBO 1002 15500KV | Gemfan 2015 2-blade | HDZero Nano Lite | HDZero Whoop Lite | Flywoo Firefly 2S Nano Baby 20 (sheet name); no craft_name in dump; board=FLYWOOF405S_AIO; 2S HDZero nano; Flywoo EL24P ELRS v3 RX; MPU6000 gyro + prop guard; sheet: NO VIDEO - camera+VTX removed |
 | FLYWOOF7NANO | 4S 850mAh | <250g | Goku F745 16x16 stack (built-in) | NIN 1404 V2 2750KV | Gemfan 4024 | Caddx Polar / Nebula Pro | Caddx Vista | Flywoo Explorer LR4 V2 HD; 4in; class corrected 5-inch -> micro (4in LR) |
 | Green Hornet V3 | 6S | 280.1g without battery | SucceX-E Mini F7 FC + 35A BLHeli_S 4-in-1 ESC | XING 1507 2800KV | 3040 3-blade | RunCam Nano2 2.1mm NTSC 4:3 | SucceX-E 300mW analog VTX | iFlight Green Hornet V3 3-inch cinewhoop; 145mm wheelbase; FC target IFLIGHT_SUCCEX_E_F7; 6S variant confirmed by pilot |
 | Happish | 1S | 28g | Onboard 4-in-1 | EX0802 19000KV | Gemfan 35mm 3-blade | HDZero Nano Lite | HDZero Whoop Lite VTX | HappyModel Mobula6 HDZero (SuperbeeF4 Lite ELRS SPI); Meteor65 Pro frame |
-| HDZERO CRUX35 | 4S | 115g | Built-in 20A BLHeli_S 4-in-1 | HappyModel EX1404 3500KV | HQProp T3.5x2x3 | CruxF405 HD ELRS AIO cam | Onboard HDZero | HDZero Crux35; 113mm |
 | LS-Ultra | 6S | 270g | T-Motor Mini F45A 6S 4-in-1 (AM32) | Five33 2207 Champion Ed. 2070KV | Gemfan Fury 5128 | Runcam HDZero Nano 90 | HDZero Race V3 | Five33 Lightswitch V2 Ultra; sheet FC=Foxeer Mini F722 but dump board=TMOTORF7 - verify |
 | LS-Ultra HD |  |  |  | HeadsUp RC (MR-30 connectors) |  | HDZero (upgraded lens) | HDZero | Five33 Lightswitch V2 Ultra - HDZero build on Halo AIO (H743); ELRS 2.4G; upgraded camera lens; sister to LS-Ultra. esc/props/weight/cells still TBD |
 | M6 ECO | 1S | 23.16g | SuperX HD ELRS AIO (built-in) | SE 0702 28000KV | Gemfan 1208-3 31mm tri-blade | HDZero ECO | HDZero ECO VTX | HappyModel Mobula6 ECO 2024; dump board CrazybeeF4DX differs from sheet - verify |
-| Mass | 3-4S (850mAh 4S) |  | SpeedyBee F405 Mini (20x20) | e.g. EMAX ECO 1404 3700KV | 3in | RunCam Nano 3 (tentative) | SpeedyBee TX800 (analog) | Massive Droner 3in (Caddx Vista moved to spares 2026-09-10; RunCam Nano 3 camera (tentative identification; one removed from spares 2026-09-10)); craft name Mass (renamed from SPEEDYBEEF405MINI 2026-09-10); board=SPEEDYBEEF405MINI; BF 4.3.2; motors/props per sheet options - verify. Video restored 2026-09-10: replaced Rush Tank Ultimate Mini with SpeedyBee TX800 on 5V; clear video confirmed at a few metres on R5 (5806 MHz). R8 (5917 MHz) subsequently restored by unlocking TX800 with IRC temporarily disconnected; channel changes via Betaflight. Latest saved backup still records R5. Original Rush fault unresolved. Troubleshooting: [Mass VTX log](docs/troubleshooting/mass-vtx-troubleshooting.md). |
+| Mass | 3-4S (850mAh 4S) |  | SpeedyBee F405 Mini (20x20) | e.g. EMAX ECO 1404 3700KV | 3in | RunCam Nano 3 (tentative) | SpeedyBee TX800 (analog) | Massive Droner 3in (Caddx Vista moved to spares 2026-09-10; RunCam Nano 3 camera (tentative identification; one removed from spares 2026-09-10)); craft name Mass (renamed from SPEEDYBEEF405MINI 2026-09-10); board=SPEEDYBEEF405MINI; BF 4.3.2; motors/props per sheet options - verify. Video restored 2026-09-10: replaced Rush Tank Ultimate Mini with SpeedyBee TX800 moved from QAS JB on 5V; clear video confirmed at a few metres on R5 (5806 MHz). R8 (5917 MHz) subsequently restored by unlocking TX800 with IRC temporarily disconnected; channel changes via Betaflight. Latest saved backup still records R5. Original Rush fault unresolved. Troubleshooting: [Mass VTX log](docs/troubleshooting/mass-vtx-troubleshooting.md). |
 | Meteor85 | 2S 450mAh | 48.3g | Built-in 1S/2S 12A ESC | 1103 11000KV | Gemfan 2015 2-blade | Runcam HDZero Nano Lite / Caddx Ant Nano | HDZero Whoop Lite / M03 analog | BetaFPV Meteor85 Brushless Whoop |
 | Mob6 AIO5 1st | 1S | 19g | CrazybeeF4SX1280 (built-in) | SE 0702 28000KV | HQ ultralight 1.2x1.1x3 | HDZero Eco | AIO5 | crash recovery off, airmode on |
 | Mob6 AIO5 2nd | 1S | 19g | CrazybeeF4SX1280 (built-in) | SE 0702 28000KV | HQ ultralight 1.2x1.1x3 | HDZero Eco | AIO5 | crash recovery on, airmode on |
@@ -200,7 +200,7 @@ _Curated per-quad build details (not captured in Betaflight dumps), largely seed
 | openracer2 | 6S | 280g dry (no props/battery) | Foxeer Reaper 20x20 ESC + Foxeer Mini F722 V4 20x20 FC (MPU6000) | HeadsUp \| Five33 2207 1960KV (MR30 connectors) | Hurricane MCK 51466 V2 | Foxeer Predator Nano | HGLRC Zeus Nano | Analog Open Racer (RTF); RX HappyModel EP1/EP2 2.4G ELRS fw 3.5.6 ISM2G4 (upgraded 2026-08-11 from 3.0.1), serial on UART1; Core 5.8 RHCP antenna; VTX control via Tramp on UART5. Second OpenRacer build (see openracer); same props as openracer. |
 | PRO-SPEC2 | 6S | 1178g with battery, no props | HDZero Halo H743 FC (ICM gyro) + Foxeer Reaper 60A 4-in-1 ESC | EMAX ECO II Series 2807 1300KV | HQProp 7x4x3 7-inch tri-blade | HDZero Nano 90 V2 | HDZero Race V3 | New Pro Spec race quad; CLI craft name=PRO-SPEC2; FC target HDZERO_HALO; onboard 2.4GHz Gemini ELRS RX firmware 3.5.3 (40555e), ISM2G4; Betaflight 2025.12.3-alpha.KAACK_V19 as of 2026-09-04. |
 | PROSPEC | 6S | 1215g with battery | HobbyWing XRotor Convertible F7 + 65A HD AM32 30x30 stack | Hobbywing XRotor 2807 1300KV | HQProp 7x4x3 7-inch tri-blade | Runcam HDZero Nano 90 V2 | HDZero Race V3 HD | New 7-inch race quad; CLI craft name=prospec; current FC target HOBBYWING_XROTORF7CONV; Betaflight 4.5.3.KAACK_V19 as of 2026-09-01 (initial 2026-08-25 dump used HOBBYWING_XROTORF7CON on 4.3.2). Frame parts from flyfive33 order 20003 and video components from Pyrodrone order 500322 (2026-07-31 / 2026-08-08); motors confirmed separately by pilot. |
-| QAS JB | 4S | sub-250g | 35A AM32 3-6S | XILO Stealth 1404 4500KV | Gemfan Hurricane 3020 3-blade | Caddx (analog) | SpeedyBee analog VTX | Lumenier QAV-S 2 Sub-250, JB Special Edition, 3in / 1404 build (matches sheet Fleet2 QAV-S 2). Converted from HDZero to analog: SpeedyBee VTX + Caddx cam. Broken 2026-07-21. Blackbox bench ramp 2026-09-07 isolates no/near-zero RPM on Motor 2 and Motor 4; inspect those motors, phase connections, and ESC channels. |
+| QAS JB | 4S | sub-250g | 35A AM32 3-6S | XILO Stealth 1404 4500KV | Gemfan Hurricane 3020 3-blade | Caddx (analog) | None (moved to Mass) | Lumenier QAV-S 2 Sub-250, JB Special Edition, 3in / 1404 build (matches sheet Fleet2 QAV-S 2). Converted from HDZero to analog with Caddx cam. SpeedyBee TX800 moved to Mass 2026-09-10; no VTX currently installed. Broken 2026-07-21. Blackbox bench ramp 2026-09-07 isolates no/near-zero RPM on Motor 2 and Motor 4; inspect those motors, phase connections, and ESC channels. |
 | Race5 |  |  |  |  |  |  |  | Race whoop on the shared 100/100/100 + 70/70/70 rate; build details TBD. |
 | XILOF4 | 6S |  | XILO Stax 45A BLHeli_32 4-in-1 | XILO Stealth 2206 1700KV (6S) | Lumenier 5x5.3x3 Gate Breaker | RunCam HDZero Nano 90 | HDZero Freestyle VTX | XILO Phreakstyle Slam; JB Edition. Sheet name: Joshua Bardwell Edition - Bundle |
 | XILOF4-2 |  |  |  |  |  |  |  | Sheet name: Joshua Bardwell Edition Pre-Built (newer of the two). Second XILOF4 freestyle build (BF 4.5.1), very similar to XILOF4 (Bundle); specs assumed same — confirm/fill in. No craft_name set, tracked by filename label |

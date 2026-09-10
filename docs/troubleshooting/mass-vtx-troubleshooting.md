@@ -82,7 +82,7 @@ Disconnect battery and USB before changing wiring.
 
 ### Installation and initial troubleshooting
 
-- Owner replaced the Rush with a SpeedyBee TX800.
+- Owner replaced the Rush with a SpeedyBee TX800 moved from QAS JB (origin confirmed 2026-09-10).
 - Owner confirmed the TX800 is connected to **5V**, video to the FC VTX pad, and IRC to an FC
   TX pad. The UART number was not recorded. The earlier measured 9V+ applies only to the Rush.
 - VTX LED illuminated; owner was unsure whether blue or red.
@@ -96,8 +96,7 @@ Disconnect battery and USB before changing wiring.
 References: [TX800 setup](https://docs.speedybee.cn/en/fpv/vtx_vrx/tx800/how-to-set-protocol-and-import-vtx-table-for-tx800.html),
 [5V power guidance](https://speedybee.zendesk.com/hc/en-us/articles/10087702239899-What-to-do-if-there-s-no-LED-is-showing-up-on-my-TX800-VTX).
 
-Whether the TX800 came from the listed spare is unconfirmed; spare inventory has not been changed
-for this replacement. The removed Rush's disposition is also unconfirmed.
+The TX800 came from QAS JB; spare inventory is unchanged for this replacement. The removed Rush's disposition is also unconfirmed.
 
 ### R8 resolution — channel lock
 
