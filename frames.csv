@@ -28,7 +28,7 @@ flywoo-firefly-nano-baby-20,Firefly 2S Nano Baby 20,Flywoo,2in,,in-use,FLYWOOF40
 five33-open-racer-2,Open Racer,Five33,5in,,in-use,openracer2,Second Open Racer airframe (analog RTF build).,hardware.csv notes
 five33-prospec-1,MultiGP Pro Spec,Five33,7in,,in-use,PROSPEC,"Body kit, stainless pod, TPU parts kit and arm kit from flyfive33 order 20003 (2026-07-31).",hardware.csv notes
 five33-prospec-2,MultiGP Pro Spec,Five33,7in,,in-use,PRO-SPEC2,? Frame model inferred from the build name; hardware.csv records no frame for this quad - confirm.,hardware.csv notes
-aos5,AOS5,,5in,,in-use,AOS5,? Manufacturer unconfirmed. Partial build: frame / motors / FC / RX only.,hardware.csv notes
+aos5,AOS UL5 v1,CNC Drones,5in,,in-use,AOS5,Partial build: frame / motors / FC / RX only.,hardware.csv notes; model and vendor confirmed by pilot 2026-09-11
 tbs-source-one-v4,Source One V4 or V5,TBS,5in,,spare,,Model version uncertain in the source sheet. Also listed in spare_parts.csv.,FPV (4).xlsx:Spares!A2
 tbs-source-two-v01,Source Two V0.1,TBS,5in,,spare,,Model identification was marked uncertain in the source sheet. Also listed in spare_parts.csv.,FPV (4).xlsx:Spares!A3
 betafpv-air65-ii-spare,Air65 II 65mm Whoop Frame Kit,BetaFPV,65mm,65mm,spare,,? Two-pack ordered 2025-11-12; not known to be built - confirm whether still unused.,orders.csv Amazon 112-1249868-4879455
