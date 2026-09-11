@@ -1,0 +1,35 @@
+frame,model,manufacturer,size,wheelbase,status,quad,notes,source
+betafpv-air65,Air65,BetaFPV,65mm,65mm,in-use,AIR65 R,,hardware.csv notes
+happymodel-mobeetle6,Mobeetle6,HappyModel,65mm,65mm,in-use,Diamond,Quad is marked broken; frame still occupied by the build.,hardware.csv notes
+happymodel-mobula6-superecofree,Mobula6 SuperECOfree,HappyModel,65mm,65mm,in-use,Ecofree,,hardware.csv notes
+happymodel-mobula6-eco,Mobula6 ECO 2024,HappyModel,65mm,65mm,in-use,M6 ECO,,hardware.csv notes
+betafpv-meteor65-pro,Meteor65 Pro,BetaFPV,65mm,65mm,in-use,Happish,Mobula6 HDZero electronics built onto a Meteor65 Pro frame.,hardware.csv notes
+happymodel-mobula7-v4,Mobula7 V4 75mm,HappyModel,75mm,75mm,in-use,Mobula1,Moblite7 -> Moblite6 electronics on a Mobula7 V4 frame.,hardware.csv notes
+betafpv-meteor85,Meteor85,BetaFPV,85mm,85mm,in-use,Meteor85,Quad is marked broken; frame still occupied by the build.,hardware.csv notes
+happymodel-mobula6-aio5-1st,Mobula6,HappyModel,65mm,65mm,in-use,Mob6 AIO5 1st,,hardware.csv notes
+happymodel-mobula6-aio5-2nd,Mobula6,HappyModel,65mm,65mm,in-use,Mob6 AIO5 2nd,,hardware.csv notes
+mob6-aio5-race,,,,,in-use,Mob6 AIO5 RACE,? Build details TBD in hardware.csv; frame model unconfirmed.,hardware.csv notes
+mob6-hdzero-race,,,,,in-use,Mob6 HDZERO RACE,? Build details TBD in hardware.csv; frame model unconfirmed.,hardware.csv notes
+race5,,,,,in-use,Race5,? Build details TBD in hardware.csv; frame model unconfirmed.,hardware.csv notes
+geprc-gep-cl30,GEP-CL30 (CineLog30),GEPRC,3in,,retired,,"Build migrated to Cine-fish (Flyfish30); bare frame may now be free, unconfirmed.",hardware.csv notes
+flyfish30,Flyfish30,,3in,,in-use,Cine-fish,? Manufacturer unconfirmed. Successor frame to CineLog30.,hardware.csv notes
+iflight-green-hornet-v3,Green Hornet V3,iFlight,3in,145mm,in-use,Green Hornet V3,3-inch cinewhoop.,hardware.csv notes
+geprc-gep-cb5,GEP-CB5 (Crocodile5 Baby),GEPRC,5in,,retired,,"Sold as a 5-inch frame, but the build ran 2004 motors (4-inch class). FC donated to AOS5; retired donor build retained separately.",hardware.csv notes
+happymodel-crux35,Crux35,HappyModel,3.5in,113mm,in-use,Crux-fish,"HDZero-branded Crux35. Bottom plate ordered separately (RaceDayQuads 811445, 2025-03-07).",hardware.csv notes
+five33-open-racer-1,Open Racer,Five33,5in,,in-use,openracer,"Body kit, arm kit, HDZero Pro pod, front brace and turtle fin from flyfive33 orders 14047 / 14162 / 14313.",hardware.csv notes
+five33-lightswitch-v2-ultra,Lightswitch V2 Ultra,Five33,5in,,in-use,LS-Ultra,,hardware.csv notes
+five33-lightswitch-v2-ultra-hd,Lightswitch V2 Ultra,Five33,5in,,in-use,LS-Ultra HD,Sister airframe to LS-Ultra; HDZero build on Halo AIO.,hardware.csv notes
+lumenier-qav-s2-sub250,QAV-S 2 Sub-250 (JB Special Edition),Lumenier,3in,,in-use,QAS JB,Quad is marked broken; frame still occupied by the build.,hardware.csv notes
+xilo-phreakstyle-slam-1,Phreakstyle Slam,XILO,5in,,retired,,JB Edition (Bundle). Retired with the XILOF4 build.,hardware.csv notes
+xilo-phreakstyle-slam-2,Phreakstyle Slam,XILO,5in,,in-use,XILOF4-2,"JB Edition Pre-Built, newer of the two. ? Frame assumed same as XILOF4 - confirm.",hardware.csv notes
+flywoo-explorer-lr4-v2,Explorer LR4 V2 HD,Flywoo,4in,,in-use,FLYWOOF7NANO,,hardware.csv notes
+massive-droner-3in,Massive Droner 3in,,3in,,in-use,Mass,? Manufacturer unconfirmed.,hardware.csv notes
+flywoo-firefly-nano-baby-20,Firefly 2S Nano Baby 20,Flywoo,2in,,in-use,FLYWOOF405S_AIO,Includes prop guard.,hardware.csv notes
+five33-open-racer-2,Open Racer,Five33,5in,,in-use,openracer2,Second Open Racer airframe (analog RTF build).,hardware.csv notes
+five33-prospec-1,MultiGP Pro Spec,Five33,7in,,in-use,PROSPEC,"Body kit, stainless pod, TPU parts kit and arm kit from flyfive33 order 20003 (2026-07-31).",hardware.csv notes
+five33-prospec-2,MultiGP Pro Spec,Five33,7in,,in-use,PRO-SPEC2,? Frame model inferred from the build name; hardware.csv records no frame for this quad - confirm.,hardware.csv notes
+aos5,AOS5,,5in,,in-use,AOS5,? Manufacturer unconfirmed. Partial build: frame / motors / FC / RX only.,hardware.csv notes
+tbs-source-one-v4,Source One V4 or V5,TBS,5in,,spare,,Model version uncertain in the source sheet. Also listed in spare_parts.csv.,FPV (4).xlsx:Spares!A2
+tbs-source-two-v01,Source Two V0.1,TBS,5in,,spare,,Model identification was marked uncertain in the source sheet. Also listed in spare_parts.csv.,FPV (4).xlsx:Spares!A3
+betafpv-air65-ii-spare,Air65 II 65mm Whoop Frame Kit,BetaFPV,65mm,65mm,spare,,? Two-pack ordered 2025-11-12; not known to be built - confirm whether still unused.,orders.csv Amazon 112-1249868-4879455
+valador-vx3-spare,VX3 3-inch,Valador,3in,,spare,,? Carbon frame kit ordered 2025-03-31; not matched to any build - confirm whether still unused.,orders.csv Amazon 114-0045965-0325874

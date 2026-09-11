@@ -58,6 +58,7 @@ flight_notes.csv         Hand-maintained descriptive comments keyed by blackbox 
 hardware.csv             Hand-maintained per-quad build details (ESC, motors, props) + size class, status, discipline, aliases, rate_preset — none of it in dumps
 esc-configs/             Raw, dated ESC configurator exports grouped by quad
 spare_parts.csv          Hand-maintained parts inventory (frames, electronics, motors, props, and accessories), including quantity, condition, compatibility, and provenance
+frames.csv               Hand-maintained frame inventory, one row per whole airframe - installed, spare or retired - with model, size, wheelbase, the quad it carries and provenance
 specs.csv                Hand-maintained race-class rulebook (Freedom Spec, ...), one row per requirement, scoped to the class/discipline it applies to
 compliance_<spec>.csv    Generated — one file per spec, one row per quad in scope: per-requirement verdict plus what's missing / to confirm
 orders.csv               FPV parts ledger, one row per ordered line item, built from Gmail by the fpv-orders-update skill; 'build' (quad/'spare'/blank) and 'notes' hand-maintained, other columns from order emails, re-runs only add new — gitignored (personal purchase history; kept local, not committed)
