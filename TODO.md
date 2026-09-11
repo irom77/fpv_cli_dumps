@@ -1,5 +1,11 @@
 # TODO
 
+## Crux-fish (formerly HDZERO CRUX35) repair
+
+- [ ] Buy 1 [HappyModel EX1404 3500KV motor](https://pyrodrone.com/products/happymodel-ex1404-1404-motor-3500kv) for Crux-fish Motor 3, reported not moving on 2026-09-10 (model per hardware.csv; confirm against the installed motor before ordering).
+- [ ] Buy 1 [HDZero Nano V3 HD FPV camera](https://pyrodrone.com/products/hdzero-nano-v3-hd-fpv-camera) for Crux-fish (formerly HDZERO CRUX35).
+- [ ] Buy 1 60 mm MIPI cable for Crux-fish’s HDZero Nano V3 camera.
+
 ## 1. Publish the `fpv-fleet-update` skill publicly
 
 Make the skill installable by others via a Claude Code plugin marketplace. Currently it's
@@ -232,7 +238,3 @@ just before a Kronos dump → `Kronos?`), left as a `?`-flagged suggestion to co
       restore the backups.
 - [ ] Decide which generated, device-specific, or sensitive files should be excluded before
       committing the backups.
-
-## Crux-fish (formerly HDZERO CRUX35) repair
-
-- [ ] Buy 1 [HappyModel EX1404 3500KV motor](https://pyrodrone.com/products/happymodel-ex1404-1404-motor-3500kv) for Crux-fish Motor 3, reported not moving on 2026-09-10 (model per hardware.csv; confirm against the installed motor before ordering).
