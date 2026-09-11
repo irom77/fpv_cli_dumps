@@ -6,6 +6,38 @@
 - [ ] Buy 1 [HDZero Nano V3 HD FPV camera](https://pyrodrone.com/products/hdzero-nano-v3-hd-fpv-camera) for Crux-fish (formerly HDZERO CRUX35).
 - [ ] Buy 1 60 mm MIPI cable for Crux-fish’s HDZero Nano V3 camera.
 
+## Cine-fish — analog VTX conversion (Rush Tank Ultimate Mini)
+
+Swap the Caddx Vista HD setup for the Rush Tank Ultimate Mini removed from Mass. Deferred 2026-09-11.
+Baseline config: [2026-09-10 backup](backups/BTFL_cli_CINE-FISH_20260910_182608_GEPRCF411_AIO.txt) —
+GEPRC GEP-F411-35A AIO, BF 4.5.2, UART1 = Vista (MSP DisplayPort), UART2 = CRSF, MAX7456 present
+(`resource OSD_CS 1 B12`), so analog OSD will work.
+
+- [ ] Bench-test the Rush before installing it — this is the unit pulled from Mass with an unresolved
+      fault (flashing green LED, video only at a few metres, 9V+ measured at the VTX):
+      [Mass VTX log](docs/troubleshooting/mass-vtx-troubleshooting.md).
+- [ ] Source an analog FPV camera. Cine-fish has no camera, the Vista cannot feed an analog VTX, and
+      nothing in spare_parts.csv is a loose analog cam.
+- [ ] Confirm whether this PCB revision breaks out a `T1` pad or keeps UART1 only on the HD plug.
+      Fallback: remap softserial onto the LED pad (`resource SOFTSERIAL_TX 1 A08`) — the softserial
+      defaults A00/B10 are MOTOR 5/6 and almost certainly not broken out.
+- [ ] Wire: VTX VBAT → `BAT+` (4S direct, **not** 5V; confirm the unit's input range on its label),
+      GND → `GND`, VIN → FC `VTX` pad (that pad is video *out*, OSD already overlaid), SA → `T1`.
+      Camera signal → `CAM`, power → `5V` or the Rush's own 5V BEC. Antenna on before any power-up.
+- [ ] Apply the CLI changes:
+      ```
+      serial 0 2048 115200 57600 0 115200
+      set osd_displayport_device = AUTO
+      set vcd_video_system = NTSC
+      save
+      ```
+      (`2048` = `FUNCTION_VTX_SMARTAUDIO`; use `PAL` if the camera is PAL.)
+- [ ] Load a VTX table. The dump has `vtxtable bands 0`, so band/channel control does nothing until one
+      is loaded. Then set `vtx_band` / `vtx_channel` / `vtx_power`; consider `vtx_low_power_disarm = ON`.
+- [ ] Redo the OSD layout — elements are placed for the 53x20 HD canvas; analog is 30x13/16.
+- [ ] Afterwards: move the Caddx Vista to spare_parts.csv, take a fresh dump, run `/fpv-fleet-update`,
+      and update hardware.csv / FLEET_SUMMARY.md (video system HD → analog).
+
 ## 1. Publish the `fpv-fleet-update` skill publicly
 
 Make the skill installable by others via a Claude Code plugin marketplace. Currently it's
