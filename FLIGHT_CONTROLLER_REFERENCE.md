@@ -28,7 +28,7 @@ Those strings resolve to the physical controller families below; rows marked
 | Flywoo GOKU F745 Nano stack | `FLYWOOF745NANO` | FLYWOOF7NANO | Product family confirmed |
 | Foxeer Mini F722 V4 | `FOXEERF722V4` | openracer2 | Confirmed |
 | GEPRC GEP-F411-35A AIO family | `GEPRC_F411_AIO`, `GEPRCF411_AIO` | CineLog30, Cine-fish | Likely old/new target aliases; revision-sensitive |
-| GEPRC GEP-F722-35A AIO family | `GEPRC_F722_AIO` | Crocodile5 baby, unnamed GEPRC dump | Product confirmed; gyro/PCB revisions exist |
+| GEPRC GEP-F722-35A AIO family | `GEPRC_F722_AIO` | AOS5, retired Crocodile5 baby | Product confirmed; gyro/PCB revisions exist |
 | Happymodel CrazyF411 ELRS 20A AIO | `BETAFLIGHTF4` | Crux-fish | Confirmed by Crux35 manual; generic target name |
 | HDZero Halo H743 | `HDZERO_HALO` | LS-Ultra HD, PRO-SPEC2 | Confirmed |
 | Hobbywing XRotor F7 / Convertible family | `HOBBYWING_XROTORF7CONV` | openracer, PROSPEC, unnamed Hobbywing dump | Family confirmed; PROSPEC's newest dump is `CONV` |
@@ -171,7 +171,12 @@ select **F411-35A AIO Manual** or **F411-35A AIO V2 Manual** after matching the 
 `GEPRC_F411_AIO` and `GEPRCF411_AIO` are cataloged separately as firmware strings,
 but are not evidence of two different physical boards.
 
-### GEPRC GEP-F722-35A AIO — Crocodile5 Baby
+### GEPRC GEP-F722-35A AIO — AOS5 / retired Crocodile5 Baby
+
+AOS5's 2026-09-11 dump and both 2024-08-27 GEPRC F722 backups share MCU ID
+`002700335333500820333931`: the same physical FC, previously recorded as
+Crocodile5 baby and then unnamed. AOS5 is a partial 5-inch build with CRSF
+configured on UART3; receiver model and PCB revision remain unconfirmed.
 
 Official [GEP-F722-35A product page](https://geprc.com/product/gep-f722-35a-aio-f722-fc-35a-2-6s-8bits-bls-esc-25-5mm/) and [manufacturer PDF](https://geprc.com/wp-content/uploads/2022/05/F722-35A-AIO-USER-MANUAL2.pdf).
 
@@ -305,9 +310,9 @@ For a solder-safe edition of this guide, capture straight-on, well-lit front and
 photos (including all silkscreen and connector keys) for:
 
 1. AIR65 R; every `CRAZYBEEF4SX1280` physical variant; Ecofree; and M6 ECO.
-2. Both CineLog AIO boards and both GEPRC F722 dumps.
+2. Both CineLog AIO boards and the GEPRC F722 AIO now in AOS5.
 3. PROSPEC, QAS JB, and LS-Ultra.
-4. The unnamed Hobbywing, GEPRC, BETAFPV, and SpeedyBee dump identities if they are
+4. The unnamed Hobbywing, BETAFPV, and SpeedyBee dump identities if they are
    still physical aircraft rather than historical backups.
 
 Once photographed, replace each revision warning with a cropped manufacturer diagram
