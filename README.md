@@ -66,6 +66,7 @@ FLEET_SUMMARY.md         Overview: fleet table, rollups, "needs attention", rate
 blackbox/                Raw .BBL/.BFL flight logs — gitignored (large binaries; not committed)
 upgrades/                Reproducible firmware upgrade records: binaries, restores, provenance and verification
 docs/troubleshooting/     Bench investigations with evidence, open hypotheses and next diagnostic tests
+docs/                    Reference notes: hardware comparisons, presets, and race-timing setup
 .claude/skills/fpv-fleet-update/   Skill that regenerates the derived files above
 .claude/skills/fpv-orders-update/  Skill that builds orders.csv from Gmail order confirmations
 ```
@@ -100,6 +101,13 @@ evidence; records for online flashes explicitly note when the firmware artifact 
 resolved. Each record separates verified measurements from assumptions and leaves a specific next
 test. The first record covers the open
 [ProSpec racing LED kit investigation](docs/troubleshooting/prospec-led-kit.md).
+
+## Race timing
+
+[FPVSIM Timer — lap timing on R8](docs/fpvsim-timer.md) covers the R8 (5917 MHz) timing procedure,
+which quads are already on that channel, the Timer Kit V2 / ESP32-C3 hardware identification, why
+the app's USB connection cannot work on this board, and how to check or update firmware and app
+versions.
 
 ## CLI snippets
 
