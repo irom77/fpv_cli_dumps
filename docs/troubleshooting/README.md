@@ -6,6 +6,10 @@ from hypotheses, and leave a concrete next test when a fault is still open.
 
 ## Open investigations
 
+- [Green Hornet V3 will not take off — two independent faults](green-hornet-post-upgrade-takeoff-failure.md)
+  — stick offsets integrating without bound (fixed, verified) and a yaw rate reinterpreted by the 4.2.4 to
+  2026.6.1 upgrade (fixed). Still open and blocking: Motor 3 is 14% down under load against 7.4% unloaded,
+  roughly 26% less thrust on that corner. Prop swap test, then replace the motor.
 - [OpenRacer intermittent thrust loss](openracer-thrust-loss.md) — motor 0 leads the recorded failure;
   AM32 channel settings otherwise match, and a props-off swap test is the next discriminator.
 - [ProSpec racing LED kit does not illuminate](prospec-led-kit.md) — power is present, but valid
