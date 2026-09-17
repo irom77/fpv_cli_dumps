@@ -65,8 +65,8 @@ orders.csv               FPV parts ledger, one row per ordered line item, built 
 FLEET_SUMMARY.md         Overview: fleet table, rollups, "needs attention", rates, spec compliance, hardware, flights
 blackbox/                Raw .BBL/.BFL flight logs — gitignored (large binaries; not committed)
 upgrades/                Reproducible firmware upgrade records: binaries, restores, provenance and verification
-docs/troubleshooting/     Bench investigations with evidence, open hypotheses and next diagnostic tests
 docs/                    Reference notes: hardware comparisons, presets, and race-timing setup
+docs/troubleshooting/    Bench investigations with evidence, open hypotheses and next diagnostic tests
 .claude/skills/fpv-fleet-update/   Skill that regenerates the derived files above
 .claude/skills/fpv-orders-update/  Skill that builds orders.csv from Gmail order confirmations
 ```
