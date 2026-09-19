@@ -99,6 +99,7 @@ for li in range(1, log_count + 1):
     if gy_idx is None:
         gy_idx = idx.get('gyro[2]')
 
+    parse_error = None
     try:
         for fr in p.frames():
             d = fr.data
@@ -138,8 +139,8 @@ for li in range(1, log_count + 1):
                 thr_max = d[thr] if thr_max is None else max(thr_max, d[thr])
             n += 1
     except Exception as e:
-        # Clean warning for truncated frames at the very end of flash
-        print(f"  [Note: Log ended abruptly at frame {n} - typical for power cuts/disarms]")
+        parse_error = str(e)
+        print(f"  [Decode incomplete at frame {n}: {e}; cause not established]")
 
     if n == 0 or t0 is None:
         print(f"  No valid flight frames found.")
@@ -161,9 +162,23 @@ for li in range(1, log_count + 1):
     print(f"  Amperage Max:    {a_max:.1f} A")
     print(f"  Gyro Yaw Range:  {gyro_yaw_min} to {gyro_yaw_max} deg/s")
     print(f"  Saturated Motor: {sat_frames} frames")
-    print(f"  Desync Summary:  {desync_total} frames across motors")
-    
-    if desync_total >= 20:
-        print(f"  *** WARNING: MOTOR_DESYNC detected on motor(s): " + ", ".join(f"m{i}" for i in bad_motors))
+    # Betaflight 4.5.x src/main/fc/core.h; preserve unknown numeric reasons.
+    disarm_names = {
+        0: "ARMING_DISABLED", 1: "FAILSAFE", 2: "THROTTLE_TIMEOUT",
+        3: "STICKS", 4: "SWITCH", 5: "CRASH_PROTECTION",
+        6: "RUNAWAY_TAKEOFF", 7: "GPS_RESCUE", 8: "SERIAL_COMMAND",
+    }
+    disarms = [e for e in p.events if e.type.name == "DISARM"]
+    for event in disarms:
+        reason = event.data.get("reason")
+        print(f"  Disarm Event:    {disarm_names.get(reason, 'UNKNOWN')} (reason={reason}; verify mapping for other firmware versions)")
+    if not disarms:
+        print("  Disarm Event:    Not recorded/decoded; shutdown cause unknown.")
+    ended = any(e.type.name == "LOG_END" for e in p.events)
+    print(f"  Log End Event:   {'present' if ended else 'absent'}; decode {'incomplete' if parse_error else 'finished'}")
+    if len(erp) != 4:
+        print("  Desync Check:    Unavailable: four-motor RPM telemetry absent. Motor commands do not prove motor speed or thrust.")
+    elif desync_total >= 20:
+        print(f"  Desync Check:    Suspected command/RPM mismatch ({desync_total} motor-frame flags) on " + ", ".join(f"m{i}" for i in bad_motors) + "; inspect timing and corroborate before diagnosing an ESC fault.")
     else:
-        print(f"  Control Loop:    Clean. No motor desyncs or thrust imbalances detected.")
+        print(f"  Desync Check:    {desync_total} command/RPM mismatch flags; this heuristic does not establish flight stability or exclude faults.")

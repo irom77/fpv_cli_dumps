@@ -227,3 +227,7 @@ Arming disable flags: RXLOSS LOAD CLI MSP
 - [Betaflight 4.5.5 SmartAudio driver](https://github.com/betaflight/betaflight/blob/4.5.5/src/main/io/vtx_smartaudio.c) — retains `USE_NONCOMPLIANT_SMARTAUDIO` conditional handling.
 - [Betaflight 4.5.5 release](https://github.com/betaflight/betaflight/releases/tag/4.5.5)
 - [Reported SmartAudio regression in 4.5.2](https://github.com/betaflight/betaflight/issues/14316) — a report on different hardware, not proof of our root cause.
+
+## Follow-up: CPU overload and failed takeoffs
+
+Reducing `pid_process_denom` to 2 cleared the LOAD arming block (CPU 63% to 32%). Subsequent takeoffs ended in recorded runaway takeoff disarms with uncontrolled yaw. The pilot subsequently reordered the motors and changed motor directions to props-out. The September 19 log records a successful short test ending with a switch disarm, without the earlier runaway behavior. See [Blackbox evidence and corrective actions](cine-fish-runaway-takeoff-20260918.md). Full-flight reliability remains unconfirmed; the SmartAudio issue is separate.
