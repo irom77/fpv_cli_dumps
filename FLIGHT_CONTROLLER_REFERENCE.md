@@ -1,6 +1,6 @@
 # FPV flight-controller catalog and wiring reference
 
-Generated from the CLI dumps and `hardware.csv` on 2026-09-04. The newest CLI dump for each
+Generated from the CLI dumps and `hardware.csv` on 2026-09-21. The newest CLI dump for each
 craft is the inventory authority. Product identity is then refined
 with the curated build notes and manufacturer documentation.
 
@@ -11,7 +11,7 @@ with the curated build notes and manufacturer documentation.
 
 ## Inventory
 
-The dump set contains **34 current craft/unnamed identities and 19 distinct Betaflight
+The dump set contains **35 current craft/unnamed identities and 20 distinct Betaflight
 board strings**.
 Those strings resolve to the physical controller families below; rows marked
 **revision-sensitive** must be visually identified before their pinout is trusted.
@@ -30,6 +30,7 @@ Those strings resolve to the physical controller families below; rows marked
 | GEPRC GEP-F411-35A AIO family | `GEPRC_F411_AIO`, `GEPRCF411_AIO` | CineLog30, Cine-fish | Likely old/new target aliases; revision-sensitive |
 | GEPRC GEP-F722-35A AIO family | `GEPRC_F722_AIO` | AOS5, retired Crocodile5 baby | Product confirmed; gyro/PCB revisions exist |
 | Happymodel CrazyF411 ELRS 20A AIO | `BETAFLIGHTF4` | Crux-fish | Confirmed by Crux35 manual; generic target name |
+| HAKRC F411 AIO family | `HAKRCF411D` | TTV2 | Official family/target match; exact 20A/40A AIO revision-sensitive |
 | HDZero Halo H743 | `HDZERO_HALO` | LS-Ultra HD, PRO-SPEC2 | Confirmed |
 | Hobbywing XRotor F7 / Convertible family | `HOBBYWING_XROTORF7CONV` | openracer, PROSPEC, unnamed Hobbywing dump | Family confirmed; PROSPEC's newest dump is `CONV` |
 | Hobbywing XRotor F7 legacy target | `HOBBYWING_XROTORF7CON` | unnamed Hobbywing dump; an older PROSPEC dump only | Physical revision unresolved |
@@ -204,6 +205,19 @@ Official [Crux35/Crux35HD/HDZero manual](https://www.happymodel.cn/wp-content/up
 
 The manual documents a solder bridge for reclaiming UART2; inspect the exact revision
 before changing it.
+
+### HAKRC F411 AIO family — TTV2
+
+The `HAKRCF411D` target matches HAKRC's [F411 20A/40A AIO product page](https://www.hakrc.com/HAKRC-F411-40A-AIO.html), which documents STM32F411, integrated ESCs, an ICM42688, barometer, current sensing, and 25.5/26.5 mm mounting options. The TTV2 dump alone does not distinguish the 20A and 40A board variants, so do not infer pad positions or power limits until the PCB is photographed and matched to the manual.
+
+```text
+Target: HAKRCF411D   MCU: STM32F411   FC/ESC: AIO
+Dump resources: M1..M4 on B04..B07 | UART1 A09/A10 | UART2 A02/A03
+                 I2C SCL/SDA B08/B09 | LED strip A08 | buzzer B02
+```
+
+Treat the resource map above as this dump's firmware assignment, not a substitute for
+the board silkscreen or manufacturer wiring diagram.
 
 ### HDZero Halo H743 — LS-Ultra HD / PRO-SPEC2
 
