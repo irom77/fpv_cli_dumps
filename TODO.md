@@ -30,10 +30,14 @@ Detailed handoff: [Cine-fish SmartAudio troubleshooting](docs/troubleshooting/ci
 - [ ] Review analog OSD element placement; OSD text is confirmed visible.
 - [x] Resolve static: actual VTX channel is A1; the saved R8 request was not reaching the VTX.
 - [x] Confirm DATA-to-FC-T1 continuity (pilot tested).
-- [ ] Resolve SmartAudio Device ready=false. VTX sticker identifies SmartAudio 2.1.
+- [ ] Resolve SmartAudio Device ready=false and channel control. Changing the Betaflight
+      channel updates the OSD/configuration values but the Rush Tiny Tank remains on A1
+      (5865 MHz), so the FC-to-VTX SmartAudio command path is still unverified. VTX sticker
+      identifies SmartAudio 2.1.
       Attempted BF 4.5.5 with `NONCOMPLIANT_SMARTAUDIO` selected; still false after restore and
-      full power cycle. Actual build-option inclusion remains unverified; see the detailed handoff.
-      This is a firmware build option, not a CLI setting.
+      full power cycle. Build metadata for key `3b7d5fd28e6489c3dd138b3d7ee0fe7a` confirms
+      `USE_NONCOMPLIANT_SMARTAUDIO` is included; see the detailed handoff. This is a firmware
+      build option, not a CLI setting.
       [Betaflight workaround](https://betaflight.com/docs/development/API/Cloud-Build-API#smartaudio-bug).
 - [ ] Confirm channel/power control and video operation on the bench; the dump records requested
       settings, not measured transmitter output. `vtx_low_power_disarm` currently remains `OFF`.

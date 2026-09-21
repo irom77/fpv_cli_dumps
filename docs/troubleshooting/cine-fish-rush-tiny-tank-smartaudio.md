@@ -6,9 +6,11 @@ Session: 2026-09-18, America/New_York. Paused at the pilot's request; resume tom
 
 - **Original static-only video problem resolved:** the HDZero Monitor received camera video and Betaflight OSD on **A1 / 5865 MHz**. The VTX was not on the R8 channel requested in Betaflight.
 - **SmartAudio remains unresolved:** Video Transmitter tab still reports **Device ready: false** after firmware replacement, backup restoration, and a full USB/battery power cycle.
+- **New channel-control evidence:** changing the VTX band/channel in Betaflight changes the saved values and OSD text, but the transmitter remains on the previously observed A1 carrier (5865 MHz). This confirms that the FC UI/configuration state is changing without confirmed RF control of the VTX.
+- **Post-restore status received:** live CLI reports `CONFIGURED`, BF 4.5.5, and build key `3b7d5fd28e6489c3dd138b3d7ee0fe7a`; CPU load is 31% with no `LOAD` arming flag. This verifies the running artifact and basic restored runtime state, but does not expose compile-time custom defines.
 - Live firmware is **Betaflight 4.5.5, GEPRCF411_AIO**, verified by CLI and the app's connection log. Do not confuse app version 2026.6.2 with the installed FC firmware.
 - DATA-to-T1 continuity was confirmed by the pilot. Live UART function and pin resource are correct. This confirms continuity/configuration, not electrical signal quality or working UART/VTX data hardware.
-- The firmware build selection screenshot includes `NONCOMPLIANT_SMARTAUDIO`; inclusion in the actual flashed binary has **not independently been verified**.
+- Build metadata now independently verifies that the flashed artifact includes `USE_NONCOMPLIANT_SMARTAUDIO`.
 - Latest repository full dump is still **pre-flash 4.5.2**. No post-flash 4.5.5 dump has been received. Do not edit historical dumps to claim they contain the new firmware or actual A1 channel.
 - No flight-readiness or range test was completed. Latest explicit video/OSD confirmation was before flashing; recheck after restoration.
 
@@ -162,7 +164,7 @@ No duplicate A09 assignment was shown. Do not blindly enable default softserial 
 
 Pilot then disconnected both battery and USB for 10 seconds, powered battery first, waited, reconnected USB, and reported the same failure.
 
-### 6. Build-log verification remains incomplete
+### 6. Build metadata verification
 
 - Pilot could view logs but could not copy them.
 - Screenshot 151613 is the general application log, showing September 17 Crux-fish/FPVM BETAFPVF4 entries. Its 404 is unrelated to this Cine-fish build.
@@ -172,7 +174,31 @@ Pilot then disconnected both battery and USB for 10 seconds, powered battery fir
 - Direct metadata URL:
   `https://build.betaflight.com/api/builds/3b7d5fd28e6489c3dd138b3d7ee0fe7a/json`
 - Agent's Python request received HTTP 403; web tool also could not access it. This is not evidence that the build is absent.
-- Last instruction before pause: open this URL in the pilot's Windows browser, search for `NONCOMPLIANT_SMARTAUDIO`, or report 403/404. **No result received yet.**
+- The build metadata endpoint was queried successfully for the running build key. It reports release `4.5.5`, target `GEPRCF411_AIO`, status `success`, and this option in the request:
+
+  ```text
+  USE_NONCOMPLIANT_SMARTAUDIO
+  ```
+
+This verifies that the compatibility workaround was compiled into the flashed firmware. It does
+not prove that the DATA wire, UART electrical signaling, or VTX SmartAudio input is working.
+
+### 7. Channel command does not move the transmitter
+
+The pilot subsequently tested the behavior directly: selecting another band/channel in
+Betaflight updates the channel shown in the OSD, but reception remains on the original A1
+frequency. The configured `vtx_band`, `vtx_channel`, and `vtx_freq` values therefore describe
+the FC's requested state; they do not prove that the Rush Tiny Tank accepted a SmartAudio
+command or changed its RF carrier. This is consistent with `Device ready: false` and makes a
+VTX-table or OSD-layout change an inadequate fix.
+
+The observation narrows the unresolved fault to the SmartAudio path: the selected firmware
+driver/build, UART electrical signaling and pin-level wiring, VTX DATA input, or the VTX's
+SmartAudio implementation. It does not distinguish among those causes. DATA-to-T1 continuity
+alone still cannot show that a valid bidirectional SmartAudio waveform reaches the VTX.
+
+The post-restore status snapshot also shows `RXLOSS CLI MSP` arming flags while connected to the
+Configurator. Those flags are expected for this bench session and are unrelated to SmartAudio.
 
 Screenshots are external Windows artifacts, not copied into this repository:
 `C:\Users\irekr\OneDrive\Pictures\Screenshots\Screenshot 2026-09-18 <timestamp>.png`.
@@ -200,13 +226,13 @@ Arming disable flags: RXLOSS LOAD CLI MSP
 
 ## Resume plan
 
-1. Ask whether the direct build-details URL opened and whether the workaround appears. If unavailable, retain the uncertainty; do not require more rounds of irrelevant app-log screenshots or reflash just to get logs.
+1. Build-option uncertainty is resolved: the build metadata confirms `USE_NONCOMPLIANT_SMARTAUDIO`. Do not reflash merely to test that option again.
 2. Obtain a fresh **post-restore 4.5.5 dump all**, plus `version`, `status`, `flash_info`, and `tasks`. Archive it under its actual export filename and regenerate the fleet views. Compare key settings to the 14:35:15 baseline, especially receiver, motors, modes, rates, UART1, VTX table, OSD, and osd_units. Do not blindly replay a restore again.
 3. Confirm battery-powered video and OSD still work on A1 after the upgrade; note exact VTX Type field and Device ready result. Test with props removed, VTX antenna attached, and airflow for extended bench operation.
-4. If compile-option verification is possible, establish whether the workaround was actually included. Selected UI options and installed build contents are different levels of evidence.
-5. If still false with verified build/config, investigate physical electrical signaling rather than assuming another table will fix discovery: inspect actual DATA/T1 pads and common ground, check for a short to ground/adjacent pads with power removed, and use a logic analyzer/oscilloscope or a known-good SmartAudio device/FC if available. These tests have **not** been done. Continuity alone does not establish valid data signaling.
+4. The compile option is verified in the build metadata; focus remaining investigation on the physical SmartAudio path and VTX response.
+5. With props removed, antenna attached, and battery power applied, capture the DATA/T1 line while issuing one deliberate channel change. Check for a waveform at the FC TX1 pad and at the VTX DATA pad; inspect the actual pad labels and common ground, and check for shorts with power removed. A logic analyzer/oscilloscope or a known-good SmartAudio device/FC is needed to separate wiring/driver failure from a VTX fault. These tests have **not** been done. Continuity alone does not establish valid data signaling.
 6. Alternate UART/softserial or another firmware build are possible controlled tests, not approved diagnoses or completed work. Plan pin use carefully: only two hardware UARTs here, and UART2 carries CRSF. Preserve a current backup before changing anything.
-7. Success criterion: Device ready=true with a detected SmartAudio version; a commanded channel change actually moves reception to the requested frequency, survives a power cycle, and video/OSD remain stable. Power labels are not proof of RF output.
+7. Success criterion: Device ready=true with a detected SmartAudio version; a commanded channel change actually moves reception from A1 to the requested frequency, survives a power cycle, and video/OSD remain stable. Power labels, OSD text, and saved CLI values are not proof of RF output.
 
 ## Avoid repeating ineffective or unsupported advice
 
