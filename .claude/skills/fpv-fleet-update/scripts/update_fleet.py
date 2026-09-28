@@ -124,8 +124,9 @@ def extract_modes(text):
 def md(s):
     """Escape a value for a markdown table cell. Hand-written hardware.csv text can legitimately
     contain a pipe (e.g. a motor sold under two brands, `HeadsUp | Five33 2207`), which would
-    otherwise split the cell and shift every column after it."""
-    return str(s or '').replace('|', '\\|')
+    otherwise split the cell and shift every column after it. Multiline CSV cells become explicit
+    HTML breaks so they stay inside one Markdown table cell."""
+    return str(s or '').replace('|', '\\|').replace('\r\n', '\n').replace('\n', '<br>')
 
 
 def norm(s):

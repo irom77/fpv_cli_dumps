@@ -48,7 +48,8 @@ files below must stay in sync whenever the set of dumps changes:
   `aliases` (former craft names, `;`-separated — see "Renaming a quad" below), and `rate_preset`
   (which named rateprofile from `rate_presets.csv` this quad is *meant* to fly — see "Rates"). Largely seeded
   from the pilot's own fleet spreadsheet, so some rows may be stale — the `notes` column flags known
-  conflicts. Optional; joined into the summary by quad name. Edit it directly.
+  conflicts. Optional; joined into the summary by quad name. Edit it directly. Long cells may use
+  quoted CSV newlines for GitHub readability; the generated Markdown summary renders those as `<br>`.
 - `FLIGHT_CONTROLLER_REFERENCE.md` — curated catalog of physical flight-controller families,
   Betaflight targets, official manufacturer pinout sources, and wiring-oriented diagrams. Unlike
   the CSVs and fleet summary, the script does not generate or overwrite it; check and extend it
