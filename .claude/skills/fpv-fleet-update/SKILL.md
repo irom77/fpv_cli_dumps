@@ -212,8 +212,9 @@ the fleet table with its status flagged. `broken` also gets its own actionable "
 from the **active** rateprofile only (the last bare `rateprofile N` line) via `extract_active_rates()`.
 Those triples are the RAW stored integers, and a triple like `//12` means only yaw was set.
 
-`scripts/rates.py` turns them into real deg/s for `rates.csv` and the summary's Rates table. It is
-pure math with no I/O — run `python3 scripts/rates.py` to execute its self-test. Two things it exists
+`.claude/skills/fpv-fleet-update/scripts/rates.py` turns them into real deg/s for `rates.csv` and the
+summary's Rates table. It is pure math with no I/O — from the repository root, run
+`python3 .claude/skills/fpv-fleet-update/scripts/rates.py` to execute its self-test. Two things it exists
 to handle:
 
 - **Stock rates are not one thing.** `diff all` omits defaults, so a quad that never had rates set

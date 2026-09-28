@@ -21,14 +21,16 @@ try:
     from orangebox import Parser
     from orangebox.reader import Reader
 except ModuleNotFoundError:
-    # Compare executable paths WITHOUT resolving symlinks: a venv's python is a symlink to the
-    # base interpreter, so realpath() would collapse both and the re-exec would never fire.
-    venv_py = os.path.join(os.getcwd(), ".venv", "bin", "python")
-    if os.path.exists(venv_py) and os.path.abspath(sys.executable) != venv_py:
-        os.execv(venv_py, [venv_py] + sys.argv)
-    sys.exit("orangebox not installed. One-time setup:\n"
-             "    python3 -m venv .venv && .venv/bin/pip install orangebox\n"
-             "then re-run this script.")
+    if __name__ == "__main__":
+        # Compare executable paths WITHOUT resolving symlinks: a venv's python is a symlink to the
+        # base interpreter, so realpath() would collapse both and the re-exec would never fire.
+        venv_py = os.path.join(os.getcwd(), ".venv", "bin", "python")
+        if os.path.exists(venv_py) and os.path.abspath(sys.executable) != venv_py:
+            os.execv(venv_py, [venv_py] + sys.argv)
+        sys.exit("orangebox not installed. One-time setup:\n"
+                 "    python3 -m venv .venv && .venv/bin/pip install orangebox\n"
+                 "then re-run this script.")
+    Parser = Reader = None
 
 LOGS_DIR = os.path.abspath(sys.argv[1]) if len(sys.argv) > 1 else os.path.join(os.getcwd(), "blackbox")
 OUT = os.path.join(os.getcwd(), "flights.csv")

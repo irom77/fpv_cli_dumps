@@ -1,5 +1,4 @@
 quad,discipline,class,center_rpy,max_rpy,expo_rpy,bf_version,preset,preset_status,rates_type,dps25_rpy,dps50_rpy,dps75_rpy,rc_rate_rpy,super_rate_rpy,rateprofile,note,source
-Mob6 AIO5 1st,race,whoop,200/200/200,667/667/667,0/0/0,4.4.2,whoop-race,match,BETAFLIGHT,61/61/61,154/154/154,316/316/316,100/100/100,70/70/70,0,,dump
 Mob6 AIO5 2nd,race,whoop,200/200/200,667/667/667,0/0/0,4.5.2,whoop-race,match,BETAFLIGHT,61/61/61,154/154/154,316/316/316,100/100/100,70/70/70,0,,dump
 Mob6 AIO5 RACE,race,whoop,200/200/200,667/667/667,0/0/0,4.4.2,whoop-race,match,BETAFLIGHT,61/61/61,154/154/154,316/316/316,100/100/100,70/70/70,0,,dump
 Mob6 HDZERO RACE,race,whoop,200/200/200,667/667/667,0/0/0,4.4.2,whoop-race,match,BETAFLIGHT,61/61/61,154/154/154,316/316/316,100/100/100,70/70/70,0,,dump

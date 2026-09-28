@@ -1,10 +1,8 @@
 # TODO
 
-## Crux-fish (formerly HDZERO CRUX35) repair
+## Mob6 AIO5 1st repair
 
-- [ ] Buy 1 [HappyModel EX1404 3500KV motor](https://pyrodrone.com/products/happymodel-ex1404-1404-motor-3500kv) for Crux-fish Motor 3, reported not moving on 2026-09-10 (model per hardware.csv; confirm against the installed motor before ordering).
-- [ ] Buy 1 [HDZero Nano V3 HD FPV camera](https://pyrodrone.com/products/hdzero-nano-v3-hd-fpv-camera) for Crux-fish (formerly HDZERO CRUX35).
-- [ ] Buy 1 60 mm MIPI cable for Crux-fish’s HDZero Nano V3 camera.
+- [ ] Replace the HDZero AIO5 all-in-one flight-controller/ESC board; Motor 1 does not spin in Betaflight’s Motors tab after the motor replacement, while Motor 3 works.
 
 ## Cine-fish — analog conversion (Rush Tiny Tank installed)
 
@@ -290,3 +288,11 @@ just before a Kronos dump → `Kronos?`), left as a `?`-flagged suggestion to co
       restore the backups.
 - [ ] Decide which generated, device-specific, or sensitive files should be excluded before
       committing the backups.
+
+## Archived tasks
+
+### Crux-fish (formerly HDZERO CRUX35) repair — completed 2026-09-28
+
+- [x] Buy 1 [HappyModel EX1404 3500KV motor](https://pyrodrone.com/products/happymodel-ex1404-1404-motor-3500kv) for Crux-fish Motor 3, reported not moving on 2026-09-10 (model per hardware.csv; confirm against the installed motor before ordering).
+- [x] Buy 1 [HDZero Nano V3 HD FPV camera](https://pyrodrone.com/products/hdzero-nano-v3-hd-fpv-camera) for Crux-fish (formerly HDZERO CRUX35).
+- [x] Buy 1 60 mm MIPI cable for Crux-fish’s HDZero Nano V3 camera.
