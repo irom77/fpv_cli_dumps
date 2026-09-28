@@ -4,7 +4,7 @@
 
 - [ ] Replace the HDZero AIO5 all-in-one flight-controller/ESC board; Motor 1 does not spin in Betaflight’s Motors tab after the motor replacement, while Motor 3 works.
 
-## 1. Publish the `fpv-fleet-update` skill publicly
+## Publish the `fpv-fleet-update` skill publicly
 
 Make the skill installable by others via a Claude Code plugin marketplace. Currently it's
 project-scoped (`.claude/skills/fpv-fleet-update/`), so it only loads inside this repo.
@@ -33,7 +33,7 @@ directory and is built around Betaflight dumps, so it's mainly useful to people 
 backups. Consider documenting that expectation, or generalizing the script (e.g. an input/output
 flag) before publishing.
 
-## 2. Make use of blackbox logs
+## Make use of blackbox logs
 
 Betaflight blackbox flight logs (`.bbl` / `.bfl`) capture per-flight telemetry. First pass is
 implemented: `update_flights.py` decodes logs (via `orangebox`) into `flights.csv`, and
@@ -75,29 +75,6 @@ not arm until it was power-cycled. Removing the shared assignment fixed the beha
 - [ ] Take fresh CLI backups of openracer and openracer2, then run `update_fleet.py` so `modes.csv`
       reflects the corrected configuration. The current openracer2 backup predates the overlap and
       the fix, so it cannot document either state.
-
-## Trial the Mondo MultiGP Pro Spec 7-inch preset
-
-Evaluate Armando Gallegos (Mondo)'s **Experimental Presets for MultiGP PRO Spec 7\"** tune on
-ProSpec. The compatibility assessment, rollback plan, staged test procedure, and acceptance criteria
-are recorded in
-[`docs/prospec-mondo-experimental-preset.md`](docs/prospec-mondo-experimental-preset.md).
-
-- [x] Set and verify the shared `house-race` rates: BETAFLIGHT RC rate `95/80/80`, super rate
-      `70/70/70` (approximately 633/533/533 deg/s).
-- [x] Save the known-good pre-preset rollback dump as
-      `BTFL_cli_backup_PROSPEC_20260902_111305_HOBBYWING_XROTORF7CONV.txt`.
-- [ ] Before applying, confirm the current preset explicitly supports Betaflight 4.5.x and review
-      its options, warnings, and linked discussion.
-- [ ] Apply the preset with props removed, save a post-preset `diff all`, and verify receiver,
-      failsafe, modes, motor order/direction, DShot telemetry, RPM filtering, OSD, LEDs, rates, and
-      the 13,000 RPM limiter.
-- [ ] Resolve the preset's `acc_hardware = NONE` setting: restore the accelerometer if AUX2 Angle
-      mode is still required, or deliberately remove/accept the unavailable mode.
-- [ ] Perform the staged hover, motor-temperature, gentle-flight, and race-flight checks. Capture a
-      blackbox log for comparison with the baseline.
-- [ ] Record the results and keep/revert decision in the proposal document, add the post-test dump
-      to `backups/`, then run `update_fleet.py`.
 
 ## Make the 5-inch racers Freedom Spec legal
 
@@ -154,73 +131,6 @@ Ideas, not yet needed:
 - Deleting a spec from `specs.csv` orphans its `compliance_*.csv` (the generator only writes).
   Cheap to fix with a cleanup pass if specs ever churn; not worth it for two.
 
-## Upgrade openracer to KAACK firmware — completed 2026-08-12
-
-openracer was upgraded from stock **Betaflight 4.5.1** to **4.5.3.KAACK_V19**. The complete build,
-flash, restore and verification record is in
-[`upgrades/OPENRACER_KAACK_V19_UPGRADE/`](upgrades/OPENRACER_KAACK_V19_UPGRADE/README.md).
-
-| Quad | Firmware |
-|---|---|
-| openracer | 4.5.3.KAACK_V19 |
-| LS-Ultra | 4.5.2.KAACK_V15 |
-| LS-Ultra HD | 4.5.3.KAACK_V18 |
-| openracer2 | 2025.12.3-alpha.KAACK_V19 |
-
-- [x] Built KAACK V19 from the 4.5-based branch for the exact `HOBBYWING_XROTORF7CONV` target,
-      avoiding the 2025.12 alpha line.
-- [x] Saved the 12:02:42 pre-flash `diff all` in `backups/`.
-
-Do these in the same bench session, since they need the quad on USB anyway:
-
-- [x] **Rates restored after flashing.** openracer matches `house-race` exactly (190/160/160 centre,
-      633/533/533 max), and the generated rate check is quiet:
-      ```
-      rateprofile 0
-      set rates_type = BETAFLIGHT
-      set roll_rc_rate = 95
-      set pitch_rc_rate = 80
-      set yaw_rc_rate = 80
-      set roll_srate = 70
-      set pitch_srate = 70
-      set yaw_srate = 70
-      save
-      ```
-- [x] **`rpm_limit = ON`** with `rpm_limit_value = 18000`, satisfying the firmware and RPM-limiter
-      parts of the Freedom Spec check.
-- [x] **Removed the 80% motor-output cap deliberately:** `motor_output_limit = 100`.
-
-      Dump history says it is **not** crash-related, contrary to the first guess:
-
-      | Dump | `motor_output_limit` |
-      |---|---|
-      | 2024-12-30 (Kronos) | not set — full 100% |
-      | 2025-08-10 (Kronos) | **80** |
-      | 2026-08-11 ×3 (openracer) | 80 |
-
-      It was introduced somewhere between 2024-12 and 2025-08, roughly **eleven months before** the
-      2026-07-15 desync crash — so it predates the fault it was assumed to be a reaction to. That
-      makes "leftover from troubleshooting" the weaker reading and "deliberate power cap" the
-      stronger one: VCI Spark 2207 2050Kv on 6S is a lot of thrust for a 305g airframe.
-
-      The blackbox logs can't settle it. Both are short bench hops (7.7s and 14.3s at 10% and 18%
-      average throttle), and the only saturation reading — 7.2% on 2026-07-15 — is confounded by
-      the desync itself, since a desynced motor gets commanded to full and reads as saturated. The
-      clean 2026-07-20 log shows 0% saturation, but at 18% throttle that proves nothing about
-      whether the cap bites under race load.
-
-      The cap was removed by decision on 2026-08-12. Use a real flight log to watch
-      `motor_sat_pct` and re-check for desync under load; the existing short bench logs cannot
-      predict full-power behavior.
-- [x] Re-dumped after flashing, finalized the OSD, and re-ran `update_fleet.py`. The final source is
-      `BTFL_cli_backup_OPENRACER_20260812_122513_HOBBYWING_XROTORF7CONV.txt`.
-
-Note: rate values do **not** transfer across the 4.2→4.3 default change or between rate types, so
-copy the raw CLI lines above rather than any remembered numbers. See `rates.csv` for what each quad
-actually flies at in deg/s. Entering house-race as equivalent ACTUAL values was tried on 2026-08-11
-(rc_rate 19/16/16, srate 63/53/53): it matched centre and max exactly but ran ~40% hotter mid-stick,
-because ACTUAL and BETAFLIGHT draw different curves between the same endpoints.
-
 ## Auto-link ordered parts to builds (fpv-orders-update)
 
 The `fpv-orders-update` skill currently leaves the `build` column blank for the pilot to fill.
@@ -236,20 +146,3 @@ just before a Kronos dump → `Kronos?`), left as a `?`-flagged suggestion to co
       restore the backups.
 - [ ] Decide which generated, device-specific, or sensitive files should be excluded before
       committing the backups.
-
-## Archived tasks
-
-### Cine-fish — analog conversion — completed 2026-09-28
-
-- [x] Install and configure the Rush Tiny Tank and CaddxFPV Baby Ratel 2 analog camera.
-- [x] Confirm analog video and Betaflight OSD operation.
-- [x] Confirm Cine-fish is flying. SmartAudio remains non-operational, so the VTX channel must
-      be selected manually; automatic channel control is not required for current operation.
-- [x] Archive the unresolved SmartAudio diagnosis in
-      [the troubleshooting handoff](docs/troubleshooting/cine-fish-rush-tiny-tank-smartaudio.md).
-
-### Crux-fish (formerly HDZERO CRUX35) repair — completed 2026-09-28
-
-- [x] Buy 1 [HappyModel EX1404 3500KV motor](https://pyrodrone.com/products/happymodel-ex1404-1404-motor-3500kv) for Crux-fish Motor 3, reported not moving on 2026-09-10 (model per hardware.csv; confirm against the installed motor before ordering).
-- [x] Buy 1 [HDZero Nano V3 HD FPV camera](https://pyrodrone.com/products/hdzero-nano-v3-hd-fpv-camera) for Crux-fish (formerly HDZERO CRUX35).
-- [x] Buy 1 60 mm MIPI cable for Crux-fish’s HDZero Nano V3 camera.
