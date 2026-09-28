@@ -4,58 +4,6 @@
 
 - [ ] Replace the HDZero AIO5 all-in-one flight-controller/ESC board; Motor 1 does not spin in Betaflight’s Motors tab after the motor replacement, while Motor 3 works.
 
-## Cine-fish — analog conversion (Rush Tiny Tank installed)
-
-Rush Tiny Tank installed 2026-09-18, confirmed by pilot. This supersedes the deferred plan to use
-Mass's Rush Tank Ultimate Mini; that unit's unresolved fault remains documented in the
-[Mass VTX log](docs/troubleshooting/mass-vtx-troubleshooting.md).
-Latest configuration: [2026-09-18 backup](backups/BTFL_cli_CINE-FISH_20260918_143515_GEPRCF411_AIO.txt),
-GEPRCF411_AIO, BF 4.5.2 in the archived dump; live FC upgraded to 4.5.5 and restored on 2026-09-18.
-A post-upgrade dump is still needed. The saved dump is preserved as exported.
-Detailed handoff: [Cine-fish SmartAudio troubleshooting](docs/troubleshooting/cine-fish-rush-tiny-tank-smartaudio.md).
-
-- [x] Install Rush Tiny Tank.
-- [x] Configure UART1 for SmartAudio (`serial 0 2048 115200 57600 0 115200`); UART2 remains CRSF.
-- [x] Load the five-band VTX table with power labels 25/100/200/350 mW;
-      saved selection is R8 (5917 MHz), power index 1 (25 mW label).
-      The VTX table is preserved in the linked full dump.
-- [x] Save a fresh dump and refresh the fleet inventory with the installed VTX.
-- [x] Install and connect the analog camera through the VTX pads (pilot confirmed 2026-09-18).
-- [x] Record camera model: CaddxFPV Baby Ratel 2 (pilot confirmed 2026-09-18).
-- [x] Confirm camera video and Betaflight OSD on HDZero Monitor, RF Auto, A1 (5865 MHz).
-- [x] Select analog OSD: 14:35:15 dump confirms `osd_displayport_device = MAX7456`,
-      `vcd_video_system = AUTO`, and a 30x13 canvas.
-- [ ] Review analog OSD element placement; OSD text is confirmed visible.
-- [x] Resolve static: actual VTX channel is A1; the saved R8 request was not reaching the VTX.
-- [x] Confirm DATA-to-FC-T1 continuity (pilot tested).
-- [ ] Resolve SmartAudio Device ready=false and channel control. Changing the Betaflight
-      channel updates the OSD/configuration values but the Rush Tiny Tank remains on A1
-      (5865 MHz), so the FC-to-VTX SmartAudio command path is still unverified. VTX sticker
-      identifies SmartAudio 2.1.
-      Attempted BF 4.5.5 with `NONCOMPLIANT_SMARTAUDIO` selected; still false after restore and
-      full power cycle. Build metadata for key `3b7d5fd28e6489c3dd138b3d7ee0fe7a` confirms
-      `USE_NONCOMPLIANT_SMARTAUDIO` is included; see the detailed handoff. This is a firmware
-      build option, not a CLI setting.
-      [Betaflight workaround](https://betaflight.com/docs/development/API/Cloud-Build-API#smartaudio-bug).
-- [ ] Confirm channel/power control and video operation on the bench; the dump records requested
-      settings, not measured transmitter output. `vtx_low_power_disarm` currently remains `OFF`.
-- [ ] Confirm the former Caddx Vista's disposition before adding it to spare_parts.csv.
-
-Pilot-reported installed wiring for the CaddxFPV Baby Ratel 2 (2026-09-18; physical pad labels not independently verified):
-
-| Rush Tiny Tank pad | FC connection | Camera connection |
-| --- | --- | --- |
-| +5V | 5V | VCC |
-| GND | GND | GND |
-| CAM | Video input (VIDEO / VI in supplied table) | VIDEO |
-| VTX | Video output (VOUT / VO in supplied table) | — |
-| DATA | T1 / TX1 | — |
-
-The reported signal path is camera → FC video input → FC OSD → VTX video input.
-Camera power comes from the FC's 5V rail through the shared VTX pad. This records the installed
-wiring; video and Betaflight OSD were confirmed on A1 before the firmware upgrade.
-Recheck after restoration and save a fresh dump.
-
 ## 1. Publish the `fpv-fleet-update` skill publicly
 
 Make the skill installable by others via a Claude Code plugin marketplace. Currently it's
@@ -290,6 +238,15 @@ just before a Kronos dump → `Kronos?`), left as a `?`-flagged suggestion to co
       committing the backups.
 
 ## Archived tasks
+
+### Cine-fish — analog conversion — completed 2026-09-28
+
+- [x] Install and configure the Rush Tiny Tank and CaddxFPV Baby Ratel 2 analog camera.
+- [x] Confirm analog video and Betaflight OSD operation.
+- [x] Confirm Cine-fish is flying. SmartAudio remains non-operational, so the VTX channel must
+      be selected manually; automatic channel control is not required for current operation.
+- [x] Archive the unresolved SmartAudio diagnosis in
+      [the troubleshooting handoff](docs/troubleshooting/cine-fish-rush-tiny-tank-smartaudio.md).
 
 ### Crux-fish (formerly HDZERO CRUX35) repair — completed 2026-09-28
 

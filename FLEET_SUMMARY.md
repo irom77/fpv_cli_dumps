@@ -11,7 +11,7 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 | AIR65 R | whoop | — | active | BETAFPVG473 | G47X | 4.5.2 | DSHOT300 | - | - | 2025-10-25 |
 | aos5 | 5-inch | — | **incomplete** | GEPRC_F722_AIO | F7X2 | 4.5.1 | DSHOT300 | HD | CRSF | 2026-09-11 |
 | BETAFPVF4SX1280 *(unnamed)* | whoop | — | active | BETAFPVF4SX1280 | F411 | 4.4.0 | DSHOT300 | - | ELRS **[A]** | 2024-07-12 |
-| Cine-fish | cinewhoop | cinematic | **incomplete** | GEPRCF411_AIO | F411 | 4.5.5 | DSHOT300 | Auto | CRSF | 2026-09-19 |
+| Cine-fish | cinewhoop | cinematic | active | GEPRCF411_AIO | F411 | 4.5.5 | DSHOT300 | Auto | CRSF | 2026-09-19 |
 | CineLog30 | cinewhoop | cinematic | **retired** | GEPRC_F411_AIO | F411 | 4.2.3 | DSHOT600 | - | RX_SERIAL / CRSF | 2025-06-19 |
 | Crocodile5 baby | micro | long-range | **retired** | GEPRC_F722_AIO | F7X2 | 4.2.4 | DSHOT300 | - | RX_SERIAL / CRSF | 2024-08-27 |
 | Crux-fish | micro | — | **broken** | BETAFLIGHTF4 | F405 | 4.4.3 | DSHOT300 | HD | CRSF | 2026-09-10 |
@@ -47,7 +47,7 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 ## Fleet rollups
 
 - **Class:** 14× whoop, 3× cinewhoop, 5× micro, 9× 5-inch, 2× 3-inch, 2× 7-inch. Size class inferred from craft name / board where `hardware.csv` doesn't set it.
-- **Status:** 23× active, 6× broken, 3× retired, 3× incomplete. Lifecycle from `hardware.csv`; a blank there counts as active.
+- **Status:** 24× active, 6× broken, 3× retired, 2× incomplete. Lifecycle from `hardware.csv`; a blank there counts as active.
 - **Discipline:** 12× race, 3× freestyle, 3× cinematic, 2× long-range, 15 unset. Hand-entered in `hardware.csv` (no heuristic — the dump gives no signal).
 - **Flight controllers:** 15× F411, 8× F7X2, 4× F405, 2× G47X, 2× H743, 1× F745, 1× F722, 1× F411SX1280, 1× SPEEDYBEEF405MINI.
 - **Firmware:** 12 on BF 4.4.x, 12 on BF 4.5.x, 5 on BF 4.3.x, 3 on BF 4.2.x, 2 on BF 2025.12.x, 1 on BF 2026.6.x.
@@ -88,7 +88,7 @@ _Note: BETAFPVF4SX1280, FLYWOOF405S_AIO, HOBBYWING_XROTORF7CON, HOBBYWING_XROTOR
 
 _Active rateprofile, decoded to deg/s (see `rates.csv`). **Center** is stick sensitivity around centre, **Max** the rate at full deflection, r/p/y. `source=default` means the dump set no rates at all, so the values shown are that firmware's stock rateprofile — which changed at 4.3 (before: BETAFLIGHT 100/70, center 200; after: ACTUAL 7/67, center 70). Intended rates come from `rate_preset` in `hardware.csv`._
 
-_Showing the 13 active quads that have a `discipline` set; 22 others are hidden (retired, broken, incomplete, or no discipline recorded). "Needs attention" above still checks every quad._
+_Showing the 14 active quads that have a `discipline` set; 21 others are hidden (retired, broken, incomplete, or no discipline recorded). "Needs attention" above still checks every quad._
 
 **race — whoop**
 
@@ -126,6 +126,12 @@ _Showing the 13 active quads that have a `discipline` set; 22 others are hidden 
 | Quad | Center °/s | Max °/s | Expo | @50% | Preset | Type | Source |
 |---|---|---|---|---|---|---|---|
 | XILOF4-2 | 700/700/700 | 840/840/810 | 30/30/30 | 375/375/370 | — | ACTUAL (default) | dump |
+
+**cinematic — cinewhoop**
+
+| Quad | Center °/s | Max °/s | Expo | @50% | Preset | Type | Source |
+|---|---|---|---|---|---|---|---|
+| Cine-fish | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — | ACTUAL | dump |
 
 **long-range — micro**
 
@@ -175,7 +181,7 @@ _Curated per-quad build details (not captured in Betaflight dumps), largely seed
 |---|---|---|---|---|---|---|---|---|
 | AIR65 R | 1S | 17.3g | Air 5-in-1 (built-in) | 0702 SE II 27000KV | Gemfan 1219S 3-blade | C03 | Onboard 5.8G 25-400mW | BetaFPV Air65; ELRS 2.4G |
 | AOS5 |  |  | GEPRC F722 AIO (same MCU as retired Crocodile5 baby) | GEPRC 2004 2550KV |  |  |  | AOS5 partial build; frame/motors/FC/RX confirmed 2026-09-11;<br>CRSF on UART3; camera, VTX, battery, props, weight unconfirmed. |
-| Cine-fish | 4S |  | GEPRC F411 AIO (built-in) | GR1404 3850KV | T3x3x3 | CaddxFPV Baby Ratel 2 | Rush Tiny Tank (analog) | Successor to CineLog30 on Flyfish30;<br>Rush Tiny Tank installed 2026-09-18;<br>analog video/OSD confirmed; live FC BF 4.5.5;<br>SmartAudio Device ready=false;<br>see docs/troubleshooting/cine-fish-rush-tiny-tank-smartaudio.md. |
+| Cine-fish | 4S |  | GEPRC F411 AIO (built-in) | GR1404 3850KV | T3x3x3 | CaddxFPV Baby Ratel 2 | Rush Tiny Tank (analog) | Flying with manual VTX channel selection;<br>Rush Tiny Tank installed 2026-09-18;<br>analog video/OSD confirmed; live FC BF 4.5.5;<br>SmartAudio Device ready=false, so channel control is not operational;<br>see docs/troubleshooting/cine-fish-rush-tiny-tank-smartaudio.md. |
 | CineLog30 | 4S | 158.5g | BLHeli_S 35A (GEP-F411-35A AIO) | GR1404 3850KV | T3x3x3 | Polar | Caddx Vista | GEPRC GEP-CL30; RETIRED -> migrated to Cine-fish (Flyfish30) |
 | Crocodile5 baby | 4S | 252.29g | GEP-F722-35A AIO (built-in) | GEP 2004 2550KV | Gemfan 5130 | Caddx Air Unit | HD air unit | GEPRC GEP-CB5; RETIRED; sheet size 5in but 2004 motors = 4in class |
 | Crux-fish | 4S | 115g | Built-in 20A BLHeli_S 4-in-1 | HappyModel EX1404 3500KV | HQProp T3.5x2x3 | HDZero Nano V3 HD FPV Camera | Onboard HDZero | HDZero Crux35; 113mm.<br>Camera upgraded and Motor 3 replaced.<br>Still broken: gyro sensor (ICM42688P) flatlines/locks up to 0 under battery power due to ESC electrical noise on takeoff.<br>Solder new local Low-ESR capacitor to FC to resolve. |

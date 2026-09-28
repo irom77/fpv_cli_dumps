@@ -1,6 +1,13 @@
 # Cine-fish: Rush Tiny Tank video and SmartAudio troubleshooting
 
-Session: 2026-09-18, America/New_York. Paused at the pilot's request; resume tomorrow.
+Session: 2026-09-18, America/New_York. Follow-up status: 2026-09-28.
+
+## Current operational status — 2026-09-28
+
+The pilot reports that Cine-fish is flying. SmartAudio channel control remains non-operational,
+so the VTX channel must be selected manually; this is the accepted operating workaround. The
+troubleshooting task is archived as complete with this limitation. The diagnostic evidence below
+remains historical and still documents why automatic channel control is unavailable.
 
 ## State at handoff
 
@@ -12,7 +19,8 @@ Session: 2026-09-18, America/New_York. Paused at the pilot's request; resume tom
 - DATA-to-T1 continuity was confirmed by the pilot. Live UART function and pin resource are correct. This confirms continuity/configuration, not electrical signal quality or working UART/VTX data hardware.
 - Build metadata now independently verifies that the flashed artifact includes `USE_NONCOMPLIANT_SMARTAUDIO`.
 - Latest repository full dump is still **pre-flash 4.5.2**. No post-flash 4.5.5 dump has been received. Do not edit historical dumps to claim they contain the new firmware or actual A1 channel.
-- No flight-readiness or range test was completed. Latest explicit video/OSD confirmation was before flashing; recheck after restoration.
+- The pilot subsequently confirmed the quad is flying. Manual channel selection remains required;
+  this does not establish that SmartAudio or automatic channel control works.
 
 ## Hardware and wiring
 
