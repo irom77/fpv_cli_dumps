@@ -6,6 +6,7 @@ Scans every BTFL_cli_*.txt dump in the target folder and produces derived output
   - fpv_quads.csv         full history, one row per dump, newest per quad flagged 'latest'
   - fpv_quads_latest.csv  one row per quad, newest dump only
   - rates.csv             active rate profiles for curated, active quads
+  - racing_whoops.csv     race-discipline whoops with build, firmware, and decoded rates
   - modes.csv             AUX mode assignments and activation ranges for curated, active quads
   - FLEET_SUMMARY.md      human-readable overview with rollups and a 'needs attention' pass
 
@@ -25,6 +26,7 @@ SRC = os.path.abspath(sys.argv[1]) if len(sys.argv) > 1 else os.getcwd()
 OUT = os.path.join(SRC, "fpv_quads.csv")
 OUT_LATEST = os.path.join(SRC, "fpv_quads_latest.csv")
 OUT_RATES = os.path.join(SRC, "rates.csv")
+OUT_RACING_WHOOPS = os.path.join(SRC, "racing_whoops.csv")
 OUT_MODES = os.path.join(SRC, "modes.csv")
 OUT_SUMMARY = os.path.join(SRC, "FLEET_SUMMARY.md")
 HW_CSV = os.path.join(SRC, "hardware.csv")
@@ -656,6 +658,11 @@ RATE_COLS = ['quad', 'discipline', 'class',
              'dps25_rpy', 'dps50_rpy', 'dps75_rpy', 'rc_rate_rpy', 'super_rate_rpy',
              'rateprofile', 'note', 'source']
 
+RACING_WHOOP_COLS = ['quad', 'status', 'cells', 'weight', 'motors', 'props',
+                     'bf_version', 'board', 'rates_type', 'center_rpy', 'max_rpy', 'expo_rpy',
+                     'dps25_rpy', 'dps50_rpy', 'dps75_rpy', 'preset', 'preset_status',
+                     'rate_source', 'dump']
+
 MODE_COLS = ['quad', 'discipline', 'class', 'mode', 'aux_channel',
              'range_visual', 'range_start', 'range_end', 'mode_id', 'logic', 'linked_to', 'linked_to_id',
              'slot', 'bf_version', 'source']
@@ -798,6 +805,47 @@ def build_rate_rows(latest_rows, presets, hw_preset):
                     ('' if d['supported'] else f"unsupported rates_type {d['rates_type']}"),
         })
     return out
+
+
+def build_racing_whoop_rows(latest_rows, rate_rows, hw_rows):
+    """Build the canonical racing-whoop inventory with hardware and decoded rates.
+
+    This deliberately includes broken racing whoops: it is an inventory, not a flyable-only
+    comparison view. Rates are joined from the unfiltered rate rows so a grounded airframe still
+    shows the last known profile instead of disappearing from the inventory.
+    """
+    decoded = {norm(r['quad']): r for r in rate_rows}
+    out = []
+    for r in latest_rows:
+        if (r.get('class') or '').strip().lower() != 'whoop':
+            continue
+        if (r.get('discipline') or '').strip().lower() != 'race':
+            continue
+        key = norm(r['quad'])
+        hw = hw_rows.get(key, {})
+        rate = decoded.get(key, {})
+        out.append({
+            'quad': r['quad'],
+            'status': status_of(r),
+            'cells': hw.get('cells', ''),
+            'weight': hw.get('weight', ''),
+            'motors': hw.get('motors', ''),
+            'props': hw.get('props', ''),
+            'bf_version': r.get('bf_version', ''),
+            'board': r.get('board', ''),
+            'rates_type': rate.get('rates_type', ''),
+            'center_rpy': rate.get('center_rpy', ''),
+            'max_rpy': rate.get('max_rpy', ''),
+            'expo_rpy': rate.get('expo_rpy', ''),
+            'dps25_rpy': rate.get('dps25_rpy', ''),
+            'dps50_rpy': rate.get('dps50_rpy', ''),
+            'dps75_rpy': rate.get('dps75_rpy', ''),
+            'preset': rate.get('preset', ''),
+            'preset_status': rate.get('preset_status', ''),
+            'rate_source': rate.get('source', ''),
+            'dump': r.get('file', ''),
+        })
+    return sorted(out, key=lambda r: r['quad'].lower())
 
 
 def build_rates_section(rate_rows, total=None):
@@ -1149,12 +1197,14 @@ def main():
     rate_rows = build_rate_rows(latest_rows, load_presets(PRESETS_CSV),
                                 load_hw_map(HW_CSV, "rate_preset"))
     rates_view = [r for r in rate_rows if r['in_view']]
+    racing_whoop_rows = build_racing_whoop_rows(latest_rows, rate_rows, load_hw_rows(HW_CSV))
     mode_rows = build_mode_rows(latest_rows)
     spec_rows = build_spec_rows(load_specs(SPECS_CSV), latest_rows, load_hw_rows(HW_CSV))
 
     write_csv(OUT, rows)
     write_csv(OUT_LATEST, latest_rows)
     write_csv(OUT_RATES, rates_view, RATE_COLS)
+    write_csv(OUT_RACING_WHOOPS, racing_whoop_rows, RACING_WHOOP_COLS)
     # LF keeps the Unicode text bars clean in Git diffs; csv's default CRLF looks like trailing
     # whitespace to `git diff --check` whenever every generated row changes.
     write_csv(OUT_MODES, compact_mode_groups(mode_rows), MODE_COLS, lineterminator='\n')
@@ -1181,6 +1231,7 @@ def main():
     print(f"  {OUT}")
     print(f"  {OUT_LATEST}")
     print(f"  {OUT_RATES}")
+    print(f"  {OUT_RACING_WHOOPS}")
     print(f"  {OUT_MODES}")
     for p in compliance_files:
         print(f"  {p}")

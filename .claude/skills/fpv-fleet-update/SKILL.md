@@ -27,6 +27,10 @@ files below must stay in sync whenever the set of dumps changes:
   first) rather than alphabetically, so quads flown the same way can be read against each other —
   and so a 1S whoop and a 6S five-inch never share a heading just because both race. The filter is
   on the VIEW only; "needs attention" checks still run over the whole fleet. See "Rates" below.
+- `racing_whoops.csv` — canonical inventory of every curated `class=whoop`, `discipline=race`
+  quad, including broken ones. It joins hand-maintained motors/build fields with the newest dump's
+  Betaflight version and decoded active rates, so it is the racing-whoop reference sheet rather
+  than a flyable-only comparison view.
 - `modes.csv` — configured Betaflight modes decoded from `aux` lines, one row per activation range
   with mode name/ID, AUX channel, exact range, condition logic/link, firmware, and source dump.
   Covers only quads with `status` active and both `discipline` and `class` set, ordered like the
