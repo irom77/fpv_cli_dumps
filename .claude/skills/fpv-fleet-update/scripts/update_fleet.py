@@ -6,7 +6,7 @@ Scans every BTFL_cli_*.txt dump in the target folder and produces derived output
   - fpv_quads.csv         full history, one row per dump, newest per quad flagged 'latest'
   - fpv_quads_latest.csv  one row per quad, newest dump only
   - rates.csv             active rate profiles for curated, active quads
-  - racing_whoops.csv     race-discipline whoops with build, firmware, and decoded rates
+  - racing_whoops.csv     race-discipline whoops with build, firmware, rates, and crash recovery
   - modes.csv             AUX mode assignments and activation ranges for curated, active quads
   - FLEET_SUMMARY.md      human-readable overview with rollups and a 'needs attention' pass
 
@@ -241,6 +241,49 @@ def extract_active_rates(text):
     }
 
 
+def extract_active_profile_settings(text, keys):
+    """Read selected settings from the PID profile the dump leaves selected."""
+    selections = re.findall(r'^profile (\d+)\s*$', text, re.M)
+    active = selections[-1] if selections else None
+    if active is None:
+        return {key: val(text, key) for key in keys}
+
+    values = {}
+    current = None
+    wanted = set(keys)
+    for line in text.splitlines():
+        m = re.match(r'^profile (\d+)\s*$', line)
+        if m:
+            current = m.group(1)
+            continue
+        if current == active:
+            sm = re.match(r'^set (\w+) = (.+?)\s*$', line)
+            if sm and sm.group(1) in wanted:
+                values[sm.group(1)] = sm.group(2).strip()
+    return {key: values.get(key, val(text, key)) for key in keys}
+
+
+def extract_crash_recovery(text):
+    """Format active-profile crash recovery and all its thresholds for the inventory."""
+    keys = ('crash_recovery', 'crash_dthreshold', 'crash_gthreshold',
+            'crash_setpoint_threshold', 'crash_time', 'crash_delay',
+            'crash_recovery_angle', 'crash_recovery_rate', 'crash_limit_yaw')
+    settings = extract_active_profile_settings(text, keys)
+    if not any(settings.values()):
+        return ''
+    return ('{state}; d={d}; g={g}; setpoint={setpoint}; time={time}ms; delay={delay}ms; '
+            'angle={angle}°; rate={rate}; yaw={yaw}').format(
+                state=settings['crash_recovery'] or '?',
+                d=settings['crash_dthreshold'] or '?',
+                g=settings['crash_gthreshold'] or '?',
+                setpoint=settings['crash_setpoint_threshold'] or '?',
+                time=settings['crash_time'] or '?',
+                delay=settings['crash_delay'] or '?',
+                angle=settings['crash_recovery_angle'] or '?',
+                rate=settings['crash_recovery_rate'] or '?',
+                yaw=settings['crash_limit_yaw'] or '?')
+
+
 def mark_latest_rows(rows):
     """Mark exactly one newest complete dump per quad, including same-day filename timestamps."""
     latest = {}
@@ -281,6 +324,7 @@ def parse_dumps():
                 'vtx_power': '', 'vtx_freq': '', 'cell_min_v': '', 'cell_max_v': '',
                 'cell_warn_v': '', 'rx_spi_protocol': '', 'elrs_uid': '', 'bind_group': '',
                 'gyro_align': '', 'rpm_limit': '', 'rpm_limit_value': '',
+                'crash_recovery': '',
                 '_modes': [],
                 'pilot': '', 'file': base, 'note': 'EMPTY/INCOMPLETE DUMP'
             })
@@ -345,6 +389,7 @@ def parse_dumps():
             # blank reads as "limiter not enabled", not "not tracked". See DUMP_DEFAULTS.
             'rpm_limit': val(text, 'rpm_limit'),
             'rpm_limit_value': val(text, 'rpm_limit_value'),
+            'crash_recovery': extract_crash_recovery(text),
             '_modes': extract_modes(text),
             **extract_active_rates(text),
             'pilot': val(text, 'pilot_name'),
@@ -416,6 +461,7 @@ COLS = ['quad', 'class', 'discipline', 'status', 'dump_date', 'craft_name', 'boa
         'elrs_uid', 'bind_group', 'video_system', 'vtx_band', 'vtx_channel', 'vtx_power',
         'vtx_freq', 'cell_min_v', 'cell_max_v', 'cell_warn_v', 'gyro_align',
         'rpm_limit', 'rpm_limit_value',
+        'crash_recovery',
         'rateprofile', 'rates_type', 'rc_rate_rpy', 'super_rate_rpy', 'expo_rpy', 'pilot',
         'note', 'file']
 
@@ -659,9 +705,9 @@ RATE_COLS = ['quad', 'discipline', 'class',
              'rateprofile', 'note', 'source']
 
 RACING_WHOOP_COLS = ['quad', 'status', 'weight', 'motors', 'props',
-                     'bf_version', 'board', 'rates_type', 'center_rpy', 'max_rpy', 'expo_rpy',
+                     'bf_version', 'board', 'center_rpy', 'max_rpy', 'expo_rpy',
                      'dps25_rpy', 'dps50_rpy', 'dps75_rpy', 'preset', 'preset_status',
-                     'rate_source', 'dump']
+                     'crash_recovery', 'dump']
 
 MODE_COLS = ['quad', 'discipline', 'class', 'mode', 'aux_channel',
              'range_visual', 'range_start', 'range_end', 'mode_id', 'logic', 'linked_to', 'linked_to_id',
@@ -842,6 +888,7 @@ def build_racing_whoop_rows(latest_rows, rate_rows, hw_rows):
             'preset': rate.get('preset', ''),
             'preset_status': rate.get('preset_status', ''),
             'rate_source': rate.get('source', ''),
+            'crash_recovery': r.get('crash_recovery', ''),
             'dump': r.get('file', ''),
         })
     return sorted(out, key=lambda r: r['quad'].lower())

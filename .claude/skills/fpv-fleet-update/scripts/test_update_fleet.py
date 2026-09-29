@@ -136,6 +136,7 @@ class RacingWhoopInventoryTests(unittest.TestCase):
         latest = [{
             'quad': 'Broken Racer', 'class': 'whoop', 'discipline': 'race', 'status': 'broken',
             'bf_version': '4.5.2', 'board': 'TEST_AIO', 'file': 'race.txt',
+            'crash_recovery': 'OFF; d=50; g=400; setpoint=350; time=500ms; delay=0ms; angle=10°; rate=100; yaw=200',
         }, {
             'quad': 'Freestyle Whoop', 'class': 'whoop', 'discipline': 'freestyle',
             'status': '', 'bf_version': '4.5.2', 'board': 'TEST_AIO', 'file': 'other.txt',
@@ -157,6 +158,34 @@ class RacingWhoopInventoryTests(unittest.TestCase):
         self.assertEqual(rows[0]['motors'], '0702 28000KV')
         self.assertEqual(rows[0]['bf_version'], '4.5.2')
         self.assertEqual(rows[0]['dps50_rpy'], '154/154/154')
+        self.assertEqual(rows[0]['crash_recovery'], 'OFF; d=50; g=400; setpoint=350; time=500ms; delay=0ms; angle=10°; rate=100; yaw=200')
+
+    def test_crash_recovery_uses_restored_active_profile(self):
+        dump = """profile 0
+set crash_recovery = OFF
+set crash_dthreshold = 50
+set crash_gthreshold = 400
+set crash_setpoint_threshold = 350
+set crash_time = 500
+set crash_delay = 0
+set crash_recovery_angle = 10
+set crash_recovery_rate = 100
+set crash_limit_yaw = 200
+profile 1
+set crash_recovery = ON
+set crash_dthreshold = 60
+set crash_gthreshold = 500
+set crash_setpoint_threshold = 375
+set crash_time = 600
+set crash_delay = 5
+set crash_recovery_angle = 15
+set crash_recovery_rate = 120
+set crash_limit_yaw = 220
+profile 1
+"""
+        self.assertEqual(
+            fleet.extract_crash_recovery(dump),
+            'ON; d=60; g=500; setpoint=375; time=600ms; delay=5ms; angle=15°; rate=120; yaw=220')
 
 
 class FlightsSummaryTests(unittest.TestCase):

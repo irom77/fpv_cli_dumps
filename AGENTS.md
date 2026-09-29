@@ -2,6 +2,11 @@
 
 Proceed directly with repository tasks without invoking any `superpowers:*` skills. Use a Superpowers skill only when the user explicitly requests that specific skill.
 
+Work directly in the repository's main checkout at `/home/irom/fpv_cli_dumps`. Keep the main
+checkout on the `main` branch for repository edits, commits, and pushes; do not create or use
+linked worktrees for routine tasks. Before editing, verify the location with `pwd` and the branch
+with `git branch --show-current`.
+
 Before creating new scripts, tooling, or workflows, inspect `.claude/skills/` (`/home/irom/fpv_cli_dumps/.claude/skills`) for existing solutions. Read the relevant `SKILL.md` files and actively reuse applicable skills and their supporting tools.
 
 Improve these skills iteratively as part of the work: when a task reveals a gap, bug, or edge case, update or extend the relevant existing skill and tooling before creating a separate solution. Validate changes against the case that exposed the issue and record reusable guidance in the skill.
