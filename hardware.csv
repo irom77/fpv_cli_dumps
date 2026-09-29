@@ -15,12 +15,9 @@ Mob6 AIO5 1st,whoop,race,broken,,1S,19g,CrazybeeF4SX1280 (built-in),SE 0702 2800
 broken during race;
 Motor 1 replaced but does not spin in the Betaflight Motors tab;
 Motor 3 replaced and works;
-diagnose Motor 1 path (FC output B08, motor/phase wiring, or ESC channel)",,whoop-race
+diagnose Motor 1 path (FC output B08, motor/phase wiring, or ESC channel). Historical names Mob6 AIO5 RACE and Race5 match this FC's MCU ID and are aliases.","Mob6 AIO5 RACE;Race5",whoop-race
 Mob6 AIO5 2nd,whoop,race,active,,1S,19g,CrazybeeF4SX1280 (built-in),SE 0702 28000KV,HQ ultralight 1.2x1.1x3,HDZero Eco,AIO5,"crash recovery on, airmode on;
-runtime confirmed 2026-09-29: Betaflight 4.5.2, BMI270 gyro/ACC, no onboard FlashFS (0 bytes); bench status had no battery present and RXLOSS/CLI/MSP/DSHOT_TELEM arming flags.",,whoop-race
-Mob6 AIO5 RACE,whoop,race,active,,,,,,,,,"Race-tuned Mobula6/AIO5 whoop; Race5 is a later alias for this same physical FC (matching MCU ID and ELRS UID). Build details otherwise TBD.",Race5,whoop-race
-Mob6 HDZERO RACE,,race,,,,,,,,,,"HDZero race whoop;
-build details TBD. Class left to the heuristic (whoop).",,whoop-race
+runtime confirmed 2026-09-29: Betaflight 4.5.2, BMI270 gyro/ACC, no onboard FlashFS (0 bytes); bench status had no battery present and RXLOSS/CLI/MSP/DSHOT_TELEM arming flags. Historical name Mob6 HDZERO RACE matches this FC's MCU ID and is an alias.",Mob6 HDZERO RACE,whoop-race
 RACE33,whoop,race,active,,,18.6g,HDZero AIO5 board,0702 30000KV,,HDZero Eco,,"Five33 65mm HDZero Race Whoop (Ready To Fly);
 runtime confirmed 2026-09-29: Betaflight 4.5.1, ICM42688P gyro/ACC, no onboard FlashFS (0 bytes); bench status had no battery present and RXLOSS/CLI/MSP/DSHOT_TELEM arming flags.",,
 CineLog30,cinewhoop,cinematic,retired,,4S,158.5g,BLHeli_S 35A (GEP-F411-35A AIO),GR1404 3850KV,T3x3x3,Polar,Caddx Vista,GEPRC GEP-CL30; RETIRED -> migrated to Cine-fish (Flyfish30),,
