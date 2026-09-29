@@ -1,5 +1,5 @@
 quad,class,discipline,status,missing,cells,weight,esc_stack,motors,props,camera,vtx,notes,aliases,rate_preset
-AIR65 R,whoop,,active,,1S,17.3g,Air 5-in-1 (built-in),0702 SE II 27000KV,Gemfan 1219S 3-blade,C03,Onboard 5.8G 25-400mW,BetaFPV Air65; ELRS 2.4G,,
+AIR65 R,whoop,race,active,,1S,17.3g,Air 5-in-1 (built-in),0702 SE II 27000KV,Gemfan 1219S 3-blade,C03,Onboard 5.8G 25-400mW,BetaFPV Air65; ELRS 2.4G,,
 Diamond,whoop,,broken,,1S 300mAh,17.5g,Built-in 5A BLHeli_S 4-in-1,SE 0702 23000KV,Gemfan 1210 31mm bi-blade,RunCam Nano 3,Built-in 25-400mW 5.8G,"HappyModel Mobeetle6 (Diamond F4 ELRS AIO);
 analog",,
 Ecofree,whoop,,active,,1S,23g,12A 1-2S BLHeli_S (built-in),SE 0702 28000KV,Gemfan Durable 1210 31mm bi-blade,HDZero ECO,HDZero ECO VTX,"HappyModel Mobula6 SuperECOfree;
@@ -22,6 +22,8 @@ build details TBD. Class left to the heuristic (whoop).",,whoop-race
 Mob6 HDZERO RACE,,race,,,,,,,,,,"HDZero race whoop;
 build details TBD. Class left to the heuristic (whoop).",,whoop-race
 Race5,,race,,,,,,,,,,Race whoop on the shared 100/100/100 + 70/70/70 rate; build details TBD.,,whoop-race
+RACE33,whoop,race,active,,,18.6g,HDZero AIO5 board,0702 30000KV,,HDZero Eco,,"Five33 65mm HDZero Race Whoop (Ready To Fly);
+runtime confirmed 2026-09-29: Betaflight 4.5.1, ICM42688P gyro/ACC, no onboard FlashFS (0 bytes); bench status had no battery present and RXLOSS/CLI/MSP/DSHOT_TELEM arming flags.",,
 CineLog30,cinewhoop,cinematic,retired,,4S,158.5g,BLHeli_S 35A (GEP-F411-35A AIO),GR1404 3850KV,T3x3x3,Polar,Caddx Vista,GEPRC GEP-CL30; RETIRED -> migrated to Cine-fish (Flyfish30),,
 Cine-fish,cinewhoop,cinematic,active,,4S,,GEPRC F411 AIO (built-in),GR1404 3850KV,T3x3x3,CaddxFPV Baby Ratel 2,Rush Tiny Tank (analog),"Flying with manual VTX channel selection;
 Rush Tiny Tank installed 2026-09-18;
