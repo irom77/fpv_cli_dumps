@@ -705,7 +705,7 @@ RATE_COLS = ['quad', 'discipline', 'class',
              'rateprofile', 'note', 'source']
 
 RACING_WHOOP_COLS = ['quad', 'weight', 'motors', 'props',
-                     'bf_version', 'board', 'center_rpy', 'max_rpy', 'expo_rpy',
+                     'bf_version', 'center_rpy', 'max_rpy', 'expo_rpy', 'board',
                      'dps25_rpy', 'dps50_rpy', 'dps75_rpy', 'crash_recovery', 'dump']
 
 MODE_COLS = ['quad', 'discipline', 'class', 'mode', 'aux_channel',
