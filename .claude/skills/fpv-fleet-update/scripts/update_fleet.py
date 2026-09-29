@@ -706,8 +706,7 @@ RATE_COLS = ['quad', 'discipline', 'class',
 
 RACING_WHOOP_COLS = ['quad', 'status', 'weight', 'motors', 'props',
                      'bf_version', 'board', 'center_rpy', 'max_rpy', 'expo_rpy',
-                     'dps25_rpy', 'dps50_rpy', 'dps75_rpy', 'preset', 'preset_status',
-                     'crash_recovery', 'dump']
+                     'dps25_rpy', 'dps50_rpy', 'dps75_rpy', 'crash_recovery', 'dump']
 
 MODE_COLS = ['quad', 'discipline', 'class', 'mode', 'aux_channel',
              'range_visual', 'range_start', 'range_end', 'mode_id', 'logic', 'linked_to', 'linked_to_id',
@@ -885,8 +884,6 @@ def build_racing_whoop_rows(latest_rows, rate_rows, hw_rows):
             'dps25_rpy': rate.get('dps25_rpy', ''),
             'dps50_rpy': rate.get('dps50_rpy', ''),
             'dps75_rpy': rate.get('dps75_rpy', ''),
-            'preset': rate.get('preset', ''),
-            'preset_status': rate.get('preset_status', ''),
             'rate_source': rate.get('source', ''),
             'crash_recovery': r.get('crash_recovery', ''),
             'dump': r.get('file', ''),
