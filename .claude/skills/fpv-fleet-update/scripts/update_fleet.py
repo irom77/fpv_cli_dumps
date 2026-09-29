@@ -658,7 +658,7 @@ RATE_COLS = ['quad', 'discipline', 'class',
              'dps25_rpy', 'dps50_rpy', 'dps75_rpy', 'rc_rate_rpy', 'super_rate_rpy',
              'rateprofile', 'note', 'source']
 
-RACING_WHOOP_COLS = ['quad', 'status', 'cells', 'weight', 'motors', 'props',
+RACING_WHOOP_COLS = ['quad', 'status', 'weight', 'motors', 'props',
                      'bf_version', 'board', 'rates_type', 'center_rpy', 'max_rpy', 'expo_rpy',
                      'dps25_rpy', 'dps50_rpy', 'dps75_rpy', 'preset', 'preset_status',
                      'rate_source', 'dump']
@@ -827,7 +827,6 @@ def build_racing_whoop_rows(latest_rows, rate_rows, hw_rows):
         out.append({
             'quad': r['quad'],
             'status': status_of(r),
-            'cells': hw.get('cells', ''),
             'weight': hw.get('weight', ''),
             'motors': hw.get('motors', ''),
             'props': hw.get('props', ''),
