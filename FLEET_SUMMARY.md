@@ -16,24 +16,24 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 | Crocodile5 baby | micro | long-range | **retired** | GEPRC_F722_AIO | F7X2 | 4.2.4 | DSHOT300 | - | RX_SERIAL / CRSF | 2024-08-27 |
 | Crux-fish | micro | — | **broken** | BETAFLIGHTF4 | F405 | 4.4.3 | DSHOT300 | HD | CRSF | 2026-09-10 |
 | Diamond | whoop | — | **broken** | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | Analog | RX_SPI **[A]** | 2025-01-24 |
-| Ecofree | whoop | — | active | CRAZYBEEF4DX | F411 | 4.4.2 | DSHOT300 | HD | - | 2025-11-14 |
-| FLYWOOF405S_AIO *(unnamed)* | micro | — | **incomplete** | FLYWOOF405S_AIO | F405 | 4.3.1 | DSHOT300 | - | RX_SERIAL / CRSF **[B]** | 2026-07-23 |
+| Ecofree | whoop | race | active | CRAZYBEEF4DX | F411 | 4.4.2 | DSHOT300 | HD | CRSF | 2026-09-29 |
+| FLYWOOF405S_AIO *(unnamed)* | micro | — | **incomplete** | FLYWOOF405S_AIO | F405 | 4.3.1 | DSHOT300 | - | RX_SERIAL / CRSF **[C]** | 2026-07-23 |
 | FLYWOOF7NANO | micro | long-range | active | FLYWOOF745NANO | F745 | 4.2.11 | DSHOT300 | - | CRSF | 2026-08-15 |
 | Green Hornet V3 | cinewhoop | cinematic | **broken** | IFLIGHT_SUCCEX_E_F7 | F722 | 2026.6.1 | DSHOT300 | HD | CRSF | 2026-09-14 |
-| Happish | whoop | — | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2024-12-06 |
+| Happish | whoop | race | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI / CRSF **[B]** | 2026-09-29 |
 | HOBBYWING_XROTORF7CON *(unnamed)* | 5-inch | — | active | HOBBYWING_XROTORF7CON | F7X2 | 4.3.0 | DSHOT600 | - | RX_SERIAL / CRSF | 2024-07-27 |
 | HOBBYWING_XROTORF7CONV *(unnamed)* | 5-inch | — | active | HOBBYWING_XROTORF7CONV | F7X2 | 4.5.3.KAACK_V19 | - | - | - | 2026-08-25 |
 | LS-Ultra | 5-inch | race | active | TMOTORF7 | F7X2 | 4.5.2.KAACK_V15 | - | - | - | 2026-07-21 |
 | LS-Ultra HD | 5-inch | race | active | HDZERO_HALO | H743 | 4.5.3.KAACK_V18 | - | - | - | 2026-07-21 |
 | M6 ECO | whoop | — | active | CRAZYBEEF4DX | F411 | 4.4.2 | DSHOT300 | HD | - | 2025-10-25 |
-| M85 HDZero | whoop | — | active | BETAFPVF4SX1280 | F411SX1280 | 4.3.1 | DSHOT300 | - | RX_SERIAL / CRSF **[B]** | 2024-07-04 |
+| M85 HDZero | whoop | — | active | BETAFPVF4SX1280 | F411SX1280 | 4.3.1 | DSHOT300 | - | RX_SERIAL / CRSF **[C]** | 2024-07-04 |
 | Mass | 3-inch | — | active | SPEEDYBEEF405MINI | SPEEDYBEEF405MINI | 4.3.2 | DSHOT600 | Auto | CRSF | 2026-09-10 |
 | Meteor85 | whoop | — | **broken** | BETAFPVF4SX1280 | F411 | 4.4.3 | DSHOT300 | HD | ELRS **[A]** | 2025-01-10 |
 | Mob6 AIO5 1st | whoop | race | **broken** | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI / CRSF **[A]** | 2026-09-28 |
 | Mob6 AIO5 2nd | whoop | race | active | CRAZYBEEF4SX1280 | F411 | 4.5.2 | DSHOT300 | HD | RX_SPI / CRSF **[A]** | 2026-09-29 |
 | Mob6 AIO5 RACE | whoop | race | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2024-10-07 |
 | Mob6 HDZERO RACE | whoop | race | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2025-07-28 |
-| Mobula1 | whoop | race | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI / CRSF **[C]** | 2026-09-29 |
+| Mobula1 | whoop | race | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI / CRSF **[B]** | 2026-09-29 |
 | openracer | 5-inch | race | active | HOBBYWING_XROTORF7CONV | F7X2 | 4.5.3.KAACK_V19 | - | - | - | 2026-09-02 |
 | openracer2 | 5-inch | race | active | FOXEERF722V4 | F7X2 | 2025.12.3-alpha.KAACK_V19 | - | Analog | - | 2026-08-11 |
 | PRO-SPEC2 | 7-inch | race | active | HDZERO_HALO | H743 | 2025.12.3-alpha.KAACK_V19 | - | - | - | 2026-09-04 |
@@ -49,11 +49,11 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 
 - **Class:** 15× whoop, 3× cinewhoop, 5× micro, 9× 5-inch, 2× 3-inch, 2× 7-inch. Size class inferred from craft name / board where `hardware.csv` doesn't set it.
 - **Status:** 25× active, 6× broken, 3× retired, 2× incomplete. Lifecycle from `hardware.csv`; a blank there counts as active.
-- **Discipline:** 15× race, 3× freestyle, 3× cinematic, 2× long-range, 13 unset. Hand-entered in `hardware.csv` (no heuristic — the dump gives no signal).
+- **Discipline:** 17× race, 3× freestyle, 3× cinematic, 2× long-range, 11 unset. Hand-entered in `hardware.csv` (no heuristic — the dump gives no signal).
 - **Flight controllers:** 16× F411, 8× F7X2, 4× F405, 2× G47X, 2× H743, 1× F745, 1× F722, 1× F411SX1280, 1× SPEEDYBEEF405MINI.
 - **Firmware:** 13 on BF 4.5.x, 12 on BF 4.4.x, 5 on BF 4.3.x, 3 on BF 4.2.x, 2 on BF 2025.12.x, 1 on BF 2026.6.x.
 - **ESC protocol:** 24× DSHOT300, 4× DSHOT600.
-- **ExpressLRS bind groups:** **ELRS-A** (10 quads, UID `7,48,91,69,202,173`); **ELRS-B** (2 quads, UID `65,245,33,230,58,226`); **ELRS-C** (1 quad, UID `22,242,162,118,226,128`). Quads in the same group share a binding phrase and bind to the same radio together.
+- **ExpressLRS bind groups:** **ELRS-A** (9 quads, UID `7,48,91,69,202,173`); **ELRS-C** (2 quads, UID `65,245,33,230,58,226`); **ELRS-B** (2 quads, UID `22,242,162,118,226,128`). Quads in the same group share a binding phrase and bind to the same radio together.
 - **Video:** 15× HD, 3× Auto, 2× Analog. Quads showing `-` have `vcd_video_system` at firmware default in the diff — not necessarily video-less.
 
 ## Needs attention
@@ -71,7 +71,6 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 - BETAFPVF4SX1280 (last dump 2024-07-12)
 - HOBBYWING_XROTORF7CON (last dump 2024-07-27)
 - Mob6 AIO5 RACE (last dump 2024-10-07)
-- Happish (last dump 2024-12-06)
 - Race5 (last dump 2025-01-24)
 - Mob6 HDZERO RACE (last dump 2025-07-28)
 
@@ -89,13 +88,15 @@ _Note: BETAFPVF4SX1280, FLYWOOF405S_AIO, HOBBYWING_XROTORF7CON, HOBBYWING_XROTOR
 
 _Active rateprofile, decoded to deg/s (see `rates.csv`). **Center** is stick sensitivity around centre, **Max** the rate at full deflection, r/p/y. `source=default` means the dump set no rates at all, so the values shown are that firmware's stock rateprofile — which changed at 4.3 (before: BETAFLIGHT 100/70, center 200; after: ACTUAL 7/67, center 70). Intended rates come from `rate_preset` in `hardware.csv`._
 
-_Showing the 17 active quads that have a `discipline` set; 19 others are hidden (retired, broken, incomplete, or no discipline recorded). "Needs attention" above still checks every quad._
+_Showing the 19 active quads that have a `discipline` set; 17 others are hidden (retired, broken, incomplete, or no discipline recorded). "Needs attention" above still checks every quad._
 
 **race — whoop**
 
 | Quad | Center °/s | Max °/s | Expo | @50% | Preset | Type | Source |
 |---|---|---|---|---|---|---|---|
 | AIR65 R | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — | BETAFLIGHT | dump |
+| Ecofree | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — | BETAFLIGHT | dump |
+| Happish | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — | BETAFLIGHT | dump |
 | Mob6 AIO5 2nd | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | whoop-race ✓ | BETAFLIGHT | dump |
 | Mob6 AIO5 RACE | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | whoop-race ✓ | BETAFLIGHT | dump |
 | Mob6 HDZERO RACE | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | whoop-race ✓ | BETAFLIGHT | dump |
@@ -190,7 +191,7 @@ _Curated per-quad build details (not captured in Betaflight dumps), largely seed
 | Crocodile5 baby | 4S | 252.29g | GEP-F722-35A AIO (built-in) | GEP 2004 2550KV | Gemfan 5130 | Caddx Air Unit | HD air unit | GEPRC GEP-CB5; RETIRED; sheet size 5in but 2004 motors = 4in class |
 | Crux-fish | 4S | 115g | Built-in 20A BLHeli_S 4-in-1 | HappyModel EX1404 3500KV | HQProp T3.5x2x3 | HDZero Nano V3 HD FPV Camera | Onboard HDZero | HDZero Crux35; 113mm.<br>Camera upgraded and Motor 3 replaced.<br>Still broken: gyro sensor (ICM42688P) flatlines/locks up to 0 under battery power due to ESC electrical noise on takeoff.<br>Solder new local Low-ESR capacitor to FC to resolve. |
 | Diamond | 1S 300mAh | 17.5g | Built-in 5A BLHeli_S 4-in-1 | SE 0702 23000KV | Gemfan 1210 31mm bi-blade | RunCam Nano 3 | Built-in 25-400mW 5.8G | HappyModel Mobeetle6 (Diamond F4 ELRS AIO);<br>analog |
-| Ecofree | 1S | 23g | 12A 1-2S BLHeli_S (built-in) | SE 0702 28000KV | Gemfan Durable 1210 31mm bi-blade | HDZero ECO | HDZero ECO VTX | HappyModel Mobula6 SuperECOfree;<br>sheet FC=SuperX AIO but dump board=CrazybeeF4DX - verify |
+| Ecofree | 1S | 23g | 12A 1-2S BLHeli_S (built-in) | 0702 BetaFPV 30000KV | Gemfan Durable 1210 31mm bi-blade | HDZero ECO | HDZero ECO VTX | HappyModel Mobula6 SuperECOfree;<br>sheet FC=SuperX AIO but dump board=CrazybeeF4DX - verify |
 | FLYWOOF405S_AIO | 2S | 33.8g | GOKU Versatile F405 2S 12A AIO (built-in 12A 4-in-1) | Flywoo ROBO 1002 15500KV | Gemfan 2015 2-blade | HDZero Nano Lite | HDZero Whoop Lite | Flywoo Firefly 2S Nano Baby 20 (sheet name);<br>no craft_name in dump; board=FLYWOOF405S_AIO; 2S HDZero nano;<br>Flywoo EL24P ELRS v3 RX; MPU6000 gyro + prop guard;<br>sheet: NO VIDEO - camera+VTX removed |
 | FLYWOOF7NANO | 4S 850mAh | <250g | Goku F745 16x16 stack (built-in) | NIN 1404 V2 2750KV | Gemfan 4024 | Caddx Polar / Nebula Pro | Caddx Vista | Flywoo Explorer LR4 V2 HD; 4in; class corrected 5-inch -> micro (4in LR) |
 | Green Hornet V3 | 6S | 280.1g without battery | SucceX-E Mini F7 FC + 35A BLHeli_S 4-in-1 ESC | XING 1507 2800KV on M1/M2/M4;<br>Racerstar Racing Edition BR1507 2800KV on M3 (mismatched replacement) | 3040 3-blade | RunCam Nano2 2.1mm NTSC 4:3 | SucceX-E 300mW analog VTX | Broken 2026-09-14: flips at liftoff.<br>Deadband/rates fixed; Motor 3 remains 14% low under load.<br>Replace with matched XING 1507 2800KV;<br>see docs/troubleshooting/green-hornet-post-upgrade-takeoff-failure.md. |
