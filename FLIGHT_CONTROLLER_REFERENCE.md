@@ -22,7 +22,7 @@ Those strings resolve to the physical controller families below; rows marked
 | BETAFPV F4 1S 12A AIO ELRS | `BETAFPVF4SX1280` | Meteor85, M85 HDZero, unnamed BETAFPV dump | V2.0/V2.2 revision-sensitive |
 | Happymodel Diamond F4 ELRS AIO | `CRAZYBEEF4SX1280` | Diamond | Product confirmed; target is shared |
 | Happymodel SuperbeeF4 Lite / Mobula HD board | `CRAZYBEEF4SX1280` | Happish, Mobula1 | Product family from build notes; revision-sensitive |
-| Happymodel/HDZero AIO5 | `CRAZYBEEF4SX1280` | Mob6 AIO5 1st, Mob6 AIO5 2nd, Mob6 AIO5 RACE, Mob6 HDZERO RACE, Race5 | Product family from names/notes; revision-sensitive |
+| Happymodel/HDZero AIO5 | `CRAZYBEEF4SX1280` | Mob6 AIO5 1st, Mob6 AIO5 2nd, Mob6 AIO5 RACE (formerly Race5), Mob6 HDZERO RACE | Product family from names/notes; revision-sensitive |
 | Happymodel SuperX HD ELRS AIO | `CRAZYBEEF4DX` | Ecofree, M6 ECO | Dump target differs from curated product name; **verify PCB** |
 | Flywoo GOKU Versatile F405 1–2S 12A AIO | `FLYWOOF405S_AIO` | unnamed Firefly 2S Nano Baby 20 | Confirmed by build/order evidence |
 | Flywoo GOKU F745 Nano stack | `FLYWOOF745NANO` | FLYWOOF7NANO | Product family confirmed |
