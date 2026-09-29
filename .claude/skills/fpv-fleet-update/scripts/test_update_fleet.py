@@ -131,6 +131,34 @@ class LatestMarkerTests(unittest.TestCase):
         self.assertEqual(rows[1]['note'], 'latest')
 
 
+class RacingWhoopInventoryTests(unittest.TestCase):
+    def test_includes_broken_whoops_and_joins_motors_firmware_and_rates(self):
+        latest = [{
+            'quad': 'Broken Racer', 'class': 'whoop', 'discipline': 'race', 'status': 'broken',
+            'bf_version': '4.5.2', 'board': 'TEST_AIO', 'file': 'race.txt',
+        }, {
+            'quad': 'Freestyle Whoop', 'class': 'whoop', 'discipline': 'freestyle',
+            'status': '', 'bf_version': '4.5.2', 'board': 'TEST_AIO', 'file': 'other.txt',
+        }]
+        rates = [{
+            'quad': 'Broken Racer', 'rates_type': 'BETAFLIGHT', 'center_rpy': '200/200/200',
+            'max_rpy': '667/667/667', 'expo_rpy': '0/0/0', 'dps25_rpy': '61/61/61',
+            'dps50_rpy': '154/154/154', 'dps75_rpy': '316/316/316', 'preset': 'whoop-race',
+            'preset_status': 'match', 'source': 'dump',
+        }]
+        hw = {'BROKENRACER': {
+            'cells': '1S', 'weight': '19g', 'motors': '0702 28000KV', 'props': '31mm',
+        }}
+
+        rows = fleet.build_racing_whoop_rows(latest, rates, hw)
+
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]['status'], 'broken')
+        self.assertEqual(rows[0]['motors'], '0702 28000KV')
+        self.assertEqual(rows[0]['bf_version'], '4.5.2')
+        self.assertEqual(rows[0]['dps50_rpy'], '154/154/154')
+
+
 class FlightsSummaryTests(unittest.TestCase):
     def test_includes_descriptive_comments_for_each_flight(self):
         with tempfile.TemporaryDirectory() as folder:

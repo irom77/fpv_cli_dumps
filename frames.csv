@@ -10,7 +10,6 @@ happymodel-mobula6-aio5-1st,Mobula6,HappyModel,65mm,65mm,in-use,Mob6 AIO5 1st,,h
 happymodel-mobula6-aio5-2nd,Mobula6,HappyModel,65mm,65mm,in-use,Mob6 AIO5 2nd,,hardware.csv notes
 mob6-aio5-race,,,,,in-use,Mob6 AIO5 RACE,? Build details TBD in hardware.csv; frame model unconfirmed.,hardware.csv notes
 mob6-hdzero-race,,,,,in-use,Mob6 HDZERO RACE,? Build details TBD in hardware.csv; frame model unconfirmed.,hardware.csv notes
-race5,,,,,in-use,Race5,? Build details TBD in hardware.csv; frame model unconfirmed.,hardware.csv notes
 geprc-gep-cl30,GEP-CL30 (CineLog30),GEPRC,3in,,retired,,"Build migrated to Cine-fish (Flyfish30); bare frame may now be free, unconfirmed.",hardware.csv notes
 flyfish30,Flyfish30,,3in,,in-use,Cine-fish,? Manufacturer unconfirmed. Successor frame to CineLog30.,hardware.csv notes
 iflight-green-hornet-v3,Green Hornet V3,iFlight,3in,145mm,in-use,Green Hornet V3,3-inch cinewhoop.,hardware.csv notes

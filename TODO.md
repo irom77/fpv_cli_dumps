@@ -106,7 +106,7 @@ save
 ## Extend spec coverage past the 5-inch racers
 
 `specs.csv` holds one class today, so the compliance pass only sees four quads. The five whoop
-racers — Mob6 AIO5 1st, Mob6 AIO5 2nd, Mob6 AIO5 RACE, Mob6 HDZERO RACE, Race5 — are all
+racers — Mob6 AIO5 1st, Mob6 AIO5 2nd, Mob6 AIO5 RACE, and Mob6 HDZERO RACE — are all
 `discipline=race` and checked against nothing.
 
 - [ ] Add the MultiGP **Tiny Whoop** class. The class-specifications page gives max 65 mm ducted
