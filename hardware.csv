@@ -8,7 +8,7 @@ M6 ECO,whoop,,active,,1S,23.16g,SuperX HD ELRS AIO (built-in),SE 0702 28000KV,Ge
 dump board CrazybeeF4DX differs from sheet - verify",,
 Happish,whoop,,active,,1S,28g,Onboard 4-in-1,EX0802 19000KV,Gemfan 35mm 3-blade,HDZero Nano Lite,HDZero Whoop Lite VTX,"HappyModel Mobula6 HDZero (SuperbeeF4 Lite ELRS SPI);
 Meteor65 Pro frame",,
-Mobula1,whoop,,active,,1S 650mAh,29.5g,Built-in 5A BLHeli_S 4-in-1,EX 1002 20000KV,Gemfan 1610-2 40mm bi-blade,HDZero Nano Lite,HDZero Whoop Lite VTX,"HappyModel Moblite7 -> Moblite6 (SuperbeeF4 Lite);
+Mobula1,whoop,race,active,,1S 650mAh,29.5g,Built-in 5A BLHeli_S 4-in-1,EX 1002 20000KV,Gemfan 1610-2 40mm bi-blade,HDZero Nano Lite,HDZero Whoop Lite VTX,"HappyModel Moblite7 -> Moblite6 (SuperbeeF4 Lite);
 75mm; Mobula7 v4 frame",,
 Meteor85,whoop,,broken,,2S 450mAh,48.3g,Built-in 1S/2S 12A ESC,1103 11000KV,Gemfan 2015 2-blade,Runcam HDZero Nano Lite / Caddx Ant Nano,HDZero Whoop Lite / M03 analog,BetaFPV Meteor85 Brushless Whoop,,
 Mob6 AIO5 1st,whoop,race,broken,,1S,19g,CrazybeeF4SX1280 (built-in),SE 0702 28000KV,HQ ultralight 1.2x1.1x3,HDZero Eco,AIO5,"crash recovery off, airmode on;
@@ -16,7 +16,8 @@ broken during race;
 Motor 1 replaced but does not spin in the Betaflight Motors tab;
 Motor 3 replaced and works;
 diagnose Motor 1 path (FC output B08, motor/phase wiring, or ESC channel)",,whoop-race
-Mob6 AIO5 2nd,whoop,race,active,,1S,19g,CrazybeeF4SX1280 (built-in),SE 0702 28000KV,HQ ultralight 1.2x1.1x3,HDZero Eco,AIO5,"crash recovery on, airmode on",,whoop-race
+Mob6 AIO5 2nd,whoop,race,active,,1S,19g,CrazybeeF4SX1280 (built-in),SE 0702 28000KV,HQ ultralight 1.2x1.1x3,HDZero Eco,AIO5,"crash recovery on, airmode on;
+runtime confirmed 2026-09-29: Betaflight 4.5.2, BMI270 gyro/ACC, no onboard FlashFS (0 bytes); bench status had no battery present and RXLOSS/CLI/MSP/DSHOT_TELEM arming flags.",,whoop-race
 Mob6 AIO5 RACE,,race,,,,,,,,,,"Race-tuned sibling of the Mob6 AIO5 pair;
 build details TBD. Class left to the heuristic (whoop).",,whoop-race
 Mob6 HDZERO RACE,,race,,,,,,,,,,"HDZero race whoop;

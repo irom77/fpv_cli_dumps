@@ -30,10 +30,10 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 | Mass | 3-inch | — | active | SPEEDYBEEF405MINI | SPEEDYBEEF405MINI | 4.3.2 | DSHOT600 | Auto | CRSF | 2026-09-10 |
 | Meteor85 | whoop | — | **broken** | BETAFPVF4SX1280 | F411 | 4.4.3 | DSHOT300 | HD | ELRS **[A]** | 2025-01-10 |
 | Mob6 AIO5 1st | whoop | race | **broken** | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI / CRSF **[A]** | 2026-09-28 |
-| Mob6 AIO5 2nd | whoop | race | active | CRAZYBEEF4SX1280 | F411 | 4.5.2 | - | - | ELRS **[A]** | 2025-10-25 |
+| Mob6 AIO5 2nd | whoop | race | active | CRAZYBEEF4SX1280 | F411 | 4.5.2 | DSHOT300 | HD | RX_SPI / CRSF **[A]** | 2026-09-29 |
 | Mob6 AIO5 RACE | whoop | race | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2024-10-07 |
 | Mob6 HDZERO RACE | whoop | race | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2025-07-28 |
-| Mobula1 | whoop | — | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI **[A]** | 2025-11-12 |
+| Mobula1 | whoop | race | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI / CRSF **[C]** | 2026-09-29 |
 | openracer | 5-inch | race | active | HOBBYWING_XROTORF7CONV | F7X2 | 4.5.3.KAACK_V19 | - | - | - | 2026-09-02 |
 | openracer2 | 5-inch | race | active | FOXEERF722V4 | F7X2 | 2025.12.3-alpha.KAACK_V19 | - | Analog | - | 2026-08-11 |
 | PRO-SPEC2 | 7-inch | race | active | HDZERO_HALO | H743 | 2025.12.3-alpha.KAACK_V19 | - | - | - | 2026-09-04 |
@@ -49,12 +49,12 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 
 - **Class:** 15× whoop, 3× cinewhoop, 5× micro, 9× 5-inch, 2× 3-inch, 2× 7-inch. Size class inferred from craft name / board where `hardware.csv` doesn't set it.
 - **Status:** 25× active, 6× broken, 3× retired, 2× incomplete. Lifecycle from `hardware.csv`; a blank there counts as active.
-- **Discipline:** 14× race, 3× freestyle, 3× cinematic, 2× long-range, 14 unset. Hand-entered in `hardware.csv` (no heuristic — the dump gives no signal).
+- **Discipline:** 15× race, 3× freestyle, 3× cinematic, 2× long-range, 13 unset. Hand-entered in `hardware.csv` (no heuristic — the dump gives no signal).
 - **Flight controllers:** 16× F411, 8× F7X2, 4× F405, 2× G47X, 2× H743, 1× F745, 1× F722, 1× F411SX1280, 1× SPEEDYBEEF405MINI.
 - **Firmware:** 13 on BF 4.5.x, 12 on BF 4.4.x, 5 on BF 4.3.x, 3 on BF 4.2.x, 2 on BF 2025.12.x, 1 on BF 2026.6.x.
-- **ESC protocol:** 23× DSHOT300, 4× DSHOT600.
-- **ExpressLRS bind groups:** **ELRS-A** (11 quads, UID `7,48,91,69,202,173`); **ELRS-B** (2 quads, UID `65,245,33,230,58,226`). Quads in the same group share a binding phrase and bind to the same radio together.
-- **Video:** 14× HD, 3× Auto, 2× Analog. Quads showing `-` have `vcd_video_system` at firmware default in the diff — not necessarily video-less.
+- **ESC protocol:** 24× DSHOT300, 4× DSHOT600.
+- **ExpressLRS bind groups:** **ELRS-A** (10 quads, UID `7,48,91,69,202,173`); **ELRS-B** (2 quads, UID `65,245,33,230,58,226`); **ELRS-C** (1 quad, UID `22,242,162,118,226,128`). Quads in the same group share a binding phrase and bind to the same radio together.
+- **Video:** 15× HD, 3× Auto, 2× Analog. Quads showing `-` have `vcd_video_system` at firmware default in the diff — not necessarily video-less.
 
 ## Needs attention
 
@@ -89,7 +89,7 @@ _Note: BETAFPVF4SX1280, FLYWOOF405S_AIO, HOBBYWING_XROTORF7CON, HOBBYWING_XROTOR
 
 _Active rateprofile, decoded to deg/s (see `rates.csv`). **Center** is stick sensitivity around centre, **Max** the rate at full deflection, r/p/y. `source=default` means the dump set no rates at all, so the values shown are that firmware's stock rateprofile — which changed at 4.3 (before: BETAFLIGHT 100/70, center 200; after: ACTUAL 7/67, center 70). Intended rates come from `rate_preset` in `hardware.csv`._
 
-_Showing the 16 active quads that have a `discipline` set; 20 others are hidden (retired, broken, incomplete, or no discipline recorded). "Needs attention" above still checks every quad._
+_Showing the 17 active quads that have a `discipline` set; 19 others are hidden (retired, broken, incomplete, or no discipline recorded). "Needs attention" above still checks every quad._
 
 **race — whoop**
 
@@ -99,6 +99,7 @@ _Showing the 16 active quads that have a `discipline` set; 20 others are hidden 
 | Mob6 AIO5 2nd | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | whoop-race ✓ | BETAFLIGHT | dump |
 | Mob6 AIO5 RACE | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | whoop-race ✓ | BETAFLIGHT | dump |
 | Mob6 HDZERO RACE | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | whoop-race ✓ | BETAFLIGHT | dump |
+| Mobula1 | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — | BETAFLIGHT | dump |
 | RACE33 | 190/160/160 | 633/533/533 | 0/0/0 | 146/123/123 | — | BETAFLIGHT | dump |
 | Race5 | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | whoop-race ✓ | BETAFLIGHT | dump |
 
@@ -200,7 +201,7 @@ _Curated per-quad build details (not captured in Betaflight dumps), largely seed
 | Mass | 3-4S (850mAh 4S) |  | SpeedyBee F405 Mini (20x20) | e.g. EMAX ECO 1404 3700KV | 3in | RunCam Nano 3 (tentative) | SpeedyBee TX800 (analog) | Massive Droner 3in; renamed from SPEEDYBEEF405MINI;<br>video restored with SpeedyBee TX800; R8 unlock workaround;<br>latest dump records R5;<br>see docs/troubleshooting/mass-vtx-troubleshooting.md. |
 | Meteor85 | 2S 450mAh | 48.3g | Built-in 1S/2S 12A ESC | 1103 11000KV | Gemfan 2015 2-blade | Runcam HDZero Nano Lite / Caddx Ant Nano | HDZero Whoop Lite / M03 analog | BetaFPV Meteor85 Brushless Whoop |
 | Mob6 AIO5 1st | 1S | 19g | CrazybeeF4SX1280 (built-in) | SE 0702 28000KV | HQ ultralight 1.2x1.1x3 | HDZero Eco | AIO5 | crash recovery off, airmode on;<br>broken during race;<br>Motor 1 replaced but does not spin in the Betaflight Motors tab;<br>Motor 3 replaced and works;<br>diagnose Motor 1 path (FC output B08, motor/phase wiring, or ESC channel) |
-| Mob6 AIO5 2nd | 1S | 19g | CrazybeeF4SX1280 (built-in) | SE 0702 28000KV | HQ ultralight 1.2x1.1x3 | HDZero Eco | AIO5 | crash recovery on, airmode on |
+| Mob6 AIO5 2nd | 1S | 19g | CrazybeeF4SX1280 (built-in) | SE 0702 28000KV | HQ ultralight 1.2x1.1x3 | HDZero Eco | AIO5 | crash recovery on, airmode on;<br>runtime confirmed 2026-09-29: Betaflight 4.5.2, BMI270 gyro/ACC, no onboard FlashFS (0 bytes); bench status had no battery present and RXLOSS/CLI/MSP/DSHOT_TELEM arming flags. |
 | Mob6 AIO5 RACE |  |  |  |  |  |  |  | Race-tuned sibling of the Mob6 AIO5 pair;<br>build details TBD. Class left to the heuristic (whoop). |
 | Mob6 HDZERO RACE |  |  |  |  |  |  |  | HDZero race whoop;<br>build details TBD. Class left to the heuristic (whoop). |
 | Mobula1 | 1S 650mAh | 29.5g | Built-in 5A BLHeli_S 4-in-1 | EX 1002 20000KV | Gemfan 1610-2 40mm bi-blade | HDZero Nano Lite | HDZero Whoop Lite VTX | HappyModel Moblite7 -> Moblite6 (SuperbeeF4 Lite);<br>75mm; Mobula7 v4 frame |
