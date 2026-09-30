@@ -30,6 +30,9 @@ files below must stay in sync whenever the set of dumps changes:
 - `racing_whoops.csv` — generated canonical inventory of every curated `class=whoop`,
   `discipline=race` quad, including broken ones. It joins `hardware.csv`'s weight, motors, and
   props with the matching row in `fpv_quads_latest.csv` and the decoded rates from `rates.csv`.
+  Its `airmode` column is `ON` when the latest dump has global `feature AIRMODE` enabled or a
+  non-empty AUX range assigned to Betaflight mode 28 (AIRMODE), otherwise `OFF`;
+  `airmode_start_throttle_percent` alone does not enable the mode.
   Rebuild it whenever either source changes; never hand-edit it. The row set must match the
   curated race-whoop intersection in the latest inventory, and its hardware fields must match
   `hardware.csv` exactly. The `crash_recovery` value includes ON/OFF plus the d-term, gyro,

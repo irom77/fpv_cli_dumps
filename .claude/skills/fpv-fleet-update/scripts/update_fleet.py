@@ -123,6 +123,17 @@ def extract_modes(text):
     return out
 
 
+def airmode_enabled(text):
+    """Report whether AIRMODE is enabled globally or by a configured AUX range.
+
+    Betaflight supports both the global `feature AIRMODE` setting and mode 28 (AIRMODE) on an
+    AUX range. The disabled feature line (`feature -AIRMODE`) is present in many dumps before the
+    active feature list, so match the exact positive command rather than searching for the word.
+    """
+    return bool(re.search(r'^feature AIRMODE\s*$', text, re.M) or
+                any(mode['mode_id'] == 28 for mode in extract_modes(text)))
+
+
 def md(s):
     """Escape a value for a markdown table cell. Hand-written hardware.csv text can legitimately
     contain a pipe (e.g. a motor sold under two brands, `HeadsUp | Five33 2207`), which would
@@ -390,6 +401,7 @@ def parse_dumps():
             'rpm_limit': val(text, 'rpm_limit'),
             'rpm_limit_value': val(text, 'rpm_limit_value'),
             'crash_recovery': extract_crash_recovery(text),
+            'airmode': airmode_enabled(text),
             '_modes': extract_modes(text),
             **extract_active_rates(text),
             'pilot': val(text, 'pilot_name'),
@@ -704,7 +716,7 @@ RATE_COLS = ['quad', 'discipline', 'class',
              'dps25_rpy', 'dps50_rpy', 'dps75_rpy', 'rc_rate_rpy', 'super_rate_rpy',
              'rateprofile', 'note', 'source']
 
-RACING_WHOOP_COLS = ['quad', 'weight', 'motors', 'props',
+RACING_WHOOP_COLS = ['quad', 'weight', 'motors', 'props', 'airmode',
                      'bf_version', 'center_rpy', 'max_rpy', 'expo_rpy', 'board',
                      'dps25_rpy', 'dps50_rpy', 'dps75_rpy', 'crash_recovery', 'dump']
 
@@ -875,6 +887,10 @@ def build_racing_whoop_rows(latest_rows, rate_rows, hw_rows):
             'weight': hw.get('weight', ''),
             'motors': hw.get('motors', ''),
             'props': hw.get('props', ''),
+            # Airmode can be global or assigned to a non-empty AUX range. The throttle-start
+            # setting alone does not enable the mode.
+            'airmode': 'ON' if (r.get('airmode') or
+                                any(m.get('mode_id') == 28 for m in r.get('_modes', ()))) else 'OFF',
             'bf_version': r.get('bf_version', ''),
             'board': r.get('board', ''),
             'rates_type': rate.get('rates_type', ''),

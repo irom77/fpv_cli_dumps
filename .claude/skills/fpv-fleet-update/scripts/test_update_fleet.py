@@ -8,6 +8,11 @@ import update_fleet as fleet
 
 
 class ModeExtractionTests(unittest.TestCase):
+    def test_airmode_detects_global_feature_and_aux_mode_but_not_disabled_feature(self):
+        self.assertTrue(fleet.airmode_enabled('feature -AIRMODE\nfeature AIRMODE\n'))
+        self.assertTrue(fleet.airmode_enabled('aux 3 28 1 900 1300 0 0\n'))
+        self.assertFalse(fleet.airmode_enabled('feature -AIRMODE\n'))
+
     def test_range_visual_is_compact_but_keeps_25_microsecond_boundaries(self):
         visual = fleet.mode_range_visual(900, 1300)
         cells = visual.removeprefix('900 |').removesuffix('| 2100')
@@ -158,7 +163,19 @@ class RacingWhoopInventoryTests(unittest.TestCase):
         self.assertEqual(rows[0]['motors'], '0702 28000KV')
         self.assertEqual(rows[0]['bf_version'], '4.5.2')
         self.assertEqual(rows[0]['dps50_rpy'], '154/154/154')
+        self.assertEqual(rows[0]['airmode'], 'OFF')
         self.assertEqual(rows[0]['crash_recovery'], 'OFF; d=50; g=400; setpoint=350; time=500ms; delay=0ms; angle=10°; rate=100; yaw=200')
+
+    def test_reports_airmode_from_an_active_aux_range(self):
+        latest = [{
+            'quad': 'Airmode Racer', 'class': 'whoop', 'discipline': 'race', 'status': 'active',
+            'bf_version': '4.5.2', 'board': 'TEST_AIO', 'file': 'race.txt',
+            '_modes': fleet.extract_modes('aux 3 28 1 900 1300 0 0'),
+        }]
+
+        rows = fleet.build_racing_whoop_rows(latest, [], {})
+
+        self.assertEqual(rows[0]['airmode'], 'ON')
 
     def test_crash_recovery_uses_restored_active_profile(self):
         dump = """profile 0
