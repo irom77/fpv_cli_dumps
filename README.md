@@ -27,6 +27,19 @@ cp ~/Downloads/BTFL_cli_MYQUAD_*.txt backups/
 python3 .claude/skills/fpv-fleet-update/scripts/update_fleet.py
 ```
 
+## Repository backups
+
+Verified Git bundle backups of this repository are stored on Windows in:
+
+```text
+C:\Users\irekr\iCloudDrive\Backup\
+```
+
+The current bundle is `fpv_cli_dumps_20260929_210825.bundle`. New bundles should use the
+`fpv_cli_dumps_YYYYMMDD_HHMMSS.bundle` naming pattern and be verified with `git bundle verify`.
+The bundle contains committed repository history and files reachable from the repository refs;
+untracked and ignored files, including raw `blackbox/` logs, are not included.
+
 ## About
 
 I use AI to help build, tune, and troubleshoot my FPV quads — extracting fleet configs from
