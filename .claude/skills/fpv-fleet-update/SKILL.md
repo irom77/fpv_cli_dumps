@@ -2,13 +2,13 @@
 name: fpv-fleet-update
 description: >-
   Regenerate the FPV quad inventory (fpv_quads.csv, fpv_quads_latest.csv, rates.csv, modes.csv,
-  FLEET_SUMMARY.md) and keep FLIGHT_CONTROLLER_REFERENCE.md current when new controllers appear
+  racing_whoops.csv, FLEET_SUMMARY.md) and keep FLIGHT_CONTROLLER_REFERENCE.md current when new controllers appear
   from the Betaflight CLI dump files in this folder. Use this whenever a new BTFL CLI backup
   or dump (a BTFL_cli_*.txt file) is added, replaced, or removed, or whenever the user asks to
   refresh, rebuild, or update the fleet CSV / fleet summary / quad inventory — even if they
   don't name the files explicitly. Also use when the user mentions re-flashing a quad, taking a
-  new backup, adding a build, or "I dumped my quad". After adding any dump, the CSVs and
-  summary are stale until this runs.
+  new backup, adding a build, editing hardware.csv, or "I dumped my quad". After adding a dump
+  or changing hardware.csv, the derived CSVs and summary are stale until this runs.
 ---
 
 # FPV Fleet Update
@@ -27,12 +27,14 @@ files below must stay in sync whenever the set of dumps changes:
   first) rather than alphabetically, so quads flown the same way can be read against each other —
   and so a 1S whoop and a 6S five-inch never share a heading just because both race. The filter is
   on the VIEW only; "needs attention" checks still run over the whole fleet. See "Rates" below.
-- `racing_whoops.csv` — canonical inventory of every curated `class=whoop`, `discipline=race`
-  quad, including broken ones. It joins hand-maintained motors/build fields with the newest dump's
-  Betaflight version, decoded active rates, and active-profile crash-recovery state. The
-  `crash_recovery` value includes ON/OFF plus the d-term, gyro, setpoint, time, delay, angle,
-  recovery-rate, and yaw-limit settings, so it is the racing-whoop reference sheet rather than a
-  flyable-only comparison view.
+- `racing_whoops.csv` — generated canonical inventory of every curated `class=whoop`,
+  `discipline=race` quad, including broken ones. It joins `hardware.csv`'s weight, motors, and
+  props with the matching row in `fpv_quads_latest.csv` and the decoded rates from `rates.csv`.
+  Rebuild it whenever either source changes; never hand-edit it. The row set must match the
+  curated race-whoop intersection in the latest inventory, and its hardware fields must match
+  `hardware.csv` exactly. The `crash_recovery` value includes ON/OFF plus the d-term, gyro,
+  setpoint, time, delay, angle, recovery-rate, and yaw-limit settings, so it is the racing-whoop
+  reference sheet rather than a flyable-only comparison view.
 - `modes.csv` — configured Betaflight modes decoded from `aux` lines, one row per activation range
   with mode name/ID, AUX channel, exact range, condition logic/link, firmware, and source dump.
   Covers only quads with `status` active and both `discipline` and `class` set, ordered like the
@@ -100,16 +102,21 @@ These larger outputs help diagnose pin assignments, DMA/timer mapping, motors an
 UART configuration; do not make them part of every routine reminder.
 
 Run the bundled script from the folder that contains the dumps. It is the single source of truth —
-it only reads `*.txt` dumps and hand-maintained CSVs and rewrites the generated files above, so it
-is safe to re-run any time:
+it reads `*.txt` dumps and hand-maintained CSVs and rewrites the generated files above, including
+`racing_whoops.csv`, so it is safe to re-run any time:
 
 ```bash
 python3 .claude/skills/fpv-fleet-update/scripts/update_fleet.py
 ```
 
-The script prints how many dumps it scanned and how many distinct quads it found. That's the whole
-update — do not hand-edit the CSVs or the summary, because the next run overwrites them. If something
-in the output looks wrong, fix the script rather than the generated files (see "How it works" below).
+The script prints how many dumps it scanned and how many distinct quads it found. After it runs,
+check that every `racing_whoops.csv` row has a matching curated race-whoop row in
+`fpv_quads_latest.csv`, and that its `weight`, `motors`, and `props` equal the corresponding
+`hardware.csv` row. Also confirm its firmware, board, rates, and crash-recovery fields came from
+the same latest-dump/rates join. That's the completion check for the cross-file inventory; do not
+hand-edit generated CSVs or the summary, because the next run overwrites them. If something in the
+output looks wrong, fix the script or the hand-maintained source CSV rather than the generated
+files (see "How it works" below).
 
 ### Flight-controller reference check
 
