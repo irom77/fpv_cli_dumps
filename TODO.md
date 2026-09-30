@@ -4,6 +4,31 @@
 
 - [ ] Replace the HDZero AIO5 all-in-one flight-controller/ESC board; Motor 1 does not spin in Betaflight’s Motors tab after the motor replacement, while Motor 3 works.
 
+## Normalize racing-whoop modes
+
+Make the active racing whoops use the same mode layout, including a dedicated Blackbox mode:
+
+```text
+AUX1: ARM                 900–1300
+AUX2: AIRMODE             900–1300
+      FLIP OVER AFTER CRASH 1300–1700
+      ANGLE                1700–2100
+AUX3: BEEPER ON           1700–2100
+AUX4: BLACKBOX            1300–1700
+```
+
+Current status from `modes.csv`:
+
+- [x] All seven active racing whoops are represented: AIR65 R, Ecofree, Happish, M6 ECO,
+      Mob6 AIO5 2nd, Mobula1, and RACE33.
+- [ ] The assignments are not equal: AIRMODE is explicitly assigned only on AIR65 R, Ecofree,
+      M6 ECO, and Mobula1; ARM and BEEPER endpoints vary; Happish has offset ANGLE/flip ranges;
+      AIR65 R has VTX PIT MODE; and no active racing whoop currently has BLACKBOX assigned.
+- [ ] Mob6 AIO5 1st remains excluded from `modes.csv` because it is marked broken; apply the
+      same layout if it returns to service.
+- [ ] Configure the target layout on each active racing whoop, remove AIR65 R's VTX PIT MODE,
+      take fresh CLI backups, and regenerate `modes.csv` with `update_fleet.py`.
+
 ## Publish the `fpv-fleet-update` skill publicly
 
 Make the skill installable by others via a Claude Code plugin marketplace. Currently it's
