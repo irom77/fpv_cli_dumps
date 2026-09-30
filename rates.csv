@@ -1,8 +1,8 @@
 quad,discipline,class,center_rpy,max_rpy,expo_rpy,bf_version,preset,preset_status,rates_type,dps25_rpy,dps50_rpy,dps75_rpy,rc_rate_rpy,super_rate_rpy,rateprofile,note,source
 AIR65 R,race,whoop,200/200/200,667/667/667,0/0/0,4.5.0,,,BETAFLIGHT,61/61/61,154/154/154,316/316/316,100/100/100,70/70/70,0:R_Angle,,dump
+Diamond,race,whoop,200/200/200,667/667/667,0/0/0,4.4.2,,,BETAFLIGHT,61/61/61,154/154/154,316/316/316,100/100/100,70/70/70,0:R_Angle,,dump
 Ecofree,race,whoop,200/200/200,667/667/667,0/0/0,4.4.2,,,BETAFLIGHT,61/61/61,154/154/154,316/316/316,100/100/100,70/70/70,0:R_Angle,,dump
 Happish,race,whoop,200/200/200,667/667/667,0/0/0,4.4.2,,,BETAFLIGHT,61/61/61,154/154/154,316/316/316,100/100/100,70/70/70,0:-,,dump
-M6 ECO,race,whoop,200/200/200,667/667/667,0/0/0,4.4.2,,,BETAFLIGHT,61/61/61,154/154/154,316/316/316,100/100/100,70/70/70,0:R_Angle,,dump
 Mob6 AIO5 2nd,race,whoop,200/200/200,667/667/667,0/0/0,4.5.2,whoop-race,match,BETAFLIGHT,61/61/61,154/154/154,316/316/316,100/100/100,70/70/70,0:-,,dump
 Mobula1,race,whoop,200/200/200,667/667/667,0/0/0,4.4.2,,,BETAFLIGHT,61/61/61,154/154/154,316/316/316,100/100/100,70/70/70,3:-,,dump
 RACE33,race,whoop,190/160/160,633/533/533,0/0/0,4.5.1,,,BETAFLIGHT,58/48/48,146/123/123,300/253/253,95/80/80,70/70/70,0:-,,dump

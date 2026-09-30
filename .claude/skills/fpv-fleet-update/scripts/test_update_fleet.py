@@ -57,6 +57,28 @@ class ModeExtractionTests(unittest.TestCase):
         self.assertEqual(modes[0]['mode'], 'UNKNOWN (99)')
 
 
+class AliasTests(unittest.TestCase):
+    def test_board_qualified_alias_disambiguates_shared_craft_name(self):
+        with tempfile.NamedTemporaryFile('w', newline='', delete=False) as f:
+            f.write('quad,aliases\nDiamond Legacy,Diamond@CRAZYBEEF4SX1280\nDiamond,M6 ECO\n')
+            path = f.name
+        try:
+            aliases = fleet.load_aliases(path)
+            self.assertEqual(
+                fleet.resolve_alias(aliases, fleet.norm('Diamond'), 'CRAZYBEEF4SX1280'),
+                'Diamond Legacy',
+            )
+            self.assertIsNone(
+                fleet.resolve_alias(aliases, fleet.norm('Diamond'), 'CRAZYBEEF4DX'),
+            )
+            self.assertEqual(
+                fleet.resolve_alias(aliases, fleet.norm('M6 ECO'), 'CRAZYBEEF4DX'),
+                'Diamond',
+            )
+        finally:
+            os.unlink(path)
+
+
 class ModeViewTests(unittest.TestCase):
     def test_requires_active_status_discipline_and_class(self):
         base = {
@@ -122,11 +144,11 @@ class LatestMarkerTests(unittest.TestCase):
         rows = [
             {
                 '_ident': 'OPENRACER', 'dump_date': '2026-08-12',
-                'file': 'BTFL_cli_backup_OPENRACER_20260812_120242_BOARD.txt', 'note': '',
+                'file': 'BTFL_cli_backup_ZZZ_20260812_120242_BOARD.txt', 'note': '',
             },
             {
                 '_ident': 'OPENRACER', 'dump_date': '2026-08-12',
-                'file': 'BTFL_cli_backup_OPENRACER_20260812_122055_BOARD.txt', 'note': '',
+                'file': 'BTFL_cli_backup_AAA_20260812_122055_BOARD.txt', 'note': '',
             },
         ]
 

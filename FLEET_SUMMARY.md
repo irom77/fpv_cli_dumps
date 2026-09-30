@@ -15,7 +15,8 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 | CineLog30 | cinewhoop | cinematic | **retired** | GEPRC_F411_AIO | F411 | 4.2.3 | DSHOT600 | - | RX_SERIAL / CRSF | 2025-06-19 |
 | Crocodile5 baby | micro | long-range | **retired** | GEPRC_F722_AIO | F7X2 | 4.2.4 | DSHOT300 | - | RX_SERIAL / CRSF | 2024-08-27 |
 | Crux-fish | micro | — | **broken** | BETAFLIGHTF4 | F405 | 4.4.3 | DSHOT300 | HD | CRSF | 2026-09-10 |
-| Diamond | whoop | — | **broken** | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | Analog | RX_SPI **[A]** | 2025-01-24 |
+| Diamond | whoop | race | active | CRAZYBEEF4DX | F411 | 4.4.2 | DSHOT300 | HD | CRSF | 2026-09-29 |
+| Diamond Legacy | whoop | — | **broken** | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | Analog | RX_SPI **[A]** | 2025-01-24 |
 | Ecofree | whoop | race | active | CRAZYBEEF4DX | F411 | 4.4.2 | DSHOT300 | HD | CRSF | 2026-09-29 |
 | FLYWOOF405S_AIO *(unnamed)* | micro | — | **incomplete** | FLYWOOF405S_AIO | F405 | 4.3.1 | DSHOT300 | - | RX_SERIAL / CRSF **[C]** | 2026-07-23 |
 | FLYWOOF7NANO | micro | long-range | active | FLYWOOF745NANO | F745 | 4.2.11 | DSHOT300 | - | CRSF | 2026-08-15 |
@@ -25,7 +26,6 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 | HOBBYWING_XROTORF7CONV *(unnamed)* | 5-inch | — | active | HOBBYWING_XROTORF7CONV | F7X2 | 4.5.3.KAACK_V19 | - | - | - | 2026-08-25 |
 | LS-Ultra | 5-inch | race | active | TMOTORF7 | F7X2 | 4.5.2.KAACK_V15 | - | - | - | 2026-07-21 |
 | LS-Ultra HD | 5-inch | race | active | HDZERO_HALO | H743 | 4.5.3.KAACK_V18 | - | - | - | 2026-07-21 |
-| M6 ECO | whoop | race | active | CRAZYBEEF4DX | F411 | 4.4.2 | DSHOT300 | HD | CRSF | 2026-09-29 |
 | M85 HDZero | whoop | — | active | BETAFPVF4SX1280 | F411SX1280 | 4.3.1 | DSHOT300 | - | RX_SERIAL / CRSF **[C]** | 2024-07-04 |
 | Mass | 3-inch | — | active | SPEEDYBEEF405MINI | SPEEDYBEEF405MINI | 4.3.2 | DSHOT600 | Auto | CRSF | 2026-09-10 |
 | Meteor85 | whoop | — | **broken** | BETAFPVF4SX1280 | F411 | 4.4.3 | DSHOT300 | HD | ELRS **[A]** | 2025-01-10 |
@@ -55,7 +55,7 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 
 ## Needs attention
 
-**Broken (needs repair — grounded until fixed):** Crux-fish, Diamond, Green Hornet V3, Meteor85, Mob6 AIO5 1st, QAS JB.
+**Broken (needs repair — grounded until fixed):** Crux-fish, Diamond Legacy, Green Hornet V3, Meteor85, Mob6 AIO5 1st, QAS JB.
 
 **Aging firmware (older than BF 4.4):**
 - FLYWOOF7NANO (4.2.11)
@@ -89,9 +89,9 @@ _Showing the 17 active quads that have a `discipline` set; 16 others are hidden 
 | Quad | Center °/s | Max °/s | Expo | @50% | Preset | Type | Source |
 |---|---|---|---|---|---|---|---|
 | AIR65 R | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — | BETAFLIGHT | dump |
+| Diamond | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — | BETAFLIGHT | dump |
 | Ecofree | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — | BETAFLIGHT | dump |
 | Happish | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — | BETAFLIGHT | dump |
-| M6 ECO | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — | BETAFLIGHT | dump |
 | Mob6 AIO5 2nd | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | whoop-race ✓ | BETAFLIGHT | dump |
 | Mobula1 | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — | BETAFLIGHT | dump |
 | RACE33 | 190/160/160 | 633/533/533 | 0/0/0 | 146/123/123 | — | BETAFLIGHT | dump |
@@ -182,7 +182,8 @@ _Curated per-quad build details (not captured in Betaflight dumps), largely seed
 | CineLog30 | 4S | 158.5g | BLHeli_S 35A (GEP-F411-35A AIO) | GR1404 3850KV | T3x3x3 | Polar | Caddx Vista | GEPRC GEP-CL30; RETIRED -> migrated to Cine-fish (Flyfish30) |
 | Crocodile5 baby | 4S | 252.29g | GEP-F722-35A AIO (built-in) | GEP 2004 2550KV | Gemfan 5130 | Caddx Air Unit | HD air unit | GEPRC GEP-CB5; RETIRED; sheet size 5in but 2004 motors = 4in class |
 | Crux-fish | 4S | 115g | Built-in 20A BLHeli_S 4-in-1 | HappyModel EX1404 3500KV | HQProp T3.5x2x3 | HDZero Nano V3 HD FPV Camera | Onboard HDZero | HDZero Crux35; 113mm.<br>Camera upgraded and Motor 3 replaced.<br>Still broken: gyro sensor (ICM42688P) flatlines/locks up to 0 under battery power due to ESC electrical noise on takeoff.<br>Solder new local Low-ESR capacitor to FC to resolve. |
-| Diamond | 1S 300mAh | 17.5g | Built-in 5A BLHeli_S 4-in-1 | SE 0702 23000KV | Gemfan 1210 31mm bi-blade | RunCam Nano 3 | Built-in 25-400mW 5.8G | HappyModel Mobeetle6 (Diamond F4 ELRS AIO);<br>analog |
+| Diamond | 1S | 23.16g | SuperX HD ELRS AIO (built-in) | SE 0702 28000KV | Gemfan 1208-3 31mm tri-blade | HDZero ECO | HDZero ECO VTX | Renamed from M6 ECO; HappyModel Mobula6 ECO 2024;<br>dump board CrazybeeF4DX differs from sheet - verify |
+| Diamond Legacy | 1S 300mAh | 17.5g | Built-in 5A BLHeli_S 4-in-1 | SE 0702 23000KV | Gemfan 1210 31mm bi-blade | RunCam Nano 3 | Built-in 25-400mW 5.8G | HappyModel Mobeetle6 (Diamond F4 ELRS AIO);<br>analog |
 | Ecofree | 1S | 23g | 12A 1-2S BLHeli_S (built-in) | 0702 BetaFPV 30000KV | Gemfan Durable 1210 31mm bi-blade | HDZero ECO | HDZero ECO VTX | HappyModel Mobula6 SuperECOfree;<br>sheet FC=SuperX AIO but dump board=CrazybeeF4DX - verify |
 | FLYWOOF405S_AIO | 2S | 33.8g | GOKU Versatile F405 2S 12A AIO (built-in 12A 4-in-1) | Flywoo ROBO 1002 15500KV | Gemfan 2015 2-blade | HDZero Nano Lite | HDZero Whoop Lite | Flywoo Firefly 2S Nano Baby 20 (sheet name);<br>no craft_name in dump; board=FLYWOOF405S_AIO; 2S HDZero nano;<br>Flywoo EL24P ELRS v3 RX; MPU6000 gyro + prop guard;<br>sheet: NO VIDEO - camera+VTX removed |
 | FLYWOOF7NANO | 4S 850mAh | <250g | Goku F745 16x16 stack (built-in) | NIN 1404 V2 2750KV | Gemfan 4024 | Caddx Polar / Nebula Pro | Caddx Vista | Flywoo Explorer LR4 V2 HD; 4in; class corrected 5-inch -> micro (4in LR) |
@@ -190,7 +191,6 @@ _Curated per-quad build details (not captured in Betaflight dumps), largely seed
 | Happish | 1S | 28g | Onboard 4-in-1 | EX0802 19000KV | Gemfan 35mm 2-blade | HDZero Nano Lite | HDZero Whoop Lite VTX | HappyModel Mobula6 HDZero (SuperbeeF4 Lite ELRS SPI);<br>Meteor65 Pro frame |
 | LS-Ultra | 6S | 270g | T-Motor Mini F45A 6S 4-in-1 (AM32) | Five33 2207 Champion Ed. 2070KV | Gemfan Fury 5128 | Runcam HDZero Nano 90 | HDZero Race V3 | Five33 Lightswitch V2 Ultra; sheet FC=Foxeer Mini F722 but dump board=TMOTORF7 - verify |
 | LS-Ultra HD |  |  |  | HeadsUp RC (MR-30 connectors) |  | HDZero (upgraded lens) | HDZero | Five33 Lightswitch V2 Ultra - HDZero build on Halo AIO (H743);<br>ELRS 2.4G; upgraded camera lens; sister to LS-Ultra.<br>esc/props/weight/cells still TBD |
-| M6 ECO | 1S | 23.16g | SuperX HD ELRS AIO (built-in) | SE 0702 28000KV | Gemfan 1208-3 31mm tri-blade | HDZero ECO | HDZero ECO VTX | HappyModel Mobula6 ECO 2024;<br>dump board CrazybeeF4DX differs from sheet - verify |
 | Mass | 3-4S (850mAh 4S) |  | SpeedyBee F405 Mini (20x20) | e.g. EMAX ECO 1404 3700KV | 3in | RunCam Nano 3 (tentative) | SpeedyBee TX800 (analog) | Massive Droner 3in; renamed from SPEEDYBEEF405MINI;<br>video restored with SpeedyBee TX800; R8 unlock workaround;<br>latest dump records R5;<br>see docs/troubleshooting/mass-vtx-troubleshooting.md. |
 | Meteor85 | 2S 450mAh | 48.3g | Built-in 1S/2S 12A ESC | 1103 11000KV | Gemfan 2015 2-blade | Runcam HDZero Nano Lite / Caddx Ant Nano | HDZero Whoop Lite / M03 analog | BetaFPV Meteor85 Brushless Whoop |
 | Mob6 AIO5 1st | 1S | 19g | CrazybeeF4SX1280 (built-in) | SE 0702 28000KV | HQ ultralight 1.2x1.1x3 tri-blade | HDZero Eco | AIO5 | crash recovery off, airmode on;<br>broken during race;<br>Motor 1 replaced but does not spin in the Betaflight Motors tab;<br>Motor 3 replaced and works;<br>diagnose Motor 1 path (FC output B08, motor/phase wiring, or ESC channel). Historical names Mob6 AIO5 RACE and Race5 match this FC's MCU ID and are aliases. |

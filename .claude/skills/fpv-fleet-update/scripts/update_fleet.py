@@ -195,11 +195,13 @@ def load_hw_map(path, col):
 
 
 def load_aliases(path):
-    """Map normalized former quad name -> current display name, from hardware.csv's `aliases`
-    column (';'-separated list of old names). Quad identity comes from the craft name baked into
-    the dump, so renaming a quad in Betaflight (e.g. Kronos -> openracer) would otherwise split one
-    airframe into two quads with two half-histories. Listing the old name here folds its dumps and
-    its blackbox flights into the current quad. Self-references are ignored."""
+    """Map former quad names to current display names from hardware.csv's aliases column.
+
+    A plain alias is a normalized former name. An ambiguous former name can be qualified with a
+    board target, for example Diamond@CRAZYBEEF4SX1280; that mapping only applies when both
+    the craft name and board match. This lets two airframes that once shared a craft name keep
+    separate histories. Self-references are ignored.
+    """
     if not os.path.exists(path):
         return {}
     out = {}
@@ -210,9 +212,20 @@ def load_aliases(path):
                 continue
             for a in (r.get('aliases') or '').split(';'):
                 a = a.strip()
-                if a and norm(a) != norm(cur):
+                if not a:
+                    continue
+                if '@' in a:
+                    old, board = (part.strip() for part in a.rsplit('@', 1))
+                    if old and board and norm(old) != norm(cur):
+                        out[(norm(old), norm(board))] = cur
+                elif norm(a) != norm(cur):
                     out[norm(a)] = cur
     return out
+
+
+def resolve_alias(aliases, ident, board=''):
+    """Resolve a dump identity, preferring a board-qualified alias over a plain alias."""
+    return aliases.get((ident, norm(board)), aliases.get(ident))
 
 
 def extract_active_rates(text):
@@ -295,15 +308,22 @@ def extract_crash_recovery(text):
                 yaw=settings['crash_limit_yaw'] or '?')
 
 
+def dump_sort_key(row):
+    """Order dumps by the timestamp encoded in their filename, then by filename."""
+    match = re.search(r'_(\d{8})_(\d{6})_', row.get('file', ''))
+    timestamp = (match.group(1), match.group(2)) if match else (row.get('dump_date', ''), '')
+    return (*timestamp, row.get('file', ''))
+
+
 def mark_latest_rows(rows):
     """Mark exactly one newest complete dump per quad, including same-day filename timestamps."""
     latest = {}
     for r in rows:
-        candidate = (r['dump_date'], r['file'])
+        candidate = dump_sort_key(r)
         if r['_ident'] not in latest or candidate > latest[r['_ident']]:
             latest[r['_ident']] = candidate
     for r in rows:
-        if (r['dump_date'], r['file']) == latest[r['_ident']] and 'EMPTY' not in r['note']:
+        if dump_sort_key(r) == latest[r['_ident']] and 'EMPTY' not in r['note']:
             r['note'] = 'latest' + (('; ' + r['note']) if r['note'] else '')
 
 
@@ -432,7 +452,7 @@ def parse_dumps():
     # name visible in the history rows.
     aliases = load_aliases(hw_path)
     for r in rows:
-        cur = aliases.get(r['_ident'])
+        cur = resolve_alias(aliases, r['_ident'], r.get('board', ''))
         if cur:
             r['quad'] = cur
             r['_ident'] = norm(cur)
@@ -456,11 +476,11 @@ def parse_dumps():
     for r in rows:
         k = (r['_ident'],) + tuple(r.get(c, '') for c in keycols)
         cur = dedup.get(k)
-        if cur is None or (r['dump_date'], r['file']) > (cur['dump_date'], cur['file']):
+        if cur is None or dump_sort_key(r) > dump_sort_key(cur):
             dedup[k] = r
     rows = list(dedup.values())
 
-    rows.sort(key=lambda r: (r['_ident'], r['dump_date'], r['file']))
+    rows.sort(key=lambda r: (r['_ident'], *dump_sort_key(r)))
 
     # The filename contains HHMMSS, so same-day pre/post-flash dumps still have one latest row.
     mark_latest_rows(rows)
@@ -495,7 +515,7 @@ def latest_per_quad(rows):
     out = []
     for rs in by_quad.values():
         good = [r for r in rs if 'EMPTY' not in r['note']] or rs
-        out.append(max(good, key=lambda r: (r['dump_date'], r['file'])))
+        out.append(max(good, key=dump_sort_key))
     out.sort(key=lambda r: r['quad'].lower())
     return out
 

@@ -199,6 +199,12 @@ so `M85 HDZero` and `M85_HDZERO` count as one quad. Dumps that share an ExpressL
 (`set expresslrs_uid`) are grouped into bind groups (ELRS-A, ELRS-B, …); quads in a group bind to the
 same radio together.
 
+When two airframes share a craft name, qualify the ambiguous alias with the dump's board target,
+for example Diamond@CRAZYBEEF4SX1280. The board-qualified mapping applies only when both the
+craft name and board match; a plain alias remains the right choice for an unambiguous rename.
+The updater orders same-day dumps by the HHMMSS timestamp in the filename, not by the filename's
+alphabetical prefix. This matters when a quad is renamed between two backups on the same day.
+
 **Renaming a quad.** Because identity is the craft name, renaming a quad in Betaflight would split one
 airframe into two quads with two half-histories. To fold them, rename the `quad` cell in `hardware.csv`
 to the new name and list the old one in that row's `aliases` column (`;`-separated for repeat renames).
