@@ -32,7 +32,8 @@ Current status from `modes.csv`:
 ## Publish the `fpv-fleet-update` skill publicly
 
 Make the skill installable by others via a Claude Code plugin marketplace. Currently it's
-project-scoped (`.claude/skills/fpv-fleet-update/`), so it only loads inside this repo.
+repository-scoped (`.agents/skills/fpv-fleet-update/`), with provider-specific discovery adapters
+where needed.
 
 Steps:
 - [ ] Decide on a marketplace repo (e.g. `github.com/irom77/claude-plugins`) — separate repo, or reuse this one.

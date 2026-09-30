@@ -107,7 +107,7 @@ The build output is
 12. Copy the new dump into `backups/` and regenerate the fleet inventory:
 
     ```bash
-    python3 .claude/skills/fpv-fleet-update/scripts/update_fleet.py
+    python3 .agents/skills/fpv-fleet-update/scripts/update_fleet.py
     ```
 
 ## Verification from the recorded dumps

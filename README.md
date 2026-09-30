@@ -24,7 +24,7 @@ Or run the fleet updater directly:
 
 ```bash
 cp ~/Downloads/BTFL_cli_MYQUAD_*.txt backups/
-python3 .claude/skills/fpv-fleet-update/scripts/update_fleet.py
+python3 .agents/skills/fpv-fleet-update/scripts/update_fleet.py
 ```
 
 ## Repository backups
@@ -80,9 +80,14 @@ blackbox/                Raw .BBL/.BFL flight logs — gitignored (large binarie
 upgrades/                Reproducible firmware upgrade records: binaries, restores, provenance and verification
 docs/                    Reference notes: hardware comparisons, presets, and race-timing setup
 docs/troubleshooting/    Bench investigations with evidence, open hypotheses and next diagnostic tests
-.claude/skills/fpv-fleet-update/   Skill that regenerates the derived files above
+.agents/skills/fpv-fleet-update/   Portable skill and scripts that regenerate the derived files above
+.claude/skills/fpv-fleet-update/   Claude Code discovery adapter for the canonical skill above
 .claude/skills/fpv-orders-update/  Skill that builds orders.csv from Gmail order confirmations
 ```
+
+The fleet skill's source of truth is .agents/skills/fpv-fleet-update/, the repository-neutral
+Agent Skills location. Claude Code discovers the small adapter under .claude/skills/; agents
+that support .agents/skills/ can load the canonical skill directly.
 
 ## Updating
 
@@ -90,7 +95,7 @@ Drop a new `BTFL_cli_*.txt` dump into `backups/` (any subfolder works — the pa
 recursively), then regenerate the inventory:
 
 ```bash
-python3 .claude/skills/fpv-fleet-update/scripts/update_fleet.py
+python3 .agents/skills/fpv-fleet-update/scripts/update_fleet.py
 ```
 
 The script is the single source of truth: it only reads the dumps and the hand-maintained CSVs, and
@@ -269,8 +274,8 @@ Drop `.BBL`/`.BFL` logs into `blackbox/` (gitignored), then decode them into `fl
 
 ```bash
 python3 -m venv .venv && .venv/bin/pip install orangebox   # one-time
-python3 .claude/skills/fpv-fleet-update/scripts/update_flights.py   # -> flights.csv
-python3 .claude/skills/fpv-fleet-update/scripts/update_fleet.py     # folds Flights into FLEET_SUMMARY.md
+python3 .agents/skills/fpv-fleet-update/scripts/update_flights.py   # -> flights.csv
+python3 .agents/skills/fpv-fleet-update/scripts/update_fleet.py     # folds Flights into FLEET_SUMMARY.md
 ```
 
 One `.BBL`/`.BFL` file can contain several internal log sections, including short captures created
