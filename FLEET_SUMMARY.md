@@ -29,7 +29,7 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 | M85 HDZero | whoop | — | active | BETAFPVF4SX1280 | F411SX1280 | 4.3.1 | DSHOT300 | - | RX_SERIAL / CRSF **[C]** | 2024-07-04 |
 | Mass | 3-inch | — | active | SPEEDYBEEF405MINI | SPEEDYBEEF405MINI | 4.3.2 | DSHOT600 | Auto | CRSF | 2026-09-10 |
 | Meteor85 | whoop | — | **broken** | BETAFPVF4SX1280 | F411 | 4.4.3 | DSHOT300 | HD | ELRS **[A]** | 2025-01-10 |
-| Mob6 AIO5 1st | whoop | race | **broken** | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI / CRSF **[A]** | 2026-09-28 |
+| Mob6 AIO5 1st | whoop | race | **broken** | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI / CRSF **[A]** | 2026-09-29 |
 | Mob6 AIO5 2nd | whoop | race | active | CRAZYBEEF4SX1280 | F411 | 4.5.2 | DSHOT300 | HD | RX_SPI / CRSF **[A]** | 2026-09-29 |
 | Mobula1 | whoop | race | active | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | HD | RX_SPI / CRSF **[B]** | 2026-09-29 |
 | openracer | 5-inch | race | active | HOBBYWING_XROTORF7CONV | F7X2 | 4.5.3.KAACK_V19 | - | - | - | 2026-09-02 |
