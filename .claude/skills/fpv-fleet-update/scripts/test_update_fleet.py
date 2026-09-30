@@ -137,6 +137,12 @@ class LatestMarkerTests(unittest.TestCase):
 
 
 class RacingWhoopInventoryTests(unittest.TestCase):
+    def test_airmode_column_follows_crash_recovery(self):
+        self.assertEqual(
+            fleet.RACING_WHOOP_COLS.index('airmode'),
+            fleet.RACING_WHOOP_COLS.index('crash_recovery') + 1,
+        )
+
     def test_includes_broken_whoops_and_joins_motors_firmware_and_rates(self):
         latest = [{
             'quad': 'Broken Racer', 'class': 'whoop', 'discipline': 'race', 'status': 'broken',
