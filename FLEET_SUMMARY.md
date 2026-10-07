@@ -17,7 +17,7 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 | Crux-fish | micro | — | **broken** | BETAFLIGHTF4 | F405 | 4.4.3 | DSHOT300 | HD | CRSF | 2026-09-10 |
 | Diamond | whoop | race | active | CRAZYBEEF4DX | F411 | 4.4.2 | DSHOT300 | HD | CRSF | 2026-09-29 |
 | Diamond Legacy | whoop | — | **broken** | CRAZYBEEF4SX1280 | F411 | 4.4.2 | DSHOT300 | Analog | RX_SPI **[A]** | 2025-01-24 |
-| Ecofree | whoop | race | active | CRAZYBEEF4DX | F411 | 4.4.2 | DSHOT300 | HD | CRSF | 2026-09-29 |
+| Ecofree | whoop | race | **broken** | CRAZYBEEF4DX | F411 | 4.4.2 | DSHOT300 | HD | CRSF | 2026-09-29 |
 | FLYWOOF405S_AIO *(unnamed)* | micro | — | **incomplete** | FLYWOOF405S_AIO | F405 | 4.3.1 | DSHOT300 | - | RX_SERIAL / CRSF **[C]** | 2026-07-23 |
 | FLYWOOF7NANO | micro | long-range | active | FLYWOOF745NANO | F745 | 4.2.11 | DSHOT300 | - | CRSF | 2026-08-15 |
 | Green Hornet V3 | cinewhoop | cinematic | **broken** | IFLIGHT_SUCCEX_E_F7 | F722 | 2026.6.1 | DSHOT300 | HD | CRSF | 2026-09-14 |
@@ -45,7 +45,7 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 ## Fleet rollups
 
 - **Class:** 12× whoop, 3× cinewhoop, 5× micro, 9× 5-inch, 2× 3-inch, 2× 7-inch. Size class inferred from craft name / board where `hardware.csv` doesn't set it.
-- **Status:** 22× active, 6× broken, 3× retired, 2× incomplete. Lifecycle from `hardware.csv`; a blank there counts as active.
+- **Status:** 21× active, 7× broken, 3× retired, 2× incomplete. Lifecycle from `hardware.csv`; a blank there counts as active.
 - **Discipline:** 15× race, 3× freestyle, 3× cinematic, 2× long-range, 10 unset. Hand-entered in `hardware.csv` (no heuristic — the dump gives no signal).
 - **Flight controllers:** 13× F411, 8× F7X2, 4× F405, 2× G47X, 2× H743, 1× F745, 1× F722, 1× F411SX1280, 1× SPEEDYBEEF405MINI.
 - **Firmware:** 13 on BF 4.5.x, 9 on BF 4.4.x, 5 on BF 4.3.x, 3 on BF 4.2.x, 2 on BF 2025.12.x, 1 on BF 2026.6.x.
@@ -55,7 +55,7 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 
 ## Needs attention
 
-**Broken (needs repair — grounded until fixed):** Crux-fish, Diamond Legacy, Green Hornet V3, Meteor85, Mob6 AIO5 1st, QAS JB.
+**Broken (needs repair — grounded until fixed):** Crux-fish, Diamond Legacy, Ecofree, Green Hornet V3, Meteor85, Mob6 AIO5 1st, QAS JB.
 
 **Aging firmware (older than BF 4.4):**
 - FLYWOOF7NANO (4.2.11)
@@ -82,7 +82,7 @@ _Note: BETAFPVF4SX1280, FLYWOOF405S_AIO, HOBBYWING_XROTORF7CON, HOBBYWING_XROTOR
 
 _Active rateprofile, decoded to deg/s (see `rates.csv`). **Center** is stick sensitivity around centre, **Max** the rate at full deflection, r/p/y. `source=default` means the dump set no rates at all, so the values shown are that firmware's stock rateprofile — which changed at 4.3 (before: BETAFLIGHT 100/70, center 200; after: ACTUAL 7/67, center 70). Intended rates come from `rate_preset` in `hardware.csv`._
 
-_Showing the 17 active quads that have a `discipline` set; 16 others are hidden (retired, broken, incomplete, or no discipline recorded). "Needs attention" above still checks every quad._
+_Showing the 16 active quads that have a `discipline` set; 17 others are hidden (retired, broken, incomplete, or no discipline recorded). "Needs attention" above still checks every quad._
 
 **race — whoop**
 
@@ -90,7 +90,6 @@ _Showing the 17 active quads that have a `discipline` set; 16 others are hidden 
 |---|---|---|---|---|---|---|---|
 | AIR65 R | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — | BETAFLIGHT | dump |
 | Diamond | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — | BETAFLIGHT | dump |
-| Ecofree | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — | BETAFLIGHT | dump |
 | Happish | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — | BETAFLIGHT | dump |
 | Mob6 AIO5 2nd | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | whoop-race ✓ | BETAFLIGHT | dump |
 | Mobula1 | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — | BETAFLIGHT | dump |
