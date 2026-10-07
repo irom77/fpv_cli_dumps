@@ -3,6 +3,7 @@ AIR65 R,whoop,race,active,,1S,17.3g,Air 5-in-1 (built-in),0702 SE II 27000KV,Gem
 Diamond Legacy,whoop,,broken,,1S 300mAh,17.5g,Built-in 5A BLHeli_S 4-in-1,SE 0702 23000KV,Gemfan 1210 31mm bi-blade,RunCam Nano 3,Built-in 25-400mW 5.8G,"HappyModel Mobeetle6 (Diamond F4 ELRS AIO);
 analog",Diamond@CRAZYBEEF4SX1280,
 Ecofree,whoop,race,active,,1S,23g,12A 1-2S BLHeli_S (built-in),0702 BetaFPV 30000KV,Gemfan Durable 1210 31mm bi-blade,HDZero ECO,HDZero ECO VTX,"HappyModel Mobula6 SuperECOfree;
+NO VIDEO reported; dump still configures HD video/VTX;
 sheet FC=SuperX AIO but dump board=CrazybeeF4DX - verify",,
 Diamond,whoop,race,active,,1S,23.16g,SuperX HD ELRS AIO (built-in),SE 0702 28000KV,Gemfan 1208-3 31mm tri-blade,HDZero ECO,HDZero ECO VTX,"Renamed from M6 ECO; HappyModel Mobula6 ECO 2024;
 dump board CrazybeeF4DX differs from sheet - verify",M6 ECO,
