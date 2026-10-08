@@ -1,6 +1,6 @@
 quad,discipline,class,center_rpy,max_rpy,expo_rpy,bf_version,preset,preset_status,rates_type,dps25_rpy,dps50_rpy,dps75_rpy,rc_rate_rpy,super_rate_rpy,rateprofile,note,source
+AIR65 C,race,whoop,70/70/70,580/580/500,0/0/0,2026.6.0-alpha,,,ACTUAL,49/49/44,162/162/142,339/339/294,7/7/7,58/58/50,0:-,,dump
 AIR65 R,race,whoop,200/200/200,667/667/667,0/0/0,4.5.0,,,BETAFLIGHT,61/61/61,154/154/154,316/316/316,100/100/100,70/70/70,0:R_Angle,,dump
-AIR65_C,race,whoop,70/70/70,670/670/670,0/0/0,,,,ACTUAL (default),55/55/55,185/185/185,390/390/390,7/7/7,67/67/67,,,default
 Diamond,race,whoop,200/200/200,667/667/667,0/0/0,4.4.2,,,BETAFLIGHT,61/61/61,154/154/154,316/316/316,100/100/100,70/70/70,0:R_Angle,,dump
 Happish,race,whoop,200/200/200,667/667/667,0/0/0,4.4.2,,,BETAFLIGHT,61/61/61,154/154/154,316/316/316,100/100/100,70/70/70,0:-,,dump
 Mob6 AIO5 2nd,race,whoop,200/200/200,667/667/667,0/0/0,4.5.2,whoop-race,match,BETAFLIGHT,61/61/61,154/154/154,316/316/316,100/100/100,70/70/70,0:-,,dump

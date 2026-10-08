@@ -8,8 +8,8 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 
 | Quad | Class | Use | Status | Board | MCU | BF | ESC | Video | RX / bind | Last dump |
 |---|---|---|---|---|---|---|---|---|---|---|
+| AIR65 C | whoop | race | active | BETAFPVG473_V2 | G47X | 2026.6.0-alpha | DSHOT300 | Analog | CRSF | 2026-10-08 |
 | AIR65 R | whoop | race | active | BETAFPVG473 | G47X | 4.5.0 | DSHOT300 | Auto | CRSF | 2026-09-29 |
-| AIR65_C | whoop | race | active | BETAFPVG473_V2 | - | - | - | - | - | 2026-10-08 |
 | aos5 | 5-inch | — | **incomplete** | GEPRC_F722_AIO | F7X2 | 4.5.1 | DSHOT300 | HD | CRSF | 2026-09-11 |
 | BETAFPVF4SX1280 *(unnamed)* | whoop | — | active | BETAFPVF4SX1280 | F411 | 4.4.0 | DSHOT300 | - | ELRS **[A]** | 2024-07-12 |
 | Cine-fish | cinewhoop | cinematic | active | GEPRCF411_AIO | F411 | 4.5.5 | DSHOT300 | Auto | CRSF | 2026-09-19 |
@@ -48,11 +48,11 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 - **Class:** 13× whoop, 3× cinewhoop, 5× micro, 9× 5-inch, 2× 3-inch, 2× 7-inch. Size class inferred from craft name / board where `hardware.csv` doesn't set it.
 - **Status:** 22× active, 7× broken, 3× retired, 2× incomplete. Lifecycle from `hardware.csv`; a blank there counts as active.
 - **Discipline:** 16× race, 3× freestyle, 3× cinematic, 2× long-range, 10 unset. Hand-entered in `hardware.csv` (no heuristic — the dump gives no signal).
-- **Flight controllers:** 13× F411, 8× F7X2, 4× F405, 2× G47X, 2× H743, 1× F745, 1× F722, 1× F411SX1280, 1× SPEEDYBEEF405MINI.
-- **Firmware:** 13 on BF 4.5.x, 9 on BF 4.4.x, 5 on BF 4.3.x, 3 on BF 4.2.x, 2 on BF 2025.12.x, 1 on BF 2026.6.x.
-- **ESC protocol:** 21× DSHOT300, 4× DSHOT600.
+- **Flight controllers:** 13× F411, 8× F7X2, 4× F405, 3× G47X, 2× H743, 1× F745, 1× F722, 1× F411SX1280, 1× SPEEDYBEEF405MINI.
+- **Firmware:** 13 on BF 4.5.x, 9 on BF 4.4.x, 5 on BF 4.3.x, 3 on BF 4.2.x, 2 on BF 2025.12.x, 2 on BF 2026.6.x.
+- **ESC protocol:** 22× DSHOT300, 4× DSHOT600.
 - **ExpressLRS bind groups:** **ELRS-A** (6 quads, UID `7,48,91,69,202,173`); **ELRS-C** (2 quads, UID `65,245,33,230,58,226`); **ELRS-B** (2 quads, UID `22,242,162,118,226,128`). Quads in the same group share a binding phrase and bind to the same radio together.
-- **Video:** 12× HD, 3× Auto, 2× Analog. Quads showing `-` have `vcd_video_system` at firmware default in the diff — not necessarily video-less.
+- **Video:** 12× HD, 3× Analog, 3× Auto. Quads showing `-` have `vcd_video_system` at firmware default in the diff — not necessarily video-less.
 
 ## Needs attention
 
@@ -68,9 +68,6 @@ Source data: `fpv_quads.csv` (full history) and `fpv_quads_latest.csv` (newest d
 - M85 HDZero (last dump 2024-07-04)
 - BETAFPVF4SX1280 (last dump 2024-07-12)
 - HOBBYWING_XROTORF7CON (last dump 2024-07-27)
-
-**Truncated dumps (re-export a full backup):**
-- AIR65_C — `BTFL_cli_AIR65_C_20261008_095237_BETAFPVG473_V2.txt`
 
 **Rate profile looks like it survived a firmware upgrade** — centre sensitivity meets or exceeds max rate on an ACTUAL profile, so the max-rate setting does nothing and the stick is linear to a very high ceiling. Usually old BETAFLIGHT-rates numbers left on a profile the firmware now reads as ACTUAL:
 - aos5 (4.5.1) — rc_rate 130/130/130 → centre 1300/1300/1300 °/s, which swamps the max-rate setting (670/670/670 °/s)
@@ -92,8 +89,8 @@ _Showing the 17 active quads that have a `discipline` set; 17 others are hidden 
 
 | Quad | Center °/s | Max °/s | Expo | @50% | Preset | Type | Source |
 |---|---|---|---|---|---|---|---|
+| AIR65 C | 70/70/70 | 580/580/500 | 0/0/0 | 162/162/142 | — | ACTUAL | dump |
 | AIR65 R | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — | BETAFLIGHT | dump |
-| AIR65_C | 70/70/70 | 670/670/670 | 0/0/0 | 185/185/185 | — | ACTUAL (default) | default |
 | Diamond | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — | BETAFLIGHT | dump |
 | Happish | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | — | BETAFLIGHT | dump |
 | Mob6 AIO5 2nd | 200/200/200 | 667/667/667 | 0/0/0 | 154/154/154 | whoop-race ✓ | BETAFLIGHT | dump |
@@ -181,7 +178,7 @@ _Curated per-quad build details (not captured in Betaflight dumps), largely seed
 | Quad | Cells | Weight | ESC / stack | Motors | Props | Camera | VTX | Notes |
 |---|---|---|---|---|---|---|---|---|
 | AIR65 R | 1S | 17.3g | Air 5-in-1 (built-in) | 0702 SE II 27000KV | Gemfan 1219S 3-blade | C03 | Onboard 5.8G 25-400mW | BetaFPV Air65; ELRS 2.4G |
-| AIR65_C | 1S | 16.6g | Matrix 1S 5IN1 II (built-in 12A ESC) | 0702 Champion 36000KV dual-ball-bearing | Gemfan GF 1207 3-blade | C03 | Onboard 5.8G 25-400mW | Air65 II Champion edition; 65mm; BETAFPV lists 16.6g; ELRS 2.4G; runtime verified 2026-10-08: Betaflight 2026.6.0-alpha build e92c10887; target BETAFPVG473_V2; BMI270 gyro/ACC; FlashFS 16MiB with 1,046,528B used; bench snapshot had no battery and RXLOSS/CLI/MSP/DSHOT_TELEM arming flags; confirm BETAFPV-compatible firmware before flashing; saved config dump remains incomplete |
+| AIR65_C | 1S | 16.6g | Matrix 1S 5IN1 II (built-in 12A ESC) | 0702 Champion 36000KV dual-ball-bearing | Gemfan GF 1207 3-blade | C03 | Onboard 5.8G 25-400mW | Air65 II Champion edition; 65mm; BETAFPV lists 16.6g; ExpressLRS: BETAFPV 2.4GHz AIO RX; receiver firmware 3.5.6 (ee188b), ISM2G4; runtime verified 2026-10-08: Betaflight 2026.6.0-alpha build e92c10887; target BETAFPVG473_V2; BMI270 gyro/ACC; FlashFS 16MiB with 1,046,528B used; bench snapshot had no battery and RXLOSS/CLI/MSP/DSHOT_TELEM arming flags; confirm BETAFPV-compatible firmware before flashing; full CLI config dump received 2026-10-08 |
 | AOS5 |  |  | GEPRC F722 AIO (same MCU as retired Crocodile5 baby) | GEPRC 2004 2550KV |  |  |  | AOS5 partial build; frame/motors/FC/RX confirmed 2026-09-11;<br>CRSF on UART3; camera, VTX, battery, props, weight unconfirmed. |
 | Cine-fish | 4S |  | GEPRC F411 AIO (built-in) | GR1404 3850KV | T3x3x3 | CaddxFPV Baby Ratel 2 | Rush Tiny Tank (analog) | Flying with manual VTX channel selection;<br>Rush Tiny Tank installed 2026-09-18;<br>analog video/OSD confirmed; live FC BF 4.5.5;<br>SmartAudio Device ready=false, so channel control is not operational;<br>see docs/troubleshooting/cine-fish-rush-tiny-tank-smartaudio.md. |
 | CineLog30 | 4S | 158.5g | BLHeli_S 35A (GEP-F411-35A AIO) | GR1404 3850KV | T3x3x3 | Polar | Caddx Vista | GEPRC GEP-CL30; RETIRED -> migrated to Cine-fish (Flyfish30) |

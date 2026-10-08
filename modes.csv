@@ -1,5 +1,11 @@
 quad,discipline,class,mode,aux_channel,range_visual,range_start,range_end,mode_id,logic,linked_to,linked_to_id,slot,bf_version,source
-AIR65 R,race,whoop,ARM,🔴 AUX1,900 |████████░░░░░░░░░░░░░░░░| 2100,900,1300,0,OR,,,0,4.5.0,BTFL_cli_AIR65_R_20260929_153410_BETAFPVG473.txt
+AIR65 C,race,whoop,ARM,🔴 AUX1,900 |████████░░░░░░░░░░░░░░░░| 2100,900,1300,0,OR,,,0,2026.6.0-alpha,BTFL_cli_AIR65_C_20261008_101553_BETAFPVG473_V2.txt
+,,,AIRMODE,🔵 AUX2,900 |████████░░░░░░░░░░░░░░░░| 2100,900,1300,28,OR,,,3,2026.6.0-alpha,BTFL_cli_AIR65_C_20261008_101553_BETAFPVG473_V2.txt
+,,,FLIP OVER AFTER CRASH,🔵 AUX2,900 |░░░░░░░░████████░░░░░░░░| 2100,1300,1700,35,OR,,,4,2026.6.0-alpha,BTFL_cli_AIR65_C_20261008_101553_BETAFPVG473_V2.txt
+,,,ANGLE,🔵 AUX2,900 |░░░░░░░░░░░░░░░░████████| 2100,1700,2100,1,OR,,,1,2026.6.0-alpha,BTFL_cli_AIR65_C_20261008_101553_BETAFPVG473_V2.txt
+,,,BEEPER ON,🟢 AUX3,900 |░░░░░░░░████████████████| 2100,1300,2100,13,OR,,,2,2026.6.0-alpha,BTFL_cli_AIR65_C_20261008_101553_BETAFPVG473_V2.txt
+,,,VTX PIT MODE,⚫ AUX4,900 |░░░░░░░░████████████████| 2100,1300,2100,39,OR,,,5,2026.6.0-alpha,BTFL_cli_AIR65_C_20261008_101553_BETAFPVG473_V2.txt
+AIR65 R,,,ARM,🔴 AUX1,900 |████████░░░░░░░░░░░░░░░░| 2100,900,1300,0,OR,,,0,4.5.0,BTFL_cli_AIR65_R_20260929_153410_BETAFPVG473.txt
 ,,,AIRMODE,🔵 AUX2,900 |████████░░░░░░░░░░░░░░░░| 2100,900,1300,28,OR,,,3,4.5.0,BTFL_cli_AIR65_R_20260929_153410_BETAFPVG473.txt
 ,,,FLIP OVER AFTER CRASH,🔵 AUX2,900 |░░░░░░░░████████░░░░░░░░| 2100,1300,1700,35,OR,,,4,4.5.0,BTFL_cli_AIR65_R_20260929_153410_BETAFPVG473.txt
 ,,,ANGLE,🔵 AUX2,900 |░░░░░░░░░░░░░░░░████████| 2100,1700,2100,1,OR,,,1,4.5.0,BTFL_cli_AIR65_R_20260929_153410_BETAFPVG473.txt
