@@ -11,7 +11,7 @@ with the curated build notes and manufacturer documentation.
 
 ## Inventory
 
-The dump set contains **35 current craft/unnamed identities and 20 distinct Betaflight
+The dump set contains **34 current craft/unnamed identities and 21 distinct Betaflight
 board strings**.
 Those strings resolve to the physical controller families below; rows marked
 **revision-sensitive** must be visually identified before their pinout is trusted.
@@ -19,6 +19,7 @@ Those strings resolve to the physical controller families below; rows marked
 | Controller / physical family | Betaflight board string(s) | Quads using it | State of identification |
 |---|---|---|---|
 | BETAFPV Air 5-in-1 G473 | `BETAFPVG473` | AIR65 R | Product family confirmed |
+| BETAFPV Matrix 1S 5IN1 II | `BETAFPVG473`, `BETAFPVG473_V2` | AIR65_C | Product, V2 target, and BMI270 gyro confirmed by runtime snapshot |
 | BETAFPV F4 1S 12A AIO ELRS | `BETAFPVF4SX1280` | Meteor85, M85 HDZero, unnamed BETAFPV dump | V2.0/V2.2 revision-sensitive |
 | Happymodel Diamond F4 ELRS AIO | `CRAZYBEEF4SX1280` | Diamond | Product confirmed; target is shared |
 | Happymodel SuperbeeF4 Lite / Mobula HD board | `CRAZYBEEF4SX1280` | Happish, Mobula1 | Product family from build notes; revision-sensitive |
@@ -55,6 +56,14 @@ VCC ----------------------------  voltage specified by peripheral + FC manual
 ```
 
 ## Controller pinout references
+
+### BETAFPV Matrix 1S 5IN1 II — AIR65 C
+
+BETAFPV identifies the Air65 II Champion as using the Matrix 1S 5IN1 II (`BETAFPVG473` firmware family). The manufacturer specifies a G473 MCU, 1S 12A continuous/18A peak ESC, onboard serial ELRS 2.4 GHz, 5.8 GHz VTX up to 400 mW, 16 MB blackbox, and 5 V/3 A BEC. A runtime snapshot on 2026-10-08 confirms target `BETAFPVG473_V2`, firmware `2026.6.0-alpha` (build `e92c10887`), and BMI270 gyro/ACC. BETAFPV lists several possible IMUs and warns that some require its compatible firmware; this board is running a vendor alpha build, so do not replace it with an official image until compatibility is confirmed.
+
+Official references: [Air65 II product page](https://betafpv.com/products/air65-ii-brushless-whoop-quadcopter) and [Matrix 1S 5IN1 II FC page](https://betafpv.com/products/matrix-1s-5in1-ii-brushless-flight-controller). The FC page documents UART1/2/3/4, with UART2 connected to the VTX and UART3 to the receiver by default; UART3 can be released by removing a resistor. Use its revision-specific diagram for wiring; no pad-level wiring is transcribed here.
+
+The runtime snapshot also reports 16 MiB FlashFS with 1,046,528 bytes used. At the captured bench state, no battery was present and arming-disable flags were `RXLOSS CLI MSP DSHOT_TELEM`; task load was 35.5% excluding SERIAL at a 3150 Hz gyro/PID rate. The saved CLI configuration file is still truncated, so settings and AUX modes remain unavailable.
 
 ### BETAFPV Air 5-in-1 G473 — AIR65 R
 
