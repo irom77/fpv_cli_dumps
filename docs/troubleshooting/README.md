@@ -6,6 +6,7 @@ from hypotheses, and leave a concrete next test when a fault is still open.
 
 ## Open investigations
 
+- [AIR65_C jumps upward on throttle](air65-c-throttle-surge.md) — Rate_3's throttle limit was reduced from 80% to 60% without changing the symptom; Air Mode was enabled in the earliest complete dump, but the current state and cause remain unverified.
 - [Green Hornet V3 will not take off — two independent faults](green-hornet-post-upgrade-takeoff-failure.md)
   — stick offsets integrating without bound (fixed, verified) and a yaw rate reinterpreted by the 4.2.4 to
   2026.6.1 upgrade (fixed). Still open and blocking: Motor 3 is 14% down under load against 7.4% unloaded,
