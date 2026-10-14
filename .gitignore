@@ -17,6 +17,9 @@ blackbox/
 *.BFL
 *.bfl
 
+# local Boxer SD card scripts and tools
+radio_models/RadioMaster_Boxer/SCRIPTS/
+
 # fpv-orders-update: purchase ledger + its transient staging file.
 # orders.csv holds personal purchase history (prices, order numbers) — kept local, never committed.
 orders.csv
