@@ -79,6 +79,7 @@ FLEET_SUMMARY.md         Overview: fleet table, rollups, "needs attention", rate
 blackbox/                Raw .BBL/.BFL flight logs — gitignored (large binaries; not committed)
 upgrades/                Reproducible firmware upgrade records: binaries, restores, provenance and verification
 docs/                    Reference notes: hardware comparisons, presets, and race-timing setup
+radio_models/            EdgeTX model exports and full-radio Companion backups, grouped by radio
 docs/troubleshooting/    Bench investigations with evidence, open hypotheses and next diagnostic tests
 .agents/skills/fpv-fleet-update/   Portable skill and scripts that regenerate the derived files above
 .claude/skills/fpv-fleet-update/   Claude Code discovery adapter for the canonical skill above
@@ -112,6 +113,15 @@ reconstructed from a CLI dump alone. Its [upgrade record index](upgrades/README.
 standard format for future quad upgrades. When available, each package records the exact firmware
 binary and checksum, source/config commits, selective restore, flashing procedure and post-flash
 evidence; records for online flashes explicitly note when the firmware artifact was not archived.
+
+## EdgeTX radio backups
+
+[`radio_models/`](radio_models/) stores EdgeTX files by radio model. The
+[RadioMaster Boxer folder](radio_models/RadioMaster_Boxer/) contains `boxer.etx`, a full
+Companion backup of the radio settings and models, plus `BETAFLIGHT.yml`, a standalone Boxer model
+export. `BETAFLIGHT` is the default Boxer model. Import the `.yml` to work with that model alone;
+keep the `.etx` as the full-radio backup for recovery. The folder README diagrams the current
+AIR65_C rate switch setup.
 
 ## Troubleshooting records
 
