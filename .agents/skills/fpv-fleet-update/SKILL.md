@@ -2,7 +2,7 @@
 name: fpv-fleet-update
 description: >-
   Regenerate the FPV quad inventory (fpv_quads.csv, fpv_quads_latest.csv, rates.csv, modes.csv,
-  racing_whoops.csv, FLEET_SUMMARY.md) and keep FLIGHT_CONTROLLER_REFERENCE.md current when new controllers appear
+  racing_whoops.csv, racing_3inch.csv, FLEET_SUMMARY.md) and keep FLIGHT_CONTROLLER_REFERENCE.md current when new controllers appear
   from the Betaflight CLI dump files in this folder. Use this whenever a new BTFL CLI backup
   or dump (a BTFL_cli_*.txt file) is added, replaced, or removed, or whenever the user asks to
   refresh, rebuild, or update the fleet CSV / fleet summary / quad inventory — even if they
@@ -38,6 +38,11 @@ files below must stay in sync whenever the set of dumps changes:
   `hardware.csv` exactly. The `crash_recovery` value includes ON/OFF plus the d-term, gyro,
   setpoint, time, delay, angle, recovery-rate, and yaw-limit settings, so it is the racing-whoop
   reference sheet rather than a flyable-only comparison view.
+- `racing_3inch.csv` — generated comparison of every curated `class=3-inch`, `discipline=race`
+  quad, including build hardware, firmware/board, decoded rates, active PID profile values, TPA,
+  dynamic idle, PID loop rate, gyro filter settings, airmode, crash recovery, and source dump.
+  Rebuild it with the fleet updater; never hand-edit it. The row set must match the 3-inch race
+  intersection in `fpv_quads_latest.csv`, and its curated hardware fields must match `hardware.csv`.
 - `modes.csv` — configured Betaflight modes decoded from `aux` lines, one row per activation range
   with mode name/ID, AUX channel, exact range, condition logic/link, firmware, and source dump.
   Covers only quads with `status` active and both `discipline` and `class` set, ordered like the
@@ -106,7 +111,7 @@ UART configuration; do not make them part of every routine reminder.
 
 Run the bundled script from the folder that contains the dumps. It is the single source of truth —
 it reads `*.txt` dumps and hand-maintained CSVs and rewrites the generated files above, including
-`racing_whoops.csv`, so it is safe to re-run any time:
+`racing_whoops.csv` and `racing_3inch.csv`, so it is safe to re-run any time:
 
 ```bash
 python3 .agents/skills/fpv-fleet-update/scripts/update_fleet.py
@@ -120,6 +125,11 @@ the same latest-dump/rates join. That's the completion check for the cross-file 
 hand-edit generated CSVs or the summary, because the next run overwrites them. If something in the
 output looks wrong, fix the script or the hand-maintained source CSV rather than the generated
 files (see "How it works" below).
+
+Also check that `racing_3inch.csv` contains exactly the curated race 3-inch rows from
+`fpv_quads_latest.csv`; confirm weight, cells, motors, and props match `hardware.csv`, and confirm
+profile values/rates come from each row's source dump. PID fields are for the active PID profile
+only; the file records the selected profile number to make that scope clear.
 
 ### Flight-controller reference check
 

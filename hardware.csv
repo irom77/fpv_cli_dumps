@@ -59,7 +59,7 @@ Second XILOF4 freestyle build (BF 4.5.1), very similar to XILOF4 (Bundle);
 specs assumed same - confirm/fill in.
 No craft_name set, tracked by filename label",,
 FLYWOOF7NANO,micro,long-range,active,,4S 850mAh,<250g,Goku F745 16x16 stack (built-in),NIN 1404 V2 2750KV,Gemfan 4024,Caddx Polar / Nebula Pro,Caddx Vista,Flywoo Explorer LR4 V2 HD; 4in; class corrected 5-inch -> micro (4in LR),,
-Mass,3-inch,,active,,3-4S (850mAh 4S),,SpeedyBee F405 Mini (20x20),e.g. EMAX ECO 1404 3700KV,3in,RunCam Nano 3 (tentative),SpeedyBee TX800 (analog),"Massive Droner 3in; renamed from SPEEDYBEEF405MINI;
+Mass,3-inch,race,active,,3-4S (850mAh 4S),,SpeedyBee F405 Mini (20x20),Five33 TinyTurners 1404 4533KV (TinyTrainer),3in,RunCam Nano 3 (tentative),SpeedyBee TX800 (analog),"Massive Droner 3in; renamed from SPEEDYBEEF405MINI;
 video restored with SpeedyBee TX800; R8 unlock workaround;
 latest dump records R5;
 see docs/troubleshooting/mass-vtx-troubleshooting.md.",SPEEDYBEEF405MINI,

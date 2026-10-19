@@ -7,6 +7,7 @@ Scans every BTFL_cli_*.txt dump in the target folder and produces derived output
   - fpv_quads_latest.csv  one row per quad, newest dump only
   - rates.csv             active rate profiles for curated, active quads
   - racing_whoops.csv     race-discipline whoops with build, firmware, rates, and crash recovery
+  - racing_3inch.csv      race-discipline 3-inch quads with build, firmware, rates, PID, and filters
   - modes.csv             AUX mode assignments and activation ranges for curated, active quads
   - FLEET_SUMMARY.md      human-readable overview with rollups and a 'needs attention' pass
 
@@ -27,6 +28,7 @@ OUT = os.path.join(SRC, "fpv_quads.csv")
 OUT_LATEST = os.path.join(SRC, "fpv_quads_latest.csv")
 OUT_RATES = os.path.join(SRC, "rates.csv")
 OUT_RACING_WHOOPS = os.path.join(SRC, "racing_whoops.csv")
+OUT_RACING_3INCH = os.path.join(SRC, "racing_3inch.csv")
 OUT_MODES = os.path.join(SRC, "modes.csv")
 OUT_SUMMARY = os.path.join(SRC, "FLEET_SUMMARY.md")
 HW_CSV = os.path.join(SRC, "hardware.csv")
@@ -421,6 +423,16 @@ def parse_dumps():
             'rpm_limit': val(text, 'rpm_limit'),
             'rpm_limit_value': val(text, 'rpm_limit_value'),
             'crash_recovery': extract_crash_recovery(text),
+            'pid_profile': (re.findall(r'^profile (\d+)\s*$', text, re.M) or [''])[-1],
+            **extract_active_profile_settings(text, (
+                'p_roll', 'i_roll', 'd_roll', 'f_roll', 'p_pitch', 'i_pitch', 'd_pitch', 'f_pitch',
+                'p_yaw', 'i_yaw', 'd_yaw', 'f_yaw', 'tpa_rate', 'tpa_breakpoint',
+                'dyn_idle_min_rpm')),
+            'pid_process_denom': val(text, 'pid_process_denom'),
+            'gyro_lpf1_dyn_min_hz': val(text, 'gyro_lpf1_dyn_min_hz'),
+            'gyro_lpf1_dyn_max_hz': val(text, 'gyro_lpf1_dyn_max_hz'),
+            'gyro_lpf2_static_hz': val(text, 'gyro_lpf2_static_hz'),
+            'simplified_gyro_filter': val(text, 'simplified_gyro_filter'),
             'airmode': airmode_enabled(text),
             '_modes': extract_modes(text),
             **extract_active_rates(text),
@@ -740,6 +752,14 @@ RACING_WHOOP_COLS = ['quad', 'weight', 'motors', 'props',
                      'bf_version', 'center_rpy', 'max_rpy', 'expo_rpy', 'board',
                      'dps25_rpy', 'dps50_rpy', 'dps75_rpy', 'crash_recovery', 'airmode', 'dump']
 
+RACING_3INCH_COLS = ['quad', 'status', 'weight', 'cells', 'motors', 'props', 'bf_version', 'board',
+                     'rateprofile', 'rates_type', 'center_rpy', 'max_rpy', 'expo_rpy',
+                     'dps25_rpy', 'dps50_rpy', 'dps75_rpy', 'pid_profile',
+                     'roll_p_i_d_f', 'pitch_p_i_d_f', 'yaw_p_i_d_f', 'tpa_rate',
+                     'tpa_breakpoint', 'dyn_idle_min_rpm', 'pid_process_denom',
+                     'gyro_lpf1_dyn_min_hz', 'gyro_lpf1_dyn_max_hz', 'gyro_lpf2_static_hz',
+                     'simplified_gyro_filter', 'airmode', 'crash_recovery', 'dump']
+
 MODE_COLS = ['quad', 'discipline', 'class', 'mode', 'aux_channel',
              'range_visual', 'range_start', 'range_end', 'mode_id', 'logic', 'linked_to', 'linked_to_id',
              'slot', 'bf_version', 'source']
@@ -923,6 +943,44 @@ def build_racing_whoop_rows(latest_rows, rate_rows, hw_rows):
             'rate_source': rate.get('source', ''),
             'crash_recovery': r.get('crash_recovery', ''),
             'dump': r.get('file', ''),
+        })
+    return sorted(out, key=lambda r: r['quad'].lower())
+
+
+def build_racing_3inch_rows(latest_rows, rate_rows, hw_rows):
+    """Compare curated race 3-inch airframes, including their active rate/PID/filter setup."""
+    decoded = {norm(r['quad']): r for r in rate_rows}
+    out = []
+    for r in latest_rows:
+        if (r.get('class') or '').strip().lower() != '3-inch':
+            continue
+        if (r.get('discipline') or '').strip().lower() != 'race':
+            continue
+        key = norm(r['quad'])
+        hw = hw_rows.get(key, {})
+        rate = decoded.get(key, {})
+        out.append({
+            'quad': r['quad'], 'status': status_of(r), 'weight': hw.get('weight', ''),
+            'cells': hw.get('cells', ''), 'motors': hw.get('motors', ''), 'props': hw.get('props', ''),
+            'bf_version': r.get('bf_version', ''), 'board': r.get('board', ''),
+            'rateprofile': rate.get('rateprofile', ''), 'rates_type': rate.get('rates_type', ''),
+            'center_rpy': rate.get('center_rpy', ''), 'max_rpy': rate.get('max_rpy', ''),
+            'expo_rpy': rate.get('expo_rpy', ''), 'dps25_rpy': rate.get('dps25_rpy', ''),
+            'dps50_rpy': rate.get('dps50_rpy', ''), 'dps75_rpy': rate.get('dps75_rpy', ''),
+            'pid_profile': r.get('pid_profile', ''),
+            'roll_p_i_d_f': '/'.join(r.get(k, '') for k in ('p_roll', 'i_roll', 'd_roll', 'f_roll')),
+            'pitch_p_i_d_f': '/'.join(r.get(k, '') for k in ('p_pitch', 'i_pitch', 'd_pitch', 'f_pitch')),
+            'yaw_p_i_d_f': '/'.join(r.get(k, '') for k in ('p_yaw', 'i_yaw', 'd_yaw', 'f_yaw')),
+            'tpa_rate': r.get('tpa_rate', ''), 'tpa_breakpoint': r.get('tpa_breakpoint', ''),
+            'dyn_idle_min_rpm': r.get('dyn_idle_min_rpm', ''),
+            'pid_process_denom': r.get('pid_process_denom', ''),
+            'gyro_lpf1_dyn_min_hz': r.get('gyro_lpf1_dyn_min_hz', ''),
+            'gyro_lpf1_dyn_max_hz': r.get('gyro_lpf1_dyn_max_hz', ''),
+            'gyro_lpf2_static_hz': r.get('gyro_lpf2_static_hz', ''),
+            'simplified_gyro_filter': r.get('simplified_gyro_filter', ''),
+            'airmode': 'ON' if (r.get('airmode') or
+                                any(m.get('mode_id') == 28 for m in r.get('_modes', ()))) else 'OFF',
+            'crash_recovery': r.get('crash_recovery', ''), 'dump': r.get('file', ''),
         })
     return sorted(out, key=lambda r: r['quad'].lower())
 
@@ -1277,6 +1335,7 @@ def main():
                                 load_hw_map(HW_CSV, "rate_preset"))
     rates_view = [r for r in rate_rows if r['in_view']]
     racing_whoop_rows = build_racing_whoop_rows(latest_rows, rate_rows, load_hw_rows(HW_CSV))
+    racing_3inch_rows = build_racing_3inch_rows(latest_rows, rate_rows, load_hw_rows(HW_CSV))
     mode_rows = build_mode_rows(latest_rows)
     spec_rows = build_spec_rows(load_specs(SPECS_CSV), latest_rows, load_hw_rows(HW_CSV))
 
@@ -1284,6 +1343,7 @@ def main():
     write_csv(OUT_LATEST, latest_rows)
     write_csv(OUT_RATES, rates_view, RATE_COLS)
     write_csv(OUT_RACING_WHOOPS, racing_whoop_rows, RACING_WHOOP_COLS)
+    write_csv(OUT_RACING_3INCH, racing_3inch_rows, RACING_3INCH_COLS)
     # LF keeps the Unicode text bars clean in Git diffs; csv's default CRLF looks like trailing
     # whitespace to `git diff --check` whenever every generated row changes.
     write_csv(OUT_MODES, compact_mode_groups(mode_rows), MODE_COLS, lineterminator='\n')
