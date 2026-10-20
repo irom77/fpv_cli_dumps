@@ -54,6 +54,60 @@ The rate curves use different calculation systems, so the raw rate numbers are n
 
 These settings reflect distinct hardware, Betaflight versions, and saved tunes. They are not a recommendation to copy one quad's PID/filter block onto the other. Use blackbox traces and motor temperature after short, controlled flights to assess changes.
 
+### CMW More Massive Droner 3-inch screenshot reference
+
+The [CMW More Massive Droner 3-inch build on RotorBuilds](https://rotorbuilds.com/build/12987/)
+provides the comparison reference. The supplied screenshots show Betaflight 3.3.3 on target OBF4,
+with PID Profile 2 and Rateprofile 1 selected. Mass values are from its latest saved dump, running
+Betaflight 2026.6.2; that dump's active CLI selectors are `profile 0` and `rateprofile 0` (the
+first profile and rateprofile in Configurator's numbered selectors).
+
+| Build detail | CMW More Massive Droner | Mass |
+|---|---|---|
+| Frame | CMW More Massive Droner 3-inch | Massive Droner 3-inch |
+| Flight controller / firmware | HGLRC F438-TX20 V2 / Betaflight 3.3.3, target OBF4 | SpeedyBee F405 Mini / Betaflight 2026.6.2 |
+| Motors | BrotherHobby Avenger 1507 4100KV | Five33 TinyTurners 1404 4533KV |
+| Props | Gemfan Flash 3052 | 3-inch; exact model not recorded |
+| Battery noted | 4S 850mAh (the build also mentions 3S 650mAh) | 4S 850mAh noted |
+
+#### PID and rate values
+
+| Setting | CMW screenshot (Profile 2 / Rateprofile 1) | Mass latest dump (`profile 0` / `rateprofile 0` in CLI) |
+|---|---:|---:|
+| Roll P / I / D / F | 26 / 40 / 18 / not shown | 45 / 80 / 30 / 120 |
+| Pitch P / I / D / F | 30 / 50 / 22 / not shown | 47 / 84 / 34 / 125 |
+| Yaw P / I / D / F | 36 / 45 / not shown / not shown | 45 / 80 / 0 / 120 |
+| Rate type / RC rate | Betaflight UI: 1.00 on all axes | ACTUAL: 7 / 7 / 7 |
+| Super rate, roll / pitch / yaw | 0.75 / 0.75 / 0.75 | 67 / 67 / 67 |
+| Expo, roll / pitch / yaw | 0 / 0 / 0 | 0 / 0 / 0 |
+| Maximum rate, roll / pitch / yaw | 800 / 800 / 800°/s | 670 / 670 / 670°/s |
+| TPA rate / breakpoint | 30% / 1650 | 65% / 1350 |
+
+The screenshot also shows D Setpoint Weight 1.5, D Setpoint Transition 0.85, and Anti-Gravity Gain
+3 with threshold 350. Mass uses newer Betaflight controls and scales for these features, so those
+values are not directly comparable to Mass's feedforward and anti-gravity settings. The rate
+systems also differ; the listed maxima are useful context, but do not make the curves equivalent.
+
+#### Filter recommendations
+
+The RotorBuilds page lists these as non-stock settings for the CMW build. The Mass column shows
+settings from its latest saved dump:
+
+| Filter setting | CMW reference (Betaflight 3.3.3) | Mass (Betaflight 2026.6.2) |
+|---|---|---|
+| Dynamic Filters | On | Dynamic gyro LPF1 250–500 Hz; dynamic notch enabled (3 notches, 100–600 Hz) |
+| Gyro lowpass | 90 Hz shown in screenshot | Dynamic LPF1 250–500 Hz; LPF2 500 Hz |
+| D-Term lowpass | PT1, 100 Hz shown in screenshot | PT1, dynamic LPF1 75–150 Hz and LPF2 150 Hz |
+| Gyro Notch Filter 1 | Off | Static gyro notch filters off |
+| Gyro Notch Filter 2 | Off | Static gyro notch filters off |
+| D-Term Notch Filter | Off | Off |
+| Yaw lowpass | 0 Hz shown in screenshot | 100 Hz |
+
+The RotorBuilds description says the builder used stock PIDs on 3S and was still tuning custom
+PIDs for 4S; the supplied screenshot is labeled “Current 4S PIDs.” Treat it as a historical
+reference, not a validated final tune or a recommendation to copy settings between these different
+flight controllers and Betaflight versions.
+
 ## How to read this comparison
 
 - Both are curated as active 3-inch race quads, but their actual prop sizes differ in the inventory: 3.5-inch on TTV2 versus 3-inch on Mass.
