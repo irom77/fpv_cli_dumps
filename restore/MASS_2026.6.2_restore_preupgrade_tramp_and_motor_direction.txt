@@ -1,0 +1,29 @@
+# Restore selected Mass settings from the pre-upgrade 4.3.2 dump.
+# Keep UART2 Serial RX (64) as currently configured.
+# UART1 was configured for IRC Tramp before the upgrade (old serial 0 function 8192).
+serial UART1 8192 115200 57600 0 115200
+
+# Restore the pre-upgrade motor yaw direction setting.
+set yaw_motors_reversed = ON
+
+# Explicitly retain the previous VTX selection: Raceband channel 8 (5917 MHz), power index 1.
+# The existing VTX table already matches the pre-upgrade dump.
+set vtx_band = 5
+set vtx_channel = 8
+set vtx_power = 1
+set vtx_freq = 5917
+
+# Restore the pre-upgrade bidirectional DShot and motor pole configuration.
+set dshot_bidir = ON
+set motor_poles = 12
+
+# Restore pre-upgrade gyro LPF1 and dynamic notch filter values.
+set gyro_lpf1_static_hz = 0
+set gyro_lpf1_dyn_min_hz = 0
+set gyro_lpf1_dyn_max_hz = 0
+set dyn_notch_count = 1
+set dyn_notch_q = 500
+set dyn_notch_min_hz = 200
+set dyn_notch_max_hz = 700
+
+save
