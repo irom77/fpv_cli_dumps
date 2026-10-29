@@ -6,6 +6,9 @@ Try the RaceGOW/DaBits fresh-pack throttle curve; see
 [`docs/whoop-throttle-curve.md`](docs/whoop-throttle-curve.md) and the snippet in
 [`CLI_SNIPPETS.md`](CLI_SNIPPETS.md#race-whoop-throttle-curve--rate-profile-3).
 
+- [ ] First try `vbat_sag_compensation = 100` alone in the active PID profile (BF PR #9561; all
+      race whoops have ADC voltage, Ecofree already has it). If combining it with the curve, raise
+      the throttle limit to 80–90.
 - [ ] Copy the flying rates into rate profile 3 on each race whoop (slot 3 has default rates).
 - [ ] Paste the snippet; skip `thr_hover` on 4.4/4.5 quads (only AIR65 C is on 2025.12+).
 - [ ] Measure the real hover stick position and set `thr_hover` to match (AIR65 C slot 0 uses 22).

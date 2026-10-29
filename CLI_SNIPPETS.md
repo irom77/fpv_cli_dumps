@@ -130,6 +130,25 @@ save
 - Because the block runs `rateprofile 3` before `save`, slot 3 becomes the active rate profile.
   To keep your old default, add `rateprofile 0` (or whichever) just before `save`, then switch
   to 3 with the OSD stick menu or a rate-profile adjustment switch.
+- If you also enable battery sag compensation (below), start with `throttle_limit_percent` at
+  80–90 instead of 70, because the two cuts stack.
+
+### Battery sag compensation — active PID profile
+
+Firmware fix for the same fresh-pack twitchiness (Betaflight 4.2+,
+[PR #9561](https://github.com/betaflight/betaflight/pull/9561)); details and per-quad numbers in
+[`docs/whoop-throttle-curve.md`](docs/whoop-throttle-curve.md#related-betaflight-battery-sag-compensation-pr-9561).
+It is a **PID-profile** setting. With no `profile N` line, it applies to the currently active PID
+profile, so you don't switch to a slot with default PIDs. It needs `battery_meter = ADC`.
+
+```text
+set vbat_sag_compensation = 100
+save
+```
+
+- Use 80 if a whoop with a 3.2–3.3 V warning voltage feels dull. Ecofree PID profile 0
+  already runs 100.
+- Fly by OSD voltage: when this works, the quad no longer *feels* the pack getting low.
 
 ## Future snippets
 
