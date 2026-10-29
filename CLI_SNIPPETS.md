@@ -150,8 +150,40 @@ save
   already runs 100.
 - Fly by OSD voltage: when this works, the quad no longer *feels* the pack getting low.
 
+## Modes
+
+### BETAFPV race-whoop modes — AIR65 layout
+
+Copied from AIR65 C and AIR65 R, whose mode setups are identical. Applying it to AIR75 C (which
+ships arming on AUX1 high) brings it in line with the rest of the race whoops, which all arm on
+AUX1 low. Slots 0–5 are overwritten; any higher slot in use stays as it is.
+
+```text
+aux 0 0 0 900 1300 0 0
+aux 1 28 1 900 1300 0 0
+aux 2 35 1 1300 1700 0 0
+aux 3 1 1 1700 2100 0 0
+aux 4 13 2 1300 2100 0 0
+aux 5 39 3 1300 2100 0 0
+save
+```
+
+| Switch | Low (900–1300) | Mid (1300–1700) | High (1700–2100) |
+|---|---|---|---|
+| AUX1 | ARM | – | – |
+| AUX2 | Airmode | Turtle mode (flip over after crash) | Angle |
+| AUX3 | – | Beeper | Beeper |
+| AUX4 | – | VTX pit mode | VTX pit mode |
+
+- **This can flip the arm-switch direction.** With props off, check in the Modes tab that ARM
+  lights up only in the switch position you use for armed on your other whoops.
+- `aux` fields are `slot mode_id aux_index start end logic linked_mode`; `aux_index` 0 is AUX1
+  (channel 5).
+- A quad with `feature AIRMODE` on already has airmode all the time, so the AUX2-low range is
+  redundant there.
+
 ## Future snippets
 
-Possible additions include modes, battery thresholds, receiver defaults, race settings, and
+Possible additions include battery thresholds, receiver defaults, race settings, and
 blackbox configuration. Hardware-dependent settings should remain clearly separated from portable
 fleet defaults.
