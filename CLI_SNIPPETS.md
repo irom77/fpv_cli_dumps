@@ -100,6 +100,37 @@ Rate snippets will be added here. Keep each named preset in its own subsection a
 - Expected roll, pitch, and yaw maximum rates
 - The rate profile slot affected by the snippet
 
+## Throttle
+
+### Race-whoop throttle curve — rate profile 3
+
+Fresh-HV-pack "low-battery feel" curve from the RaceGOW/DaBits discussion; background in
+[`docs/whoop-throttle-curve.md`](docs/whoop-throttle-curve.md). Writes CLI `rateprofile 3`
+(shown as **Rateprofile 4** in Configurator, which counts from 1), so the other profiles are
+untouched.
+
+A fresh rate profile has default rates. Copy your flying rates into slot 3 first (Configurator
+PID Tuning → Copy rateprofile), or paste your own `*_rc_rate` / `*_srate` / `*_expo` lines after
+`rateprofile 3`.
+
+```text
+rateprofile 3
+set rateprofile_name = THRCRV
+set throttle_limit_type = SCALE
+set throttle_limit_percent = 70
+set thr_mid = 35
+set thr_expo = 80
+set thr_hover = 40
+save
+```
+
+- `thr_hover` exists only on Betaflight 2025.12+. On 4.4/4.5 it prints `Invalid name`; skip
+  that line, the rest still applies.
+- Set `thr_hover` to the stick position where the quad really hovers.
+- Because the block runs `rateprofile 3` before `save`, slot 3 becomes the active rate profile.
+  To keep your old default, add `rateprofile 0` (or whichever) just before `save`, then switch
+  to 3 with the OSD stick menu or a rate-profile adjustment switch.
+
 ## Future snippets
 
 Possible additions include modes, battery thresholds, receiver defaults, race settings, and

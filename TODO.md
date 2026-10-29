@@ -1,5 +1,17 @@
 # TODO
 
+## Race-whoop throttle curve (rate profile 3)
+
+Try the RaceGOW/DaBits fresh-pack throttle curve; see
+[`docs/whoop-throttle-curve.md`](docs/whoop-throttle-curve.md) and the snippet in
+[`CLI_SNIPPETS.md`](CLI_SNIPPETS.md#race-whoop-throttle-curve--rate-profile-3).
+
+- [ ] Copy the flying rates into rate profile 3 on each race whoop (slot 3 has default rates).
+- [ ] Paste the snippet; skip `thr_hover` on 4.4/4.5 quads (only AIR65 C is on 2025.12+).
+- [ ] Measure the real hover stick position and set `thr_hover` to match (AIR65 C slot 0 uses 22).
+- [ ] Test-fly on a fresh 4.35V HV pack, tune `throttle_limit_percent` within 70–80, take fresh
+      CLI backups.
+
 ## Mob6 AIO5 1st repair
 
 - [ ] Replace the HDZero AIO5 all-in-one flight-controller/ESC board; Motor 1 does not spin in Betaflight’s Motors tab after the motor replacement, while Motor 3 works.
